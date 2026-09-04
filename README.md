@@ -10,7 +10,7 @@ external API via `NEXT_PUBLIC_API_URL`.
 | Framework | Next.js 16 (App Router, Turbopack, React Compiler) |
 | UI runtime | React 19 |
 | Language | TypeScript 5.9 (strict), `@/*` alias |
-| Styling | Tailwind CSS v4 (CSS-first config) |
+| Styling | Tailwind CSS v4 (CSS-first config), Plus Jakarta Sans + Geist Mono |
 | Components | shadcn/ui on Base UI primitives, lucide-react icons |
 | Theming | next-themes (class strategy, system default) |
 | Server state | TanStack Query v5 |
@@ -46,18 +46,25 @@ pnpm dev
 
 ## Styleguide
 
-A living reference for the design system at
+A living reference for the Renuterra design system at
 [`/styleguide`](http://localhost:3000/styleguide), reachable from the topbar.
-Sections: Overview (tokens), Buttons, Forms, Cards, Dropdowns, Feedback, States,
-Layout.
+It documents the brand tokens in `src/app/globals.css` and every component in
+`src/components/ui` and `src/components/shared`, grouped as Foundations
+(Brand, Color, Typography, Spacing), Components (Buttons, Inputs & forms,
+Status badges & tags, Cards, Tables, Sidebar & top nav, KPI tiles & charts,
+Empty/loading/error, Menus & toasts) and Screens (sample CRM screens).
 
 Every section is prerendered at `/styleguide/<id>`; an unknown id 404s. To add
 one, drop a page in `src/apps/styleguide/pages/` and register it in
 `src/apps/styleguide/sections.ts` — the sidebar, routing and static params all
-derive from that array.
+derive from that array. Sample content lives in `src/apps/styleguide/data.ts`.
 
-Build examples from theme tokens (`bg-card`, `text-muted-foreground`), never
-hardcoded hex, so both themes stay correct.
+Brand rules worth knowing: primary buttons take dark text on lime (white fails
+contrast), links and info badges are navy, status tones are `success` /
+`warning` / `info` / `destructive` / `neutral` and waste streams keep a fixed
+colour everywhere (`bg-stream-recyclable` …). Build from theme tokens
+(`bg-card`, `text-muted-foreground`), never hardcoded hex, so both themes stay
+correct.
 
 Playwright browsers need a one-time `pnpm exec playwright install chromium`.
 
@@ -107,9 +114,10 @@ src/
         index.ts
       utils/
     styleguide/             Living design-system reference at /styleguide
-      Styleguide.tsx        Shell: sidebar, search, section switching
-      sections.ts           Section registry (id, label, icon, component)
-      components/           SectionHeader, Demo, Swatch
+      Styleguide.tsx        Shell: header, grouped sidebar, section switching
+      sections.ts           Section registry (id, label, number, group, component)
+      data.ts               Sample CRM content used by the demos
+      components/           SectionHeader, Demo, CrmFrame, KpiTile
       pages/                One file per section
     prototypes/             Mobile CRM prototype playground at /prototypes
       registry.ts           Prototype registry (slug, title, status, component)

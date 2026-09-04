@@ -1,43 +1,44 @@
 "use client";
 
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Smartphone } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { ThemeToggle } from "@/components/shared";
+import { BrandLogo, ThemeToggle } from "@/components/shared";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { APP_NAME } from "@/constants";
 import { cn } from "@/lib/utils";
-import { findSection, STYLEGUIDE_SECTIONS } from "./sections";
+import {
+  findSection,
+  STYLEGUIDE_GROUPS,
+  STYLEGUIDE_SECTIONS,
+} from "./sections";
 
 export default function Styleguide({ section }: { section?: string }) {
-  const [search, setSearch] = useState("");
-
   const activeSection = findSection(section);
   const ActiveComponent = activeSection.component;
 
-  const filteredSections = useMemo(() => {
-    const term = search.trim().toLowerCase();
-    if (!term) return STYLEGUIDE_SECTIONS;
-    return STYLEGUIDE_SECTIONS.filter((s) =>
-      s.label.toLowerCase().includes(term),
-    );
-  }, [search]);
-
   return (
-    <div className="bg-muted/40 flex min-h-screen flex-col">
-      <header className="border-border bg-background flex h-16 shrink-0 items-center justify-between border-b px-6">
-        <div>
-          <h1 className="text-base leading-tight font-bold">
-            {APP_NAME} Styleguide
+    <div className="bg-background flex min-h-screen flex-col">
+      <header className="border-border bg-background/85 sticky top-0 z-50 flex h-[60px] shrink-0 items-center justify-between gap-4 border-b px-7 backdrop-blur-[10px]">
+        <div className="flex items-center gap-3.5">
+          <BrandLogo height={26} plate />
+          <span className="bg-border h-[22px] w-px" aria-hidden />
+          <h1 className="text-sm font-semibold tracking-[-.01em]">
+            CRM Style Guide
           </h1>
-          <span className="text-muted-foreground text-xs">
-            Design tokens &amp; components
+          <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 font-mono text-[11px]">
+            v1.0
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            nativeButton={false}
+            render={<Link href="/prototypes" />}
+          >
+            <Smartphone className="size-4" />
+            Prototypes
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -47,56 +48,47 @@ export default function Styleguide({ section }: { section?: string }) {
             <ArrowLeft className="size-4" />
             Back to app
           </Button>
+          <ThemeToggle />
         </div>
       </header>
 
-      <div className="flex flex-1 gap-6 p-6">
-        <aside className="border-border bg-background flex w-60 shrink-0 flex-col gap-3 self-start rounded-2xl border p-4 shadow-xs">
-          <div className="relative">
-            <Search
-              className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-3.5 -translate-y-1/2"
-              aria-hidden
-            />
-            <Input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search components…"
-              aria-label="Search components"
-              className="h-8 ps-8 text-xs"
-            />
-          </div>
+      <div className="mx-auto grid w-full max-w-[1440px] flex-1 grid-cols-[220px_minmax(0,1fr)]">
+        <nav
+          aria-label="Sections"
+          className="border-border sticky top-[60px] h-[calc(100vh-60px)] overflow-auto border-r py-7 pr-4 pl-7"
+        >
+          {STYLEGUIDE_GROUPS.map((group) => (
+            <div key={group} className="mb-[22px] last:mb-0">
+              <div className="text-muted-foreground mb-2 ml-2.5 font-mono text-[10.5px] tracking-[.1em] uppercase">
+                {group}
+              </div>
+              <div className="flex flex-col gap-0.5">
+                {STYLEGUIDE_SECTIONS.filter((s) => s.group === group).map(
+                  (item) => {
+                    const isActive = item.id === activeSection.id;
+                    return (
+                      <Link
+                        key={item.id}
+                        href={`/styleguide/${item.id}`}
+                        aria-current={isActive ? "page" : undefined}
+                        className={cn(
+                          "rounded-lg px-2.5 py-1.5 text-[13px] transition-colors",
+                          isActive
+                            ? "bg-accent text-accent-foreground font-medium"
+                            : "text-foreground hover:bg-muted",
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  },
+                )}
+              </div>
+            </div>
+          ))}
+        </nav>
 
-          <nav className="flex flex-col gap-1">
-            {filteredSections.map((item) => {
-              const Icon = item.icon;
-              const isActive = item.id === activeSection.id;
-              return (
-                <Link
-                  key={item.id}
-                  href={`/styleguide/${item.id}`}
-                  aria-current={isActive ? "page" : undefined}
-                  className={cn(
-                    "flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
-                    isActive
-                      ? "bg-primary text-primary-foreground font-semibold shadow-xs"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                  )}
-                >
-                  <Icon className="size-4 shrink-0" aria-hidden />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-            {filteredSections.length === 0 ? (
-              <p className="text-muted-foreground px-3 py-2 text-xs">
-                No matching sections.
-              </p>
-            ) : null}
-          </nav>
-        </aside>
-
-        <main className="border-border bg-background min-h-[600px] flex-1 rounded-2xl border p-8 shadow-xs">
+        <main className="min-w-0 px-10 pt-10 pb-24">
           <ActiveComponent />
         </main>
       </div>

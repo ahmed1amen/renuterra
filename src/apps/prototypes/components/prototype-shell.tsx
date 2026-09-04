@@ -2,7 +2,7 @@
 
 import { ArrowLeft, LayoutGrid, Palette } from "lucide-react";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/shared";
+import { BrandLogo, ThemeToggle } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/constants";
 import { cn } from "@/lib/utils";
@@ -24,13 +24,17 @@ export function PrototypeShell({ slug }: { slug?: string }) {
   return (
     <div className="bg-muted/40 flex min-h-screen flex-col">
       <header className="border-border bg-background flex h-16 shrink-0 items-center justify-between border-b px-6">
-        <div>
-          <h1 className="text-base leading-tight font-bold">
-            {APP_NAME} Prototypes
-          </h1>
-          <span className="text-muted-foreground text-xs">
-            Mobile CRM screens for review
-          </span>
+        <div className="flex items-center gap-3.5">
+          <BrandLogo height={26} plate />
+          <span className="bg-border h-[22px] w-px" aria-hidden />
+          <div>
+            <h1 className="text-sm leading-tight font-semibold tracking-[-.01em]">
+              {APP_NAME} Prototypes
+            </h1>
+            <span className="text-muted-foreground text-xs">
+              Mobile CRM screens for review
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
