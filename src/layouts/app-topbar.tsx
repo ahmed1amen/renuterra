@@ -14,9 +14,18 @@ export function AppTopbar() {
           <Button
             variant="ghost"
             size="sm"
+            nativeButton={false}
             render={<Link href="/styleguide" />}
           >
             Styleguide
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            nativeButton={false}
+            render={<Link href="/prototypes" />}
+          >
+            Prototypes
           </Button>
           <ThemeToggle />
         </div>

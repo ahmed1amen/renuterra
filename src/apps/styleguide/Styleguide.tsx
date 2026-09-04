@@ -38,7 +38,12 @@ export default function Styleguide({ section }: { section?: string }) {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          <Button variant="outline" size="sm" render={<Link href="/" />}>
+          <Button
+            variant="outline"
+            size="sm"
+            nativeButton={false}
+            render={<Link href="/" />}
+          >
             <ArrowLeft className="size-4" />
             Back to app
           </Button>

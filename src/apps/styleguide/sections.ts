@@ -8,10 +8,12 @@ import {
   Loader,
   Palette,
   Sparkles,
+  Tag,
 } from "lucide-react";
 import type { ComponentType } from "react";
 import ButtonsPage from "./pages/Buttons";
 import CardsPage from "./pages/Cards";
+import DisplayPage from "./pages/Display";
 import DropdownsPage from "./pages/Dropdowns";
 import FeedbackPage from "./pages/Feedback";
 import FormsPage from "./pages/Forms";
@@ -31,6 +33,7 @@ export const STYLEGUIDE_SECTIONS: StyleguideSection[] = [
   { id: "buttons", label: "Buttons", icon: Sparkles, component: ButtonsPage },
   { id: "forms", label: "Forms", icon: Grid, component: FormsPage },
   { id: "cards", label: "Cards", icon: CreditCard, component: CardsPage },
+  { id: "display", label: "Display", icon: Tag, component: DisplayPage },
   {
     id: "dropdowns",
     label: "Dropdowns",

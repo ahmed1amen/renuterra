@@ -61,6 +61,26 @@ hardcoded hex, so both themes stay correct.
 
 Playwright browsers need a one-time `pnpm exec playwright install chromium`.
 
+## Prototypes
+
+A playground at [`/prototypes`](http://localhost:3000/prototypes) for building
+mobile CRM screens as real React pages on the design system, reviewed by PMs on
+Vercel preview deployments with Toolbar comments.
+
+- Screens live in `src/apps/prototypes/screens/` and are registered in
+  `src/apps/prototypes/registry.ts` (`slug`, `title`, `description`, `status`,
+  `component`). Adding a prototype = one screen file + one registry entry; the
+  sidebar, index cards, static params and tests derive from the array.
+- Screens render inside a device frame. `?device=iphone|android|bare` switches
+  the chrome and `?scenario=empty|error|loading` forces every mock request into
+  that state, so a review link captures exactly what the reviewer saw.
+- Data comes from `src/mocks/` through TanStack Query hooks in
+  `src/features/crm/`. `src/features/crm/api.ts` is the only file to change
+  when the real API lands.
+- Screens may only use `src/components/ui`, `src/components/shared` and theme
+  tokens. If a component is missing, add it via shadcn and document it in the
+  styleguide first.
+
 ## Layout
 
 Mirrors the `cmp-ui` structure. Screens live in `src/apps/<app>/pages/`; the
@@ -91,6 +111,10 @@ src/
       sections.ts           Section registry (id, label, icon, component)
       components/           SectionHeader, Demo, Swatch
       pages/                One file per section
+    prototypes/             Mobile CRM prototype playground at /prototypes
+      registry.ts           Prototype registry (slug, title, status, component)
+      components/           Shell, phone frame, viewport/scenario switchers
+      screens/              One file per prototype screen
   assets/icons/             Static SVG/icon assets
   components/
     shared/                 Cross-app components (kebab-case)
@@ -98,13 +122,14 @@ src/
   constants/                app.ts, storage.ts + barrel
   enums/
   features/<domain>/hooks/  Domain logic shared across apps
+    crm/                    CRM data access (api.ts) + TanStack Query hooks
   hooks/                    Shared React hooks + barrel
   layouts/                  app-layout.tsx, app-topbar.tsx
   lib/
     api/                    client.ts, errors.ts
     query-client.ts         createQueryClient() factory
     utils.ts                cn()
-  mocks/                    Fixture JSON
+  mocks/                    Typed CRM fixtures, mockFetch, scenario store
   providers/                app-providers.tsx + barrel
   types/                    Shared types + barrel
   env.ts                    Validated environment variables

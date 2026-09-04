@@ -1,4 +1,5 @@
-import { PageHeader } from "@/components/shared";
+import { Activity, Contact, Kanban, Users } from "lucide-react";
+import { BottomNav, PageHeader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Demo, SectionHeader } from "../components";
 
@@ -7,7 +8,7 @@ export default function LayoutPage() {
     <div className="space-y-8">
       <SectionHeader
         title="Layout"
-        description="Page chrome. AppLayout wraps every product route; PageHeader opens every screen."
+        description="Page chrome. AppLayout wraps every product route; PageHeader opens every screen; BottomNav anchors mobile screens."
       />
 
       <Demo title="PageHeader">
@@ -30,6 +31,24 @@ export default function LayoutPage() {
             </>
           }
         />
+      </Demo>
+
+      <Demo title="BottomNav">
+        <div className="border-border max-w-[390px] overflow-hidden rounded-xl border">
+          <BottomNav
+            items={[
+              { label: "Leads", icon: Users, href: "#", active: true },
+              { label: "Contacts", icon: Contact, href: "#" },
+              { label: "Deals", icon: Kanban, href: "#" },
+              { label: "Activity", icon: Activity, href: "#" },
+            ]}
+          />
+        </div>
+        <p className="text-muted-foreground mt-3 text-sm">
+          Mobile tab bar. Sticks to the bottom of its scroll container and pads
+          for the home indicator via{" "}
+          <code className="font-mono text-xs">--safe-area-bottom</code>.
+        </p>
       </Demo>
 
       <Demo title="Content widths">
