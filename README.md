@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Renuterra
 
-## Getting Started
+Frontend-only Next.js application. No database or auth layer — data comes from an
+external API via `NEXT_PUBLIC_API_URL`.
 
-First, run the development server:
+## Stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | Next.js 16 (App Router, Turbopack, React Compiler) |
+| UI runtime | React 19 |
+| Language | TypeScript 5.9 (strict), `@/*` alias |
+| Styling | Tailwind CSS v4 (CSS-first config) |
+| Components | shadcn/ui on Radix primitives, lucide-react icons |
+| Theming | next-themes (class strategy, system default) |
+| Server state | TanStack Query v5 |
+| Client state | Zustand |
+| Forms | React Hook Form + Zod v4 |
+| Env | T3 Env (validated at build time) |
+| Lint/format | Biome 2 |
+| Unit tests | Vitest + Testing Library (jsdom) |
+| E2E | Playwright |
+| Hooks | Husky + lint-staged + commitlint (conventional commits) |
+| CI | GitHub Actions — typecheck → lint → test → build |
+| Package manager | pnpm |
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Dev server on http://localhost:3000 |
+| `pnpm build` / `pnpm start` | Production build and serve |
+| `pnpm typecheck` | `next typegen` + `tsc --noEmit` |
+| `pnpm lint` / `pnpm lint:fix` | Biome check (add `:fix` to write) |
+| `pnpm format` | Biome formatter |
+| `pnpm test` / `pnpm test:watch` | Vitest |
+| `pnpm test:e2e` | Playwright (builds and serves automatically) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Playwright browsers need a one-time `pnpm exec playwright install chromium`.
 
-## Learn More
+## Layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/                    App Router routes, layout, globals.css
+  components/
+    providers/            Theme + TanStack Query providers
+    ui/                   shadcn/ui components (vendored, yours to edit)
+  hooks/                  Shared React hooks
+  lib/
+    api-client.ts         fetch wrapper, throws ApiError on non-2xx
+    utils.ts              cn() class merger
+  stores/                 Zustand stores
+  types/                  Shared types
+  env.ts                  Validated environment variables
+tests/
+  setup.ts                Vitest setup (jest-dom, matchMedia polyfill)
+  e2e/                    Playwright specs
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Conventions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Server Components by default; add `"use client"` only where interactivity requires it.
+- Read env through `@/env`, never `process.env` directly, so validation is enforced.
+- Adding UI: `pnpm dlx shadcn@latest add <component>`.
+- Commit messages follow Conventional Commits; `commit-msg` hook enforces it.
