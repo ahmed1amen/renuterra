@@ -233,6 +233,40 @@
   --stream-cd: #9b97c7;
 }
 
+/* intl-tel-input (PhoneInput) — skin the widget with theme tokens so both
+   themes stay correct. Structural rules live in the vendored stylesheet. */
+.phone-input .iti {
+  width: 100%;
+  --iti-border-color: var(--border);
+  --iti-dropdown-bg: var(--popover);
+  --iti-hover-color: var(--accent);
+  --iti-icon-color: var(--muted-foreground);
+}
+.phone-input .iti__dropdown-content {
+  color: var(--popover-foreground);
+  border-radius: var(--radius, 0.5rem);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  overflow: hidden;
+}
+.phone-input .iti__search-input {
+  background: transparent;
+  color: var(--popover-foreground);
+  border-bottom: 1px solid var(--border);
+  outline: none;
+}
+.phone-input .iti__search-input::placeholder {
+  color: var(--muted-foreground);
+}
+.phone-input .iti__selected-dial-code,
+.phone-input .iti__country .iti__dial-code {
+  color: var(--muted-foreground);
+}
+.phone-input .iti__country.iti__highlight {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

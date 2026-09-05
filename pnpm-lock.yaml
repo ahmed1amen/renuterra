@@ -32,6 +32,9 @@ importers:
       cn:
         specifier: ^0.2.4
         version: 0.2.4
+      intl-tel-input:
+        specifier: ^27.3.1
+        version: 27.3.1
       lucide-react:
         specifier: ^1.40.0
         version: 1.40.0(react@19.2.8)
@@ -1841,6 +1844,9 @@ packages:
   ini@6.0.0:
     resolution: {integrity: sha512-IBTdIkzZNOpqm7q3dRqJvMaldXjDHWkEDfrwGEQTs5eaQMWV+djAhR+wahyNNMAa+qpbDUhBMVt4ZKNwpPm7xQ==}
     engines: {node: ^20.17.0 || >=22.9.0}
+
+  intl-tel-input@27.3.1:
+    resolution: {integrity: sha512-8Y7cJ1YwR1L29U9I2Ftc2sBkqUBDHdpHDmvy1dFfi2osD2+6sw16OF+SxXLz64gvkFAxDO1WhpmncTvXHnyA+g==}
 
   ip-address@10.7.0:
     resolution: {integrity: sha512-BGFsyJd5mpXp3rK6jIdADLNgpJUK1jnjzvYF8lK+VyDab9JAmqN0YOKDdP17HlgKb2+ehPgDc8EtnRLbGCAMhA==}
@@ -4525,6 +4531,8 @@ snapshots:
   inherits@2.0.4: {}
 
   ini@6.0.0: {}
+
+  intl-tel-input@27.3.1: {}
 
   ip-address@10.7.0: {}
 

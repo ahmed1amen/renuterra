@@ -10,6 +10,7 @@ import {
   NativeSelect,
   NativeSelectOption,
 } from "@/components/ui/native-select";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -155,6 +156,45 @@ export default function FormsPage() {
             </Label>
             <Switch id={f("report")} />
           </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor={f("intl-phone")} className="text-[13px]">
+            Phone number
+          </Label>
+          <PhoneInput
+            id={f("intl-phone")}
+            placeholder="50 226 4150"
+            initialCountry="ae"
+          />
+          <span className="text-muted-foreground text-xs">
+            <Code>PhoneInput</Code> — intl-tel-input, emits E.164
+          </span>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor={f("intl-phone-invalid")} className="text-[13px]">
+            Phone number, invalid
+          </Label>
+          <PhoneInput
+            id={f("intl-phone-invalid")}
+            value="+9715"
+            invalid
+            initialCountry="ae"
+          />
+          <span className="text-destructive text-xs">
+            Enter a full number for the selected country
+          </span>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor={f("intl-phone-disabled")} className="text-[13px]">
+            Phone number, disabled
+          </Label>
+          <PhoneInput
+            id={f("intl-phone-disabled")}
+            value="+971502264150"
+            disabled
+            initialCountry="ae"
+          />
         </div>
 
         <div className="col-span-3 flex flex-col gap-1.5">

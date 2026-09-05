@@ -1,5 +1,3 @@
-/**
- * Layout shells. Composed by App Router layout files in src/app.
- */
 export { AppLayout } from "./app-layout";
+export { AppSidebar } from "./app-sidebar";
 export { AppTopbar } from "./app-topbar";

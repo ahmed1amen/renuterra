@@ -1,13 +1,14 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import logo from "../../../public/brand/renuterra-logo.webp";
+import logo from "../../../public/brand/renuterra-logo.png";
 
 type BrandLogoProps = {
   /** Rendered height in px. Minimum 22 in the top bar, 16 in email footers. */
   height?: number;
   /**
-   * Sit the logo on a white plate. Required on dark surfaces until the
-   * white-on-dark variant is supplied.
+   * Sit the logo on a white plate in dark mode, where the near-black wordmark
+   * would otherwise vanish. In light mode the artwork is transparent and sits
+   * directly on the surface. Needed until a white-on-dark variant is supplied.
    */
   plate?: boolean;
   className?: string;
@@ -38,7 +39,7 @@ export function BrandLogo({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md bg-white px-2 py-1",
+        "inline-flex items-center rounded-md dark:bg-white dark:px-2 dark:py-1",
         className,
       )}
     >
