@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  BarChart3,
-  ChevronsLeft,
-  ChevronsRight,
-  Home,
-  type LucideIcon,
-  Palette,
-} from "lucide-react";
+import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,27 +9,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { STORAGE_KEYS } from "@/constants";
 import { cn } from "@/lib/utils";
 import { USERS } from "@/mocks";
-
-type NavItem = {
-  label: string;
-  href: string;
-  icon: LucideIcon;
-  /** Match the pathname exactly instead of by prefix. */
-  exact?: boolean;
-};
-
-const NAV_GROUPS: { label?: string; items: NavItem[] }[] = [
-  {
-    items: [
-      { label: "Home", href: "/", icon: Home, exact: true },
-      { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
-    ],
-  },
-  {
-    label: "Design system",
-    items: [{ label: "Styleguide", href: "/styleguide", icon: Palette }],
-  },
-];
+import { isNavItemActive, NAV_GROUPS } from "./nav-items";
 
 const CURRENT_USER = USERS[0];
 
@@ -57,9 +30,6 @@ export function AppSidebar() {
       localStorage.setItem(STORAGE_KEYS.sidebarCollapsed, prev ? "0" : "1");
       return !prev;
     });
-
-  const isActive = (item: NavItem) =>
-    item.exact ? pathname === item.href : pathname.startsWith(item.href);
 
   const ToggleIcon = collapsed ? ChevronsRight : ChevronsLeft;
 
@@ -123,7 +93,7 @@ export function AppSidebar() {
             <ul className="flex flex-col gap-0.5">
               {group.items.map((item) => {
                 const Icon = item.icon;
-                const active = isActive(item);
+                const active = isNavItemActive(item, pathname);
                 return (
                   <li key={item.href}>
                     <Link

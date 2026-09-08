@@ -1,9 +1,24 @@
-import { ChevronRight } from "lucide-react";
+"use client";
+
+import { BarChart3, ChevronRight, Home, Menu, Palette } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, CrmFrame, SectionHeader } from "../components";
+import { Code, CrmFrame, Demo, SectionHeader } from "../components";
 
 const TABS = ["Overview", "Sites", "Collections", "Invoices", "Documents"];
+const DRAWER_ITEMS = [
+  { label: "Home", icon: Home, active: false },
+  { label: "Dashboard", icon: BarChart3, active: true },
+  { label: "Styleguide", icon: Palette, active: false },
+];
 const CHIPS = ["All", "Scheduled", "Completed", "Missed"];
 
 export default function NavigationPage() {
@@ -67,6 +82,47 @@ export default function NavigationPage() {
           </div>
         </div>
       </CrmFrame>
+
+      <Demo
+        title="Mobile drawer"
+        hint={
+          <>
+            below <Code>lg</Code> the rail is hidden and the same links move
+            into a <Code>Sheet</Code> behind the topbar's menu button (
+            <Code>app-mobile-nav.tsx</Code>); tapping a link closes it
+          </>
+        }
+      >
+        <Sheet>
+          <SheetTrigger render={<Button variant="outline" size="sm" />}>
+            <Menu className="size-4" />
+            Open drawer
+          </SheetTrigger>
+          <SheetContent side="left" className="bg-sidebar">
+            <SheetHeader className="border-sidebar-border">
+              <SheetTitle>Renuterra</SheetTitle>
+            </SheetHeader>
+            <nav aria-label="Demo navigation" className="px-3 py-4">
+              <ul className="flex flex-col gap-0.5">
+                {DRAWER_ITEMS.map(({ label, icon: Icon, active }) => (
+                  <li key={label}>
+                    <span
+                      className={
+                        active
+                          ? "bg-sidebar-accent text-sidebar-accent-foreground flex h-10 items-center gap-2.5 rounded-lg px-2.5 text-[13px] font-medium"
+                          : "text-sidebar-foreground/80 flex h-10 items-center gap-2.5 rounded-lg px-2.5 text-[13px] font-medium"
+                      }
+                    >
+                      <Icon className="size-4 shrink-0" aria-hidden />
+                      {label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </SheetContent>
+        </Sheet>
+      </Demo>
     </div>
   );
 }
