@@ -35,7 +35,7 @@ const ICONS: Record<(typeof CRM_NAV)[number]["icon"], LucideIcon> = {
   shield: ShieldCheck,
 };
 
-/** The CRM sidebar: ivory ground, active item on the lime tint with a 2px bar. */
+/** The CRM sidebar: white ground, active item on the lime tint with a 2px bar. */
 export function CrmSidebar({
   activeIndex,
   badge,

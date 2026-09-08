@@ -14,7 +14,7 @@ export default function NavigationPage() {
         title="Sidebar & top nav"
         description={
           <>
-            Ivory sidebar (<Code>--sidebar</Code>), 240px, active item on the
+            White sidebar (<Code>--sidebar</Code>), 240px, active item on the
             lime tint with a 2px lime bar. Top bar 56px, 60% border, 80%
             background blur — the existing <Code>app-topbar.tsx</Code> recipe.
           </>

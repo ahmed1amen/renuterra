@@ -188,7 +188,10 @@ export default function ColorPage() {
             <li>
               Navy for links and informational badges; lavender as its tint.
             </li>
-            <li>Ivory/snow surfaces so lime reads warm, never neon.</li>
+            <li>
+              White panels on the neutral page ground, so lime reads warm and
+              the chrome stays out of the way.
+            </li>
           </ul>
         </div>
         <div className="border-border bg-card rounded-xl border px-5 py-4">

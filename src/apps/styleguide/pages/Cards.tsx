@@ -33,7 +33,7 @@ export default function CardsPage() {
       <SectionHeader
         number="08"
         title="Cards & panels"
-        description="White card on snow ground, 1px 10%-foreground ring, radius 14px, 16px padding. Footer takes a 50% muted band."
+        description="White card on the neutral page ground, 1px 10%-foreground ring, radius 14px, 16px padding. Footer takes a 50% muted band."
       />
       <div className="grid grid-cols-3 items-start gap-4">
         <Card>

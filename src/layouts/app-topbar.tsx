@@ -5,7 +5,7 @@ import { APP_NAME } from "@/constants";
 
 export function AppTopbar() {
   return (
-    <header className="border-border/60 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
+    <header className="border-border bg-card/85 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 px-6">
         <Link
           href="/"

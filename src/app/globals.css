@@ -102,8 +102,8 @@
 :root {
   --radius: 0.625rem;
 
-  /* Surfaces */
-  --background: #fcfbf7; /* brand snow */
+  /* Surfaces — white panels (cards, sidebar) lifted off a neutral page ground */
+  --background: #f4f5f2; /* page ground: sits behind white panels */
   --foreground: #404040; /* brand charcoal (wordmark) */
   --card: #ffffff;
   --card-foreground: #404040;
@@ -114,16 +114,16 @@
   --primary: #68c828; /* brand limegreen */
   --primary-hover: #5ab520;
   --primary-foreground: #142105; /* dark text on lime — white fails contrast */
-  --secondary: #f0f1ed; /* brand whitesmoke */
+  --secondary: #f1f2ef; /* brand whitesmoke */
   --secondary-foreground: #404040;
-  --muted: #f0f1ed;
-  --muted-foreground: #737870;
+  --muted: #f3f4f1;
+  --muted-foreground: #6b7169;
   --accent: #eaf8df; /* lime tint — hovers, selected rows */
   --accent-foreground: #2e5a12;
   --destructive: #d9463e;
   --destructive-bg: #fbe4e2;
-  --border: #e4e5dd;
-  --input: #dcddd4;
+  --border: #e5e7e1;
+  --input: #d9dbd3;
   --ring: #68c828;
 
   /* Charts */
@@ -133,14 +133,14 @@
   --chart-4: #b8f800;
   --chart-5: #404040;
 
-  /* Sidebar */
-  --sidebar: #fcfdee; /* brand ivory */
+  /* Sidebar — white panel, same surface as cards */
+  --sidebar: #ffffff;
   --sidebar-foreground: #404040;
   --sidebar-primary: #68c828;
   --sidebar-primary-foreground: #142105;
   --sidebar-accent: #eaf8df;
   --sidebar-accent-foreground: #2e5a12;
-  --sidebar-border: #e8e9dc;
+  --sidebar-border: #e5e7e1;
   --sidebar-ring: #68c828;
 
   /* Brand ramp — lime */
@@ -209,7 +209,7 @@
   --chart-4: #b8f800;
   --chart-5: #a0a596;
 
-  --sidebar: #101308;
+  --sidebar: #1c2016; /* same surface as cards, lifted off the page ground */
   --sidebar-foreground: #f1f2ea;
   --sidebar-primary: #b8f800;
   --sidebar-primary-foreground: #142105;

@@ -20,9 +20,9 @@ export const BRAND_PALETTE = [
   { name: "Navy", hex: "#051683", use: "Links, info, chart-2" },
   { name: "Lavender", hex: "#E4E5F4", use: "Info tint, navy avatars" },
   { name: "Lightslategray", hex: "#9B97C7", use: "Chart-3, C&D stream" },
-  { name: "Snow", hex: "#FCFBF7", use: "Page background" },
-  { name: "Ivory", hex: "#FCFDEE", use: "Sidebar" },
-  { name: "Whitesmoke", hex: "#F0F1ED", use: "Muted / secondary" },
+  { name: "Snow", hex: "#FCFBF7", use: "Warm off-white — marketing surfaces" },
+  { name: "Ivory", hex: "#FCFDEE", use: "Warm off-white — marketing surfaces" },
+  { name: "Whitesmoke", hex: "#F0F1ED", use: "Muted / secondary, page ground" },
 ];
 
 export const LIME_RAMP = [
@@ -48,9 +48,9 @@ export const NAVY_RAMP = [
 ].map(([step, hex], i) => ({ step, hex, dark: i >= 3 }));
 
 export const SEMANTIC_TOKENS = [
-  ["--background", "#FCFBF7", "#14170F", "Page ground"],
+  ["--background", "#F4F5F2", "#14170F", "Page ground behind the white panels"],
   ["--foreground", "#404040", "#F1F2EA", "Body text"],
-  ["--card", "#FFFFFF", "#1C2016", "Cards, table shells, popovers"],
+  ["--card", "#FFFFFF", "#1C2016", "Cards, table shells, popovers, sidebar"],
   [
     "--primary",
     "#68C828",
@@ -63,21 +63,21 @@ export const SEMANTIC_TOKENS = [
     "#142105",
     "Text on primary — always dark",
   ],
-  ["--secondary", "#F0F1ED", "#262B1F", "Secondary button, chips"],
-  ["--muted", "#F0F1ED", "#262B1F", "Table headers, skeletons, hovers"],
+  ["--secondary", "#F1F2EF", "#262B1F", "Secondary button, chips"],
+  ["--muted", "#F3F4F1", "#262B1F", "Table headers, skeletons, hovers"],
   [
     "--muted-foreground",
-    "#737870",
+    "#6B7169",
     "#A0A596",
     "Captions, labels, placeholders",
   ],
   ["--accent", "#EAF8DF", "#26361A", "Selected row / nav item, count pills"],
   ["--accent-foreground", "#2E5A12", "#D6F5B0", "Text on accent"],
   ["--destructive", "#D9463E", "#F0665E", "Errors, delete, missed"],
-  ["--border", "#E4E5DD", "white 10%", "Dividers, card rings"],
-  ["--input", "#DCDDD4", "white 14%", "Field borders"],
+  ["--border", "#E5E7E1", "white 10%", "Dividers, card rings"],
+  ["--input", "#D9DBD3", "white 14%", "Field borders"],
   ["--ring", "#68C828", "#98E810", "Focus ring"],
-  ["--sidebar", "#FCFDEE", "#101308", "Sidebar ground"],
+  ["--sidebar", "#FFFFFF", "#1C2016", "Sidebar ground — same surface as cards"],
   [
     "--chart-1…5",
     "lime · navy · slate · yellow-green · charcoal",

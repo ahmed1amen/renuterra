@@ -23,7 +23,7 @@ export function BottomNav({ items, className }: BottomNavProps) {
     <nav
       aria-label="Primary"
       className={cn(
-        "border-border bg-background/95 sticky bottom-0 z-10 mt-auto border-t pb-[var(--safe-area-bottom,0px)] backdrop-blur",
+        "border-border bg-card/95 sticky bottom-0 z-10 mt-auto border-t pb-[var(--safe-area-bottom,0px)] backdrop-blur",
         className,
       )}
     >
