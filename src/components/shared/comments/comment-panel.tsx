@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquare, RotateCcw, X } from "lucide-react";
+import { ImageIcon, MessageSquare, RotateCcw, X } from "lucide-react";
 import { useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Badge } from "@/components/ui/badge";
@@ -133,6 +133,12 @@ export function CommentPanel({
                           Reopen
                         </Button>
                       </>
+                    ) : null}
+                    {thread.root.image ? (
+                      <ImageIcon
+                        aria-label="Has an attachment"
+                        className="text-muted-foreground size-3"
+                      />
                     ) : null}
                     {thread.replies.length > 0 ? (
                       <span className="text-muted-foreground text-[11px]">

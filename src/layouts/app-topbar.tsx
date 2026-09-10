@@ -15,14 +15,6 @@ export function AppTopbar() {
           <BrandLogo height={22} />
         </Link>
         <div className="ml-auto flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            nativeButton={false}
-            render={<Link href="/styleguide" />}
-          >
-            Styleguide
-          </Button>
           <ThemeToggle />
         </div>
       </div>

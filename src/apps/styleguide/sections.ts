@@ -1,11 +1,13 @@
 import type { ComponentType } from "react";
 import BadgesPage from "./pages/Badges";
 import BrandPage from "./pages/Brand";
+import BreadcrumbsPage from "./pages/Breadcrumbs";
 import ButtonsPage from "./pages/Buttons";
 import CardsPage from "./pages/Cards";
 import ChartsPage from "./pages/Charts";
 import ColorPage from "./pages/Color";
 import FormsPage from "./pages/Forms";
+import ListViewPage from "./pages/ListView";
 import MenusPage from "./pages/Menus";
 import NavigationPage from "./pages/Navigation";
 import ScreensPage from "./pages/Screens";
@@ -103,30 +105,44 @@ export const STYLEGUIDE_SECTIONS: StyleguideSection[] = [
     component: NavigationPage,
   },
   {
+    id: "breadcrumbs",
+    label: "Breadcrumbs",
+    number: "11",
+    group: "Components",
+    component: BreadcrumbsPage,
+  },
+  {
     id: "charts",
     label: "KPI tiles & charts",
-    number: "11",
+    number: "12",
     group: "Components",
     component: ChartsPage,
   },
   {
     id: "states",
     label: "Empty, loading, error",
-    number: "12",
+    number: "13",
     group: "Components",
     component: StatesPage,
   },
   {
     id: "menus",
     label: "Menus & toasts",
-    number: "13",
+    number: "14",
     group: "Components",
     component: MenusPage,
   },
   {
+    id: "list-view",
+    label: "List view",
+    number: "15",
+    group: "Screens",
+    component: ListViewPage,
+  },
+  {
     id: "screens",
     label: "Sample CRM screens",
-    number: "14",
+    number: "16",
     group: "Screens",
     component: ScreensPage,
   },

@@ -31,6 +31,7 @@ import {
   useUpdateComment,
 } from "@/features/comments";
 import { cn } from "@/lib/utils";
+import { ImageDropzone, useImageAttachment } from "./comment-image";
 import { CommentPanel } from "./comment-panel";
 import { CommentPin } from "./comment-pin";
 import { NameDialog } from "./name-dialog";
@@ -68,6 +69,8 @@ function EnabledSurface({ children }: { children: ReactNode }) {
   const [openThreadId, setOpenThreadId] = useState<string | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [nameDialogOpen, setNameDialogOpen] = useState(false);
+  const attachment = useImageAttachment();
+  const resetAttachment = attachment.reset;
 
   const comments = data ?? [];
   const threads = groupThreads(comments);
@@ -91,11 +94,27 @@ function EnabledSurface({ children }: { children: ReactNode }) {
       if (e.key === "Escape") {
         setCommentMode(false);
         setDraft(null);
+        resetAttachment();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [resetAttachment]);
+
+  // A miss when dropping a screenshot would otherwise make the browser
+  // navigate to the file and lose the draft. The dropzone's own handler runs
+  // first (target phase), so this only swallows the misses.
+  const composerOpen = draft !== null || openThreadId !== null;
+  useEffect(() => {
+    if (!composerOpen) return;
+    const swallow = (e: Event) => e.preventDefault();
+    window.addEventListener("dragover", swallow);
+    window.addEventListener("drop", swallow);
+    return () => {
+      window.removeEventListener("dragover", swallow);
+      window.removeEventListener("drop", swallow);
+    };
+  }, [composerOpen]);
 
   // Deep link: ?comment=<id> opens the thread and scrolls its pin into view.
   const consumedDeepLink = useRef(false);
@@ -131,8 +150,10 @@ function EnabledSurface({ children }: { children: ReactNode }) {
       y: draft.y,
       author,
       body: draft.body.trim(),
+      image: attachment.image,
     });
     setDraft(null);
+    attachment.reset();
     setCommentMode(false);
   };
 
@@ -177,7 +198,7 @@ function EnabledSurface({ children }: { children: ReactNode }) {
                 setOpenThreadId(open ? thread.root.id : null)
               }
               currentUser={name}
-              onReply={(body) => {
+              onReply={(body, image) => {
                 if (!name) {
                   setNameDialogOpen(true);
                   return;
@@ -188,6 +209,7 @@ function EnabledSurface({ children }: { children: ReactNode }) {
                   y: thread.root.y,
                   author: name,
                   body,
+                  image,
                   parentId: thread.root.id,
                 });
               }}
@@ -209,15 +231,21 @@ function EnabledSurface({ children }: { children: ReactNode }) {
           <Popover
             open
             onOpenChange={(open) => {
-              if (!open) setDraft(null);
+              if (!open) {
+                setDraft(null);
+                attachment.reset();
+              }
             }}
           >
             <PopoverTrigger
               render={
-                <span
+                <button
+                  type="button"
                   data-comment-pin
+                  aria-label="New comment pin"
                   style={percentToCss(draft.x, draft.y)}
                   className="border-background bg-primary text-primary-foreground pointer-events-auto absolute z-40 flex size-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 text-[11px] font-bold shadow-md"
+                  onClick={(e) => e.stopPropagation()}
                 />
               }
             >
@@ -230,20 +258,26 @@ function EnabledSurface({ children }: { children: ReactNode }) {
                   setDraft((d) => (d ? { ...d, body: e.target.value } : d))
                 }
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                    trySubmitDraft();
-                  }
+                  if (e.key !== "Enter" || e.shiftKey) return;
+                  if (e.nativeEvent.isComposing) return;
+                  e.preventDefault();
+                  trySubmitDraft();
                 }}
-                placeholder="Leave a comment…"
+                onPaste={attachment.onPaste}
+                placeholder="Leave a comment…  ⏎ to send, ⇧⏎ for a new line"
                 aria-label="New comment"
                 autoFocus
                 className="min-h-20 text-sm"
               />
-              <div className="flex justify-end gap-2">
+              <ImageDropzone attachment={attachment} />
+              <div className="flex items-center justify-end gap-2">
                 <Button
                   size="sm"
                   variant="ghost"
-                  onClick={() => setDraft(null)}
+                  onClick={() => {
+                    setDraft(null);
+                    attachment.reset();
+                  }}
                 >
                   Cancel
                 </Button>

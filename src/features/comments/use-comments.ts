@@ -49,6 +49,7 @@ export function useAddComment(page: string) {
         y: input.y,
         author: input.author,
         body: input.body,
+        image: input.image ?? null,
         resolved: false,
         parentId: input.parentId ?? null,
         createdAt: new Date().toISOString(),

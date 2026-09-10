@@ -86,5 +86,8 @@ test("with Supabase configured a comment persists across reload at the same posi
   await panel.getByText(body).click();
   await expect(page.getByLabel("Reply")).toBeVisible();
   await page.getByLabel("Delete thread").click();
+  // Deleting is confirmed inline inside the thread popover.
+  await expect(page.getByText("Delete this thread?")).toBeVisible();
+  await page.getByRole("button", { name: "Delete", exact: true }).click();
   await expect(page.getByText(body)).toHaveCount(0);
 });

@@ -109,18 +109,18 @@ export function AppSidebar() {
           <nav
             key={group.label ?? "main"}
             aria-label={group.label ?? "Main"}
-            className={groupIndex > 0 ? "mt-6" : undefined}
+            className={groupIndex > 0 ? "mt-7" : undefined}
           >
             {group.label ? (
               collapsed ? (
                 <div className="border-sidebar-border mx-1 mb-2 border-t" />
               ) : (
-                <p className="text-muted-foreground/80 mb-1 px-2.5 text-[10.5px] font-medium tracking-[0.08em] uppercase">
+                <p className="text-muted-foreground mb-2 px-2.5 text-[11px] font-semibold tracking-[0.1em] uppercase">
                   {group.label}
                 </p>
               )
             ) : null}
-            <ul className="flex flex-col gap-0.5">
+            <ul className="flex flex-col gap-1">
               {group.items.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item);
@@ -131,16 +131,16 @@ export function AppSidebar() {
                       title={collapsed ? item.label : undefined}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex h-9 items-center gap-2.5 rounded-lg text-[13px] font-medium transition-colors",
-                        collapsed ? "justify-center" : "px-2.5",
+                        "flex h-10 items-center gap-3 rounded-lg border border-transparent text-sm transition-colors",
+                        collapsed ? "justify-center" : "px-3",
                         active
-                          ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
+                          ? "bg-sidebar-accent border-sidebar-border text-sidebar-accent-foreground font-semibold"
+                          : "text-sidebar-foreground hover:bg-sidebar-accent/60 font-medium",
                       )}
                     >
                       <Icon
                         className={cn(
-                          "size-4 shrink-0",
+                          "size-[18px] shrink-0",
                           active
                             ? "text-sidebar-accent-foreground"
                             : "text-muted-foreground",

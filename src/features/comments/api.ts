@@ -10,6 +10,7 @@ type Row = {
   y: number;
   author: string;
   body: string;
+  image: string | null;
   resolved: boolean;
   parent_id: string | null;
   created_at: string;
@@ -22,6 +23,7 @@ const fromRow = (row: Row): PageComment => ({
   y: Number(row.y),
   author: row.author,
   body: row.body,
+  image: row.image ?? null,
   resolved: row.resolved,
   parentId: row.parent_id,
   createdAt: row.created_at,
@@ -58,6 +60,7 @@ export const commentsApi = {
         y: input.y,
         author: input.author,
         body: input.body,
+        image: input.image ?? null,
         parent_id: input.parentId ?? null,
       })
       .select()

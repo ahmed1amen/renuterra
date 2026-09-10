@@ -174,4 +174,4 @@ Adding an app: create `src/apps/<name>/`, then a route group
 - shadcn/ui is Base UI underneath: compose with the `render` prop, not `asChild`.
 - Read env through `@/env`, never `process.env` directly, so validation is enforced.
 - Adding UI: `pnpm dlx shadcn@latest add <component>`.
-- Commit messages follow Conventional Commits; `commit-msg` hook enforces it.
+- Commit messages follow Conventional Commits by convention (no hook enforces it).

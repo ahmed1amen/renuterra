@@ -110,6 +110,7 @@ export default function Dashboard() {
   return (
     <>
       <PageHeader
+        breadcrumbs={[{ label: "Home", href: "/" }, { label: "Dashboard" }]}
         title="Dashboard"
         description="Pipeline, leads and team activity at a glance."
         actions={

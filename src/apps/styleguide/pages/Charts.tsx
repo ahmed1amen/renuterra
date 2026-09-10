@@ -20,7 +20,7 @@ export default function ChartsPage() {
   return (
     <div className="space-y-5">
       <SectionHeader
-        number="11"
+        number="12"
         title="KPI tiles & charts"
         description={
           <>

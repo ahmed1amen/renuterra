@@ -15,6 +15,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -35,7 +36,7 @@ export default function MenusPage() {
   return (
     <div className="space-y-5">
       <SectionHeader
-        number="13"
+        number="14"
         title="Menus & toasts"
         description={
           <>
@@ -53,20 +54,22 @@ export default function MenusPage() {
               <ChevronDown data-icon="inline-end" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>QT-2026-0418</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <Send />
-                Send reminder
-                <DropdownMenuShortcut>⌘R</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Copy />
-                Duplicate
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Download />
-                Download PDF
-              </DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>QT-2026-0418</DropdownMenuLabel>
+                <DropdownMenuItem>
+                  <Send />
+                  Send reminder
+                  <DropdownMenuShortcut>⌘R</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Copy />
+                  Duplicate
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Download />
+                  Download PDF
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive">
                 <Trash2 />

@@ -9,6 +9,8 @@ export type PageComment = {
   y: number;
   author: string;
   body: string;
+  /** Optional attached screenshot as a base64 data URL, or null. */
+  image: string | null;
   resolved: boolean;
   parentId: string | null;
   createdAt: string;
@@ -20,6 +22,7 @@ export type NewComment = {
   y: number;
   author: string;
   body: string;
+  image?: string | null;
   parentId?: string | null;
 };
 

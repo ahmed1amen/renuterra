@@ -10,6 +10,7 @@ function comment(overrides: Partial<PageComment>): PageComment {
     y: 50,
     author: "Sara",
     body: "Body",
+    image: null,
     resolved: false,
     parentId: null,
     createdAt: "2026-01-01T00:00:00Z",

@@ -17,6 +17,11 @@ import {
   relativeTime,
 } from "@/features/comments";
 import { cn } from "@/lib/utils";
+import {
+  CommentImage,
+  ImageDropzone,
+  useImageAttachment,
+} from "./comment-image";
 
 /**
  * A numbered pin anchored at the thread's stored percentage position, with the
@@ -37,7 +42,7 @@ export function CommentPin({
   open: boolean;
   onOpenChange: (open: boolean) => void;
   currentUser: string;
-  onReply: (body: string) => void;
+  onReply: (body: string, image: string | null) => void;
   onToggleResolved: () => void;
   onDelete: () => void;
 }) {
@@ -106,6 +111,7 @@ function CommentRow({
         <p className="mt-0.5 text-sm break-words whitespace-pre-wrap">
           {comment.body}
         </p>
+        {comment.image ? <CommentImage image={comment.image} /> : null}
       </div>
     </div>
   );
@@ -120,19 +126,22 @@ export function ThreadView({
 }: {
   thread: CommentThread;
   currentUser: string;
-  onReply: (body: string) => void;
+  onReply: (body: string, image: string | null) => void;
   onToggleResolved: () => void;
   onDelete: () => void;
 }) {
   const { root, replies } = thread;
   const [reply, setReply] = useState("");
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const attachment = useImageAttachment();
   const canDelete = currentUser !== "" && currentUser === root.author;
 
   const submitReply = () => {
     const body = reply.trim();
     if (!body) return;
-    onReply(body);
+    onReply(body, attachment.image);
     setReply("");
+    attachment.reset();
   };
 
   return (
@@ -144,52 +153,83 @@ export function ThreadView({
         ))}
       </div>
 
-      <div className="border-border flex flex-col gap-2 border-t p-3">
-        <Textarea
-          value={reply}
-          onChange={(e) => setReply(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) submitReply();
-          }}
-          placeholder="Reply…"
-          aria-label="Reply"
-          className="min-h-16 text-sm"
-        />
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1">
+      {confirmingDelete ? (
+        <div className="border-border flex flex-col gap-2 border-t p-3">
+          <p className="text-sm font-medium">Delete this thread?</p>
+          <p className="text-muted-foreground text-xs">
+            {replies.length > 0
+              ? `This also deletes ${replies.length} ${replies.length === 1 ? "reply" : "replies"}. `
+              : ""}
+            This can't be undone.
+          </p>
+          <div className="flex justify-end gap-2">
             <Button
               size="sm"
               variant="ghost"
-              onClick={onToggleResolved}
-              aria-label={root.resolved ? "Reopen" : "Resolve"}
+              onClick={() => setConfirmingDelete(false)}
             >
-              {root.resolved ? (
-                <>
-                  <RotateCcw className="size-3.5" /> Reopen
-                </>
-              ) : (
-                <>
-                  <Check className="size-3.5" /> Resolve
-                </>
-              )}
+              Cancel
             </Button>
-            {canDelete ? (
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                aria-label="Delete thread"
-                className="text-destructive"
-                onClick={onDelete}
-              >
-                <Trash2 className="size-3.5" />
-              </Button>
-            ) : null}
+            <Button size="sm" variant="destructive" onClick={onDelete}>
+              <Trash2 className="size-3.5" />
+              Delete
+            </Button>
           </div>
-          <Button size="sm" disabled={!reply.trim()} onClick={submitReply}>
-            Reply
-          </Button>
         </div>
-      </div>
+      ) : (
+        <div className="border-border flex flex-col gap-2 border-t p-3">
+          <Textarea
+            value={reply}
+            onChange={(e) => setReply(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key !== "Enter" || e.shiftKey) return;
+              // Mid-composition Enter commits an IME candidate, not the reply.
+              if (e.nativeEvent.isComposing) return;
+              e.preventDefault();
+              submitReply();
+            }}
+            onPaste={attachment.onPaste}
+            placeholder="Reply…  ⏎ to send, ⇧⏎ for a new line"
+            aria-label="Reply"
+            className="min-h-16 text-sm"
+          />
+          <ImageDropzone attachment={attachment} compact />
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={onToggleResolved}
+                aria-label={root.resolved ? "Reopen" : "Resolve"}
+              >
+                {root.resolved ? (
+                  <>
+                    <RotateCcw className="size-3.5" /> Reopen
+                  </>
+                ) : (
+                  <>
+                    <Check className="size-3.5" /> Resolve
+                  </>
+                )}
+              </Button>
+              {canDelete ? (
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  aria-label="Delete thread"
+                  className="text-destructive"
+                  onClick={() => setConfirmingDelete(true)}
+                >
+                  <Trash2 className="size-3.5" />
+                </Button>
+              ) : null}
+            </div>
+            <Button size="sm" disabled={!reply.trim()} onClick={submitReply}>
+              Reply
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

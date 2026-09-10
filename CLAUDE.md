@@ -18,7 +18,7 @@ pnpm test:e2e           # Playwright — builds and serves automatically
 
 - Playwright needs a one-time `pnpm exec playwright install chromium`.
 - Vitest picks up `src/**/*.test.{ts,tsx}` and `tests/unit/**`; Playwright specs live in `tests/e2e/`.
-- Commits follow Conventional Commits (enforced by a commit-msg hook); lint-staged runs Biome on staged files.
+- Commits follow Conventional Commits by convention (not enforced); lint-staged runs Biome on staged files.
 
 ## Architecture
 

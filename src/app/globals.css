@@ -134,13 +134,13 @@
   --chart-5: #404040;
 
   /* Sidebar */
-  --sidebar: #fcfdee; /* brand ivory */
+  --sidebar: #ffffff;
   --sidebar-foreground: #404040;
   --sidebar-primary: #68c828;
   --sidebar-primary-foreground: #142105;
-  --sidebar-accent: #eaf8df;
-  --sidebar-accent-foreground: #2e5a12;
-  --sidebar-border: #e8e9dc;
+  --sidebar-accent: #f4f4f2; /* neutral hover/selected pill */
+  --sidebar-accent-foreground: #1f2320;
+  --sidebar-border: #ececea;
   --sidebar-ring: #68c828;
 
   /* Brand ramp — lime */
@@ -213,8 +213,8 @@
   --sidebar-foreground: #f1f2ea;
   --sidebar-primary: #b8f800;
   --sidebar-primary-foreground: #142105;
-  --sidebar-accent: #26361a;
-  --sidebar-accent-foreground: #d6f5b0;
+  --sidebar-accent: #23261f; /* neutral hover/selected pill */
+  --sidebar-accent-foreground: #f1f2ea;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: #98e810;
 

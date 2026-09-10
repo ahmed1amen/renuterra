@@ -14,7 +14,7 @@ export default function StatesPage() {
   return (
     <div className="space-y-5">
       <SectionHeader
-        number="12"
+        number="13"
         title="Empty, loading, error"
         description='Centered, 64px vertical padding, 32px Lucide icon in muted-foreground. One primary action max; filtered-empty offers "Clear filters" as outline.'
       />

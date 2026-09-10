@@ -1,4 +1,9 @@
 export { commentsApi } from "./api";
+export {
+  fileToStoredImage,
+  imageFromDataTransfer,
+  MAX_IMAGE_BYTES,
+} from "./image";
 export { clampPercent, percentToCss, pointToPercent } from "./position";
 export { relativeTime } from "./relative-time";
 export { filterThreads, groupThreads, openThreadCount } from "./threads";
