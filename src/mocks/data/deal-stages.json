@@ -1,0 +1,26 @@
+[
+  {
+    "id": "prospecting",
+    "label": "Prospecting"
+  },
+  {
+    "id": "qualification",
+    "label": "Qualification"
+  },
+  {
+    "id": "proposal",
+    "label": "Proposal"
+  },
+  {
+    "id": "negotiation",
+    "label": "Negotiation"
+  },
+  {
+    "id": "won",
+    "label": "Won"
+  },
+  {
+    "id": "lost",
+    "label": "Lost"
+  }
+]

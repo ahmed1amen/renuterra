@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { STYLEGUIDE_SECTIONS, Styleguide } from "@/apps/styleguide";
+import { STYLEGUIDE_SECTIONS, Styleguide } from "@/app/styleguide";
 
 export const metadata: Metadata = { title: "Styleguide" };
 

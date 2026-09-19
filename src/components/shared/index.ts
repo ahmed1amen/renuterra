@@ -6,6 +6,7 @@ export { BrandLogo } from "./brand-logo";
 export { CommentSurface } from "./comments/comment-surface";
 export { EmptyState } from "./empty-state";
 export { ErrorState } from "./error-state";
+export { KpiCard } from "./kpi-card";
 export { Loader } from "./loader";
 export { type Crumb, PageHeader } from "./page-header";
 export { StatusPill, type StatusTone } from "./status-pill";

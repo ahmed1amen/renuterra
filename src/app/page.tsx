@@ -1,4 +1,4 @@
-import { Home } from "@/apps/main/pages";
+import { Home } from "@/app/main/pages";
 import { AppLayout } from "@/layouts";
 
 export default function Page() {

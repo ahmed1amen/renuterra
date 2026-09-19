@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Dashboard } from "@/apps/main/pages";
+import { Dashboard } from "@/app/main/pages";
 import { AppLayout } from "@/layouts";
 
 export const metadata: Metadata = {

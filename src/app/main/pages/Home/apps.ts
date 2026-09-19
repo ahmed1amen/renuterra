@@ -34,8 +34,8 @@ export type AppCategory = {
 };
 
 /**
- * The app launcher registry. Everything except Dashboard and Styleguide is a
- * dummy for now — cards exist so the home reflects the platform we're
+ * The app launcher registry. Everything except Field Service, Dashboard and
+ * Styleguide is a dummy for now — cards exist so the home reflects the platform we're
  * building, and clicking one says so.
  */
 export const APP_CATEGORIES: AppCategory[] = [
@@ -58,7 +58,13 @@ export const APP_CATEGORIES: AppCategory[] = [
     tone: "bg-warning-bg text-warning",
     label: "Sales operations",
     apps: [
-      { id: "sales", name: "Sales", icon: BarChart3, status: "beta" },
+      {
+        id: "sales",
+        name: "Sales",
+        icon: BarChart3,
+        status: "beta",
+        href: "/sales",
+      },
       { id: "quotes", name: "Quotes", icon: FileText, status: "soon" },
     ],
   },
@@ -72,6 +78,7 @@ export const APP_CATEGORIES: AppCategory[] = [
         name: "Field Service",
         icon: Truck,
         status: "beta",
+        href: "/field-service",
       },
       { id: "routing", name: "Routing", icon: MapIcon, status: "soon" },
     ],

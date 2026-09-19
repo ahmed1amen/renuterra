@@ -55,9 +55,9 @@ Status badges & tags, Cards, Tables, Sidebar & top nav, KPI tiles & charts,
 Empty/loading/error, Menus & toasts) and Screens (sample CRM screens).
 
 Every section is prerendered at `/styleguide/<id>`; an unknown id 404s. To add
-one, drop a page in `src/apps/styleguide/pages/` and register it in
-`src/apps/styleguide/sections.ts` — the sidebar, routing and static params all
-derive from that array. Sample content lives in `src/apps/styleguide/data.ts`.
+one, drop a page in `src/app/styleguide/pages/` and register it in
+`src/app/styleguide/sections.ts` — the sidebar, routing and static params all
+derive from that array. Sample content lives in `src/app/styleguide/data.ts`.
 
 Brand rules worth knowing: primary buttons take dark text on lime (white fails
 contrast), links and info badges are navy, status tones are `success` /
@@ -97,8 +97,9 @@ the real API lands.
 
 ## Layout
 
-Mirrors the `cmp-ui` structure. Screens live in `src/apps/<app>/pages/`; the
-App Router files in `src/app/` are thin route definitions that map a URL to a
+Mirrors the `cmp-ui` structure. Screens live in `src/app/<app>/pages/`,
+colocated in the App Router — a folder without a `page.tsx` produces no route.
+The `page.tsx` files themselves are thin route definitions that map a URL to a
 page module and own nothing else.
 
 ```
@@ -106,21 +107,27 @@ src/
   api/                      Typed API surface (Orval-shaped)
     Api/<resource>/         One folder per resource + index barrel
     index.ts                export * as Api
-  app/                      App Router — thin route files only
+  app/                      App Router — routes + one folder per portal/app
     layout.tsx              Root layout, mounts <AppProviders>
-    page.tsx                / -> apps/main/pages/Dashboard
+    page.tsx                / -> app/main/pages/Home
     error.tsx not-found.tsx
-  apps/                     One folder per portal/app
-    main/
-      components/           Components local to this app
+    dashboard/page.tsx      /dashboard -> app/main/pages/Dashboard
+    field-service/          The Field Service app (its own sidebar)
+      page.tsx              /field-service -> its Dashboard
+      dispatch/page.tsx     /field-service/dispatch
+      components/ utils/ constants/
+      pages/ Dashboard/ Dispatch/
+    main/                   No page.tsx, so no route of its own
       constants/
       pages/
-        Dashboard/          PascalCase page folder
-          Dashboard.tsx     Implementation
+        Home/               PascalCase page folder
+          Home.tsx          Implementation
           index.ts          Barrel
+        Dashboard/
         index.ts
       utils/
     styleguide/             Living design-system reference at /styleguide
+      [[...section]]/page.tsx  The catch-all route
       Styleguide.tsx        Shell: header, grouped sidebar, section switching
       sections.ts           Section registry (id, label, number, group, component)
       data.ts               Sample CRM content used by the demos
@@ -137,6 +144,7 @@ src/
     comments/               PM review comments (Supabase) + hooks
   hooks/                    Shared React hooks + barrel
   layouts/                  app-layout.tsx, app-sidebar.tsx, app-topbar.tsx
+    nav.ts                  Sidebar registry — one entry per app, picked by path
   lib/
     api/                    client.ts, errors.ts
     query-client.ts         createQueryClient() factory
@@ -155,16 +163,16 @@ tests/
 
 | Scope | Location |
 | --- | --- |
-| A screen | `src/apps/<app>/pages/<Page>/<Page>.tsx` + `index.ts` |
+| A screen | `src/app/<app>/pages/<Page>/<Page>.tsx` + `index.ts` |
 | Sub-view of a screen | `pages/<Page>/List/`, `View/`, `Detail/` |
 | Component used by one screen | `pages/<Page>/components/` |
-| Component used across one app | `src/apps/<app>/components/` |
+| Component used across one app | `src/app/<app>/components/` |
 | Component used everywhere | `src/components/shared/` |
 | Domain hooks spanning apps | `src/features/<domain>/hooks/` |
 | Endpoint bindings | `src/api/Api/<resource>/` |
 
-Adding an app: create `src/apps/<name>/`, then a route group
-`src/app/(<name>)/` whose files import from it.
+Adding an app: create `src/app/<name>/` with its screens, then the
+`page.tsx` (at whatever URL it should live) that imports from it.
 
 ## Conventions
 

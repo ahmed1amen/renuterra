@@ -1,51 +1,29 @@
 "use client";
 
-import {
-  BarChart3,
-  ChevronsLeft,
-  ChevronsRight,
-  Home,
-  type LucideIcon,
-  Palette,
-} from "lucide-react";
+import { ChevronsLeft, ChevronsRight, LayoutGrid } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { BrandLogo } from "@/components/shared";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { STORAGE_KEYS } from "@/constants";
 import { cn } from "@/lib/utils";
 import { USERS } from "@/mocks";
-
-type NavItem = {
-  label: string;
-  href: string;
-  icon: LucideIcon;
-  /** Match the pathname exactly instead of by prefix. */
-  exact?: boolean;
-};
-
-const NAV_GROUPS: { label?: string; items: NavItem[] }[] = [
-  {
-    items: [
-      { label: "Home", href: "/", icon: Home, exact: true },
-      { label: "Dashboard", href: "/dashboard", icon: BarChart3 },
-    ],
-  },
-  {
-    label: "Design system",
-    items: [{ label: "Styleguide", href: "/styleguide", icon: Palette }],
-  },
-];
+import { useAgreementModal } from "@/stores/agreement-modal";
+import { type NavAction, type NavItem, navForPath } from "./nav";
 
 const CURRENT_USER = USERS[0];
 
 /**
- * Desktop navigation rail. Collapses to icons only; the choice persists in
- * localStorage (prototype-grade persistence, no backend).
+ * Desktop navigation rail. The nav swaps per app — `navForPath` picks the
+ * entry that owns the current pathname, so entering an app replaces the
+ * platform links with that app's own. Collapses to icons only; the choice
+ * persists in localStorage (prototype-grade persistence, no backend).
  */
 export function AppSidebar() {
   const pathname = usePathname();
+  const nav = navForPath(pathname);
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
@@ -105,7 +83,34 @@ export function AppSidebar() {
           collapsed ? "px-2" : "px-3",
         )}
       >
-        {NAV_GROUPS.map((group, groupIndex) => (
+        {nav.label ? (
+          <div className={cn("mb-4", collapsed ? "px-0" : "px-1")}>
+            <Link
+              href="/"
+              title={collapsed ? "All apps" : undefined}
+              className={cn(
+                "text-muted-foreground hover:text-foreground flex items-center gap-2 text-xs font-medium transition-colors",
+                collapsed && "justify-center",
+              )}
+            >
+              <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
+              {collapsed ? (
+                <span className="sr-only">All apps</span>
+              ) : (
+                "All apps"
+              )}
+            </Link>
+            {collapsed ? null : (
+              <p className="mt-2 px-1 text-sm font-semibold">{nav.label}</p>
+            )}
+          </div>
+        ) : null}
+
+        {nav.action ? (
+          <ActionButton action={nav.action} collapsed={collapsed} />
+        ) : null}
+
+        {nav.groups.map((group, groupIndex) => (
           <nav
             key={group.label ?? "main"}
             aria-label={group.label ?? "Main"}
@@ -184,5 +189,75 @@ export function AppSidebar() {
         )}
       </div>
     </aside>
+  );
+}
+
+/**
+ * The app's primary action, sitting above its nav — full width when the rail
+ * is open, an icon square when it is collapsed.
+ */
+function ActionButton({
+  action,
+  collapsed,
+}: {
+  action: NavAction;
+  collapsed: boolean;
+}) {
+  const openAgreement = useAgreementModal((s) => s.openModal);
+  const Icon = action.icon;
+  const className = cn(
+    "bg-primary text-primary-foreground hover:bg-primary/90 mb-5 flex h-10 items-center rounded-lg text-sm font-semibold transition-colors",
+    collapsed ? "w-full justify-center" : "w-full justify-center gap-2 px-3",
+  );
+  const body = (
+    <>
+      <Icon className="size-[18px] shrink-0" aria-hidden />
+      {collapsed ? (
+        <span className="sr-only">{action.label}</span>
+      ) : (
+        <span className="whitespace-nowrap">{action.label}</span>
+      )}
+    </>
+  );
+
+  if (action.opens === "new-agreement") {
+    return (
+      <button
+        type="button"
+        title={collapsed ? action.label : undefined}
+        onClick={() => openAgreement()}
+        className={className}
+      >
+        {body}
+      </button>
+    );
+  }
+
+  if (action.href) {
+    return (
+      <Link
+        href={action.href}
+        title={collapsed ? action.label : undefined}
+        className={className}
+      >
+        {body}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      title={collapsed ? action.label : undefined}
+      onClick={() =>
+        toast(`${action.label} isn't built yet`, {
+          description:
+            "It's on the platform map — this button is a placeholder.",
+        })
+      }
+      className={className}
+    >
+      {body}
+    </button>
   );
 }

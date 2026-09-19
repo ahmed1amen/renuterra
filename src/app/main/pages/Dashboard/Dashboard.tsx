@@ -14,6 +14,7 @@ import { useMemo } from "react";
 import { toast } from "sonner";
 import {
   ErrorState,
+  KpiCard,
   PageHeader,
   StatusPill,
   type StatusTone,
@@ -43,7 +44,6 @@ import {
   findUser,
   type LeadStatus,
 } from "@/mocks";
-import { KpiCard } from "../../components";
 import { formatCount, formatCurrency, formatRelative } from "../../utils";
 
 const ACTIVITY_ICONS: Record<ActivityType, LucideIcon> = {

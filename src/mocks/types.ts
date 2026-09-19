@@ -86,3 +86,61 @@ export type Activity = {
   /** Only meaningful for tasks. */
   completed?: boolean;
 };
+
+export type TechnicianStatus = "available" | "on-job" | "off-shift";
+
+export type Technician = {
+  id: string;
+  name: string;
+  initials: string;
+  phone: string;
+  /** Service area the tech is rostered to today. */
+  zone: string;
+  /** Last known vehicle position, for the dispatch map. */
+  lat: number;
+  lng: number;
+  shift: string;
+  status: TechnicianStatus;
+  skills: string[];
+};
+
+export type JobStatus =
+  | "unassigned"
+  | "scheduled"
+  | "en-route"
+  | "on-site"
+  | "completed"
+  | "blocked";
+
+export type JobPriority = "low" | "normal" | "high" | "urgent";
+
+export type ServiceType =
+  | "collection"
+  | "maintenance"
+  | "installation"
+  | "inspection";
+
+export type Job = {
+  id: string;
+  /** Human-facing work order number. */
+  ref: string;
+  customer: string;
+  site: string;
+  address: string;
+  /** Service point position, for the dispatch map. */
+  lat: number;
+  lng: number;
+  zone: string;
+  serviceType: ServiceType;
+  /** Waste stream the job handles; drives the stream colour in the UI. */
+  stream: "recyclable" | "food" | "medical" | "hazardous" | "cd" | "general";
+  status: JobStatus;
+  priority: JobPriority;
+  /** Start of the booked slot. */
+  scheduledFor: string;
+  /** Arrival window shown to the customer. */
+  window: string;
+  durationMins: number;
+  technicianId: string | null;
+  notes?: string;
+};

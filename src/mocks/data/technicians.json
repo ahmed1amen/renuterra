@@ -1,0 +1,74 @@
+[
+  {
+    "id": "tech_1",
+    "name": "Rashid Al Marri",
+    "initials": "RA",
+    "phone": "+971 50 555 0118",
+    "zone": "Al Quoz",
+    "lat": 25.1155,
+    "lng": 55.227,
+    "shift": "06:00–14:00",
+    "status": "on-job",
+    "skills": ["Collection", "Compactor"]
+  },
+  {
+    "id": "tech_2",
+    "name": "Lena Fischer",
+    "initials": "LF",
+    "phone": "+971 50 555 0243",
+    "zone": "Deira",
+    "lat": 25.27485,
+    "lng": 55.29025,
+    "shift": "07:00–15:00",
+    "status": "on-job",
+    "skills": ["Maintenance", "Compactor", "Baler"]
+  },
+  {
+    "id": "tech_3",
+    "name": "Mateo Álvarez",
+    "initials": "MÁ",
+    "phone": "+971 50 555 0361",
+    "zone": "Jebel Ali",
+    "lat": 25.0292,
+    "lng": 55.1205,
+    "shift": "06:00–14:00",
+    "status": "available",
+    "skills": ["Hazardous", "Collection"]
+  },
+  {
+    "id": "tech_4",
+    "name": "Fatima Zahra",
+    "initials": "FZ",
+    "phone": "+971 50 555 0477",
+    "zone": "Business Bay",
+    "lat": 25.17755,
+    "lng": 55.27175,
+    "shift": "08:00–16:00",
+    "status": "available",
+    "skills": ["Inspection", "Installation"]
+  },
+  {
+    "id": "tech_5",
+    "name": "Dmitri Petrov",
+    "initials": "DP",
+    "phone": "+971 50 555 0512",
+    "zone": "Al Quoz",
+    "lat": 25.1419,
+    "lng": 55.215,
+    "shift": "08:00–16:00",
+    "status": "available",
+    "skills": ["Installation", "Baler"]
+  },
+  {
+    "id": "tech_6",
+    "name": "Grace Mwangi",
+    "initials": "GM",
+    "phone": "+971 50 555 0698",
+    "zone": "Deira",
+    "lat": 25.24625,
+    "lng": 55.35325,
+    "shift": "14:00–22:00",
+    "status": "off-shift",
+    "skills": ["Collection", "Medical"]
+  }
+]
