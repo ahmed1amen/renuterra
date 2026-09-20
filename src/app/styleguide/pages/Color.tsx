@@ -1,7 +1,7 @@
 import { Check, X } from "lucide-react";
 import { StreamSwatch, WASTE_STREAMS } from "@/components/shared";
 import { cn } from "@/lib/utils";
-import { Demo, SectionHeader } from "../components";
+import { Code, Demo, SectionHeader } from "../components";
 import {
   BRAND_PALETTE,
   LIME_RAMP,
@@ -83,10 +83,10 @@ export default function ColorPage() {
       </div>
 
       <div className="space-y-3">
-        <div className="text-sm font-semibold">Lime ramp</div>
+        <div className="text-sm font-semibold">Navy ramp — primary</div>
+        <Ramp steps={NAVY_RAMP} cols={8} />
+        <div className="pt-2 text-sm font-semibold">Lime ramp — accent</div>
         <Ramp steps={LIME_RAMP} cols={10} />
-        <div className="pt-2 text-sm font-semibold">Navy ramp</div>
-        <Ramp steps={NAVY_RAMP} cols={6} />
       </div>
 
       <Demo
@@ -182,13 +182,14 @@ export default function ColorPage() {
           </div>
           <ul className="text-muted-foreground flex list-disc flex-col gap-1.5 pl-4 text-[13px]">
             <li>
-              Lime for one primary action per view, focus rings, and
-              "recyclable" data.
+              Navy for one primary action per view, focus rings, links and
+              informational badges; lavender as its tint.
             </li>
             <li>
-              Navy for links and informational badges; lavender as its tint.
+              Lime for success, the "recyclable" stream and the second chart
+              series — it is the accent now, not the action colour.
             </li>
-            <li>Ivory/snow surfaces so lime reads warm, never neon.</li>
+            <li>Ivory/snow surfaces so navy reads deep, never flat black.</li>
           </ul>
         </div>
         <div className="border-border bg-card rounded-xl border px-5 py-4">
@@ -197,12 +198,15 @@ export default function ColorPage() {
             Don't
           </div>
           <ul className="text-muted-foreground flex list-disc flex-col gap-1.5 pl-4 text-[13px]">
-            <li>No white text on lime — use #142105.</li>
             <li>
-              No lime as body-text color; use lime-700 for text-size accents.
+              No dark text on navy — <Code>--primary-foreground</Code> is white.
             </li>
             <li>
-              No large lime fills or gradients on panels; the leaf mark owns the
+              No lime solids for primary actions; lime survives as success and
+              stream colour only.
+            </li>
+            <li>
+              No large navy fills or gradients on panels; the leaf mark owns the
               gradient.
             </li>
           </ul>

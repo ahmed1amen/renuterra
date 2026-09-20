@@ -6,19 +6,23 @@ import type { StatusTone, WasteStream } from "@/components/shared";
 
 export const BRAND_PALETTE = [
   {
-    name: "Limegreen",
-    hex: "#68C828",
-    use: "Primary actions, focus, recyclable",
+    name: "Navy",
+    hex: "#051683",
+    use: "Primary actions, focus, links, chart-1",
   },
-  { name: "Greenyellow", hex: "#98E810", use: "Dark-mode ring, chart-1" },
+  {
+    name: "Lavender",
+    hex: "#E4E5F4",
+    use: "Accent — selected rows, info tint",
+  },
+  { name: "Limegreen", hex: "#68C828", use: "Success, recyclable, chart-2" },
+  { name: "Greenyellow", hex: "#98E810", use: "Dark-mode success" },
   {
     name: "Greenyellow 2",
     hex: "#B8F800",
-    use: "Dark-mode primary, logo highlight",
+    use: "Logo highlight, chart-4",
   },
   { name: "Charcoal", hex: "#404040", use: "Text, wordmark" },
-  { name: "Navy", hex: "#051683", use: "Links, info, chart-2" },
-  { name: "Lavender", hex: "#E4E5F4", use: "Info tint, navy avatars" },
   { name: "Lightslategray", hex: "#9B97C7", use: "Chart-3, C&D stream" },
   { name: "Snow", hex: "#FCFBF7", use: "Page background" },
   { name: "Ivory", hex: "#FCFDEE", use: "Sidebar" },
@@ -41,11 +45,13 @@ export const LIME_RAMP = [
 export const NAVY_RAMP = [
   ["50", "#EEF0FA"],
   ["100", "#E4E5F4"],
+  ["200", "#C9CDF5"],
   ["300", "#9B97C7"],
+  ["400", "#6D7CE0"],
   ["500", "#2E3EA6"],
   ["700", "#051683"],
   ["900", "#030D4D"],
-].map(([step, hex], i) => ({ step, hex, dark: i >= 3 }));
+].map(([step, hex], i) => ({ step, hex, dark: i >= 5 }));
 
 export const SEMANTIC_TOKENS = [
   ["--background", "#FCFBF7", "#14170F", "Page ground"],
@@ -53,15 +59,15 @@ export const SEMANTIC_TOKENS = [
   ["--card", "#FFFFFF", "#1C2016", "Cards, table shells, popovers"],
   [
     "--primary",
-    "#68C828",
-    "#B8F800",
+    "#051683",
+    "#8B97EA",
     "Primary button, active nav bar, progress",
   ],
   [
     "--primary-foreground",
-    "#142105",
-    "#142105",
-    "Text on primary — always dark",
+    "#FFFFFF",
+    "#050A33",
+    "Text on primary — white on navy, dark on lifted navy",
   ],
   ["--secondary", "#F0F1ED", "#262B1F", "Secondary button, chips"],
   ["--muted", "#F0F1ED", "#262B1F", "Table headers, skeletons, hovers"],
@@ -71,16 +77,16 @@ export const SEMANTIC_TOKENS = [
     "#A0A596",
     "Captions, labels, placeholders",
   ],
-  ["--accent", "#EAF8DF", "#26361A", "Selected row / nav item, count pills"],
-  ["--accent-foreground", "#2E5A12", "#D6F5B0", "Text on accent"],
+  ["--accent", "#E4E5F4", "#23264A", "Selected row / nav item, count pills"],
+  ["--accent-foreground", "#051683", "#C9CDF5", "Text on accent"],
   ["--destructive", "#D9463E", "#F0665E", "Errors, delete, missed"],
   ["--border", "#E4E5DD", "white 10%", "Dividers, card rings"],
   ["--input", "#DCDDD4", "white 14%", "Field borders"],
-  ["--ring", "#68C828", "#98E810", "Focus ring"],
+  ["--ring", "#051683", "#8B97EA", "Focus ring"],
   ["--sidebar", "#FCFDEE", "#101308", "Sidebar ground"],
   [
     "--chart-1…5",
-    "lime · navy · slate · yellow-green · charcoal",
+    "navy · lime · slate · yellow-green · charcoal",
     "same, lightened",
     "Series order for non-stream charts",
   ],

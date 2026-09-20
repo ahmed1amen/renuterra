@@ -17,7 +17,8 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive-bg text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-info underline-offset-4 hover:underline",
-        navy: "bg-navy-700 text-white hover:bg-navy-900",
+        /** @deprecated Same colour as `default` now that primary is navy. */
+        navy: "bg-primary text-primary-foreground hover:bg-primary-hover",
         dark: "bg-foreground text-background hover:bg-foreground/90",
         success: "bg-success text-white hover:bg-success/90",
         warning: "bg-warning text-white hover:bg-warning/90",

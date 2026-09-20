@@ -53,8 +53,8 @@ export default function ButtonsPage() {
         description={
           <>
             Variants map 1:1 to <Code>button.tsx</Code>. Height 32px default,
-            28px sm, 36px lg; radius 10px; 14px/500. Lime primary always takes
-            dark text — white fails contrast on <Code>--primary</Code>.
+            28px sm, 36px lg; radius 10px; 14px/500. Navy primary takes white
+            text — <Code>--primary-foreground</Code> is #FFFFFF.
           </>
         }
       />
@@ -245,8 +245,9 @@ export default function ButtonsPage() {
       </Demo>
 
       <Note title="Picking a variant">
-        Lime <Code>default</Code> is the single primary action on a screen. Navy
-        carries links and secondary confirmations, gray/outline everything else.{" "}
+        Navy <Code>default</Code> is the single primary action on a screen. The
+        <Code>navy</Code> variant is the same colour by hand — prefer{" "}
+        <Code>default</Code>. Gray/outline carries everything else.{" "}
         <Code>danger</Code> is for irreversible actions only — the soft{" "}
         <Code>destructive</Code> variant covers ordinary deletes. Warning and
         success solids are for status-driven actions, not decoration.
