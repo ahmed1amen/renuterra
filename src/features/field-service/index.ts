@@ -1,5 +1,11 @@
 export { fieldServiceApi } from "./api";
 export {
+  type BookingInput,
+  useAppointment,
+  useAppointmentStore,
+  useAppointments,
+} from "./appointment-store";
+export {
   type TechnicianLane,
   useDispatchBoard,
   useDispatchStore,

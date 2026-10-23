@@ -1,5 +1,7 @@
 import {
   BarChart3,
+  Building2,
+  CalendarCheck,
   FileSignature,
   Gauge,
   Home,
@@ -81,6 +83,21 @@ export const APP_NAVS: AppNav[] = [
             exact: true,
           },
           { label: "Dispatch", href: "/field-service/dispatch", icon: Radio },
+          {
+            label: "Appointments",
+            href: "/field-service/appointments",
+            icon: CalendarCheck,
+          },
+        ],
+      },
+      {
+        label: "Organization",
+        items: [
+          {
+            label: "Customers",
+            href: "/field-service/customers",
+            icon: Building2,
+          },
         ],
       },
     ],

@@ -12,7 +12,10 @@ render — edit them freely, no code changes needed.
 | `deal-stages.json` | `{ id: DealStage; label: string }[]` | pipeline column order |
 | `activities.json` | `Activity[]` | `useActivities()` |
 | `technicians.json` | `Technician[]` | `useTechnicians()` — Field Service crew |
-| `jobs.json` | `Job[]` | `useJobs()` — Field Service work orders |
+| `jobs.json` | `Job[]` | `useJobs()` — dispatch board (legacy; being replaced by appointments) |
+| `customers.json` | `Customer[]` | `useCustomers()`, `useCustomer(id)` — Field Ops customers with contacts |
+| `service-points.json` | `ServicePoint[]` | `useServicePoints()` — sites with containers and contracted service lines |
+| `appointments.json` | `Appointment[]` | `useAppointments()`, `useAppointment(id)` — visits around `MOCK_NOW`, merged with session bookings/edits |
 
 ## Adding a dataset
 

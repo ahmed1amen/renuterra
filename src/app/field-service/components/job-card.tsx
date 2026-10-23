@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -86,19 +87,21 @@ export function JobCard({
             {job.technicianId ? "Reassign" : "Assign"}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>Assign to</DropdownMenuLabel>
-            {assignable.map((tech) => (
-              <DropdownMenuItem
-                key={tech.id}
-                disabled={tech.id === job.technicianId}
-                onClick={() => onAssign(tech.id)}
-              >
-                <span className="truncate">{tech.name}</span>
-                <span className="text-muted-foreground ml-auto text-xs">
-                  {tech.zone}
-                </span>
-              </DropdownMenuItem>
-            ))}
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Assign to</DropdownMenuLabel>
+              {assignable.map((tech) => (
+                <DropdownMenuItem
+                  key={tech.id}
+                  disabled={tech.id === job.technicianId}
+                  onClick={() => onAssign(tech.id)}
+                >
+                  <span className="truncate">{tech.name}</span>
+                  <span className="text-muted-foreground ml-auto text-xs">
+                    {tech.zone}
+                  </span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
             {job.technicianId ? (
               <>
                 <DropdownMenuSeparator />

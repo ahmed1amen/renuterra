@@ -217,6 +217,9 @@ export function OsmMap({
   }, [zoomBy]);
 
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    // Pins and controls are buttons: capturing the pointer here would steal
+    // their click, so a press on one never starts a pan.
+    if ((e.target as HTMLElement).closest("button")) return;
     drag.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture(e.pointerId);
   };

@@ -164,3 +164,58 @@ export function formatHour(hour: number) {
   const display = h % 12 === 0 ? 12 : h % 12;
   return `${display} ${suffix}`;
 }
+
+const dubaiDate = new Intl.DateTimeFormat("en-GB", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  timeZone: "Asia/Dubai",
+});
+
+/** "Fri 4 Sep" in Dubai time. */
+export function formatDate(iso: string) {
+  return dubaiDate.format(new Date(iso)).replace(",", "");
+}
+
+/** "Fri 4 Sep, 13:05" in Dubai time. */
+export function formatDateTime(iso: string) {
+  return `${formatDate(iso)}, ${formatTime(iso)}`;
+}
+
+/** "06:00–10:00"; a window ending at midnight reads "24:00". */
+export function formatWindowRange(startIso: string, endIso: string) {
+  const end = formatTime(endIso);
+  return `${formatTime(startIso)}–${end === "00:00" ? "24:00" : end}`;
+}
+
+const dubaiDayKey = new Intl.DateTimeFormat("en-CA", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  timeZone: "Asia/Dubai",
+});
+
+/** `2026-09-04` — the Dubai calendar day an instant falls on. */
+export function toDubaiDayKey(iso: string) {
+  return dubaiDayKey.format(new Date(iso));
+}
+
+/** Dubai is UTC+4 all year — no daylight saving. */
+const DUBAI_OFFSET_HOURS = 4;
+
+/** ISO instant for a Dubai calendar day (`2026-09-04`) at a local hour. */
+export function dubaiDateTime(dayKey: string, hour: number) {
+  return new Date(
+    Date.parse(`${dayKey}T00:00:00Z`) + (hour - DUBAI_OFFSET_HOURS) * 3_600_000,
+  ).toISOString();
+}
+
+const aed = new Intl.NumberFormat("en-AE", {
+  style: "currency",
+  currency: "AED",
+  maximumFractionDigits: 0,
+});
+
+export function formatAed(value: number) {
+  return aed.format(value);
+}

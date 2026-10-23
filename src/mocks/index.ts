@@ -6,7 +6,9 @@
  * `MockScenario` so screens can demo their loading/empty/error UI.
  */
 export { ACTIVITIES } from "./activities";
+export { APPOINTMENTS } from "./appointments";
 export { CONTACTS } from "./contacts";
+export { CUSTOMERS, findCustomer } from "./customers";
 export { DEAL_STAGES, DEALS } from "./deals";
 export { JOBS } from "./jobs";
 export { LEADS } from "./leads";
@@ -18,6 +20,7 @@ export {
   type MockScenario,
   useMockScenarioStore,
 } from "./scenario";
+export { findServicePoint, SERVICE_POINTS } from "./service-points";
 export { findTechnician, TECHNICIANS } from "./technicians";
 export type * from "./types";
 export { findUser, USERS } from "./users";

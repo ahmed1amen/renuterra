@@ -1,0 +1,948 @@
+[
+  {
+    "id": "sp_01",
+    "number": "REN-SP-000301",
+    "customerId": "cust_01",
+    "name": "Palm Crescent Hotels & Resorts - Palm Jumeirah Resort",
+    "location": "Palm Jumeirah Resort",
+    "address": "Crescent Rd, Palm Jumeirah, Dubai",
+    "emirate": "Dubai",
+    "area": "Palm Jumeirah",
+    "lat": 25.1305,
+    "lng": 55.1172,
+    "status": "active",
+    "accessNotes": "Service entrance off the Crescent; call security 10 min ahead.",
+    "attributes": ["Security badge required", "Loading bay 05:00–09:00 only"],
+    "containers": [
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 8,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "recyclable",
+        "quantity": 4,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "240L",
+        "stream": "food",
+        "quantity": 10,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_01_l1",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "daily",
+        "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_01_l2",
+        "serviceItem": "REC 1.1CBM",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["mon", "thu"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_01_l3",
+        "serviceItem": "FOOD 240L",
+        "stream": "food",
+        "frequency": "weekly",
+        "days": ["mon", "wed", "fri"],
+        "window": "AM",
+        "uom": "pcs",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "id": "sp_02",
+    "number": "REN-SP-000302",
+    "customerId": "cust_01",
+    "name": "Palm Crescent Hotels & Resorts - Downtown Tower Hotel",
+    "location": "Downtown Tower Hotel",
+    "address": "Sheikh Mohammed bin Rashid Blvd, Downtown, Dubai",
+    "emirate": "Dubai",
+    "area": "Downtown",
+    "lat": 25.1932,
+    "lng": 55.2766,
+    "status": "active",
+    "accessNotes": "Basement B2 waste room. Height limit 3.2 m.",
+    "attributes": ["Height restriction 3.2 m"],
+    "containers": [
+      {
+        "type": "compactor",
+        "size": "15CBM",
+        "stream": "general",
+        "quantity": 1,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "660L",
+        "stream": "recyclable",
+        "quantity": 6,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_02_l1",
+        "serviceItem": "COMP 15CBM GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["tue", "sat"],
+        "window": "night",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_02_l2",
+        "serviceItem": "REC 660L",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["wed"],
+        "window": "night",
+        "uom": "pcs",
+        "quantity": 6
+      }
+    ]
+  },
+  {
+    "id": "sp_03",
+    "number": "REN-SP-000303",
+    "customerId": "cust_01",
+    "name": "Palm Crescent Hotels & Resorts - JBR Beach Hotel",
+    "location": "JBR Beach Hotel",
+    "address": "The Walk, Jumeirah Beach Residence, Dubai",
+    "emirate": "Dubai",
+    "area": "Dubai Marina",
+    "lat": 25.0783,
+    "lng": 55.1336,
+    "status": "active",
+    "attributes": ["Night collection only"],
+    "containers": [
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 6,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "240L",
+        "stream": "food",
+        "quantity": 8,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_03_l1",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["mon", "wed", "fri"],
+        "window": "night",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_03_l2",
+        "serviceItem": "FOOD 240L",
+        "stream": "food",
+        "frequency": "weekly",
+        "days": ["tue", "thu", "sat"],
+        "window": "night",
+        "uom": "pcs",
+        "quantity": 8
+      }
+    ]
+  },
+  {
+    "id": "sp_04",
+    "number": "REN-SP-000304",
+    "customerId": "cust_02",
+    "name": "Al Safa Medical Centre - Main Clinic",
+    "location": "Main Clinic",
+    "address": "Al Wasl Rd, Al Safa 1, Dubai",
+    "emirate": "Dubai",
+    "area": "Al Safa",
+    "lat": 25.1726,
+    "lng": 55.2333,
+    "status": "active",
+    "accessNotes": "Sharps and clinical bags handed over at the rear dock. Sign the consignment note.",
+    "attributes": ["Consignment note required"],
+    "containers": [
+      {
+        "type": "sharps-box",
+        "size": "20L",
+        "stream": "medical",
+        "quantity": 12,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "240L",
+        "stream": "medical",
+        "quantity": 4,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "660L",
+        "stream": "general",
+        "quantity": 2,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_04_l1",
+        "serviceItem": "MED COLL",
+        "stream": "medical",
+        "frequency": "weekly",
+        "days": ["mon", "wed", "fri"],
+        "window": "AM",
+        "uom": "kg",
+        "quantity": 60
+      },
+      {
+        "id": "sp_04_l2",
+        "serviceItem": "REL 660L GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["tue", "sat"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_05",
+    "number": "REN-SP-000305",
+    "customerId": "cust_02",
+    "name": "Al Safa Medical Centre - Al Barsha Clinic",
+    "location": "Al Barsha Clinic",
+    "address": "Al Barsha 1, near Mall of the Emirates, Dubai",
+    "emirate": "Dubai",
+    "area": "Al Barsha",
+    "lat": 25.1135,
+    "lng": 55.199,
+    "status": "active",
+    "attributes": ["Consignment note required"],
+    "containers": [
+      {
+        "type": "sharps-box",
+        "size": "20L",
+        "stream": "medical",
+        "quantity": 6,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "240L",
+        "stream": "medical",
+        "quantity": 2,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_05_l1",
+        "serviceItem": "MED COLL",
+        "stream": "medical",
+        "frequency": "weekly",
+        "days": ["tue", "fri"],
+        "window": "AM",
+        "uom": "kg",
+        "quantity": 25
+      }
+    ]
+  },
+  {
+    "id": "sp_06",
+    "number": "REN-SP-000306",
+    "customerId": "cust_03",
+    "name": "Marina Gate Mall Management - Loading Bay B",
+    "location": "Loading Bay B",
+    "address": "Al Marsa St, Dubai Marina, Dubai",
+    "emirate": "Dubai",
+    "area": "Dubai Marina",
+    "lat": 25.0868,
+    "lng": 55.148,
+    "status": "active",
+    "accessNotes": "Bay B only. Max 20 min dwell.",
+    "attributes": ["Loading bay 22:00–06:00", "Max dwell 20 min"],
+    "containers": [
+      {
+        "type": "compactor",
+        "size": "20CBM",
+        "stream": "general",
+        "quantity": 2,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "compactor",
+        "size": "15CBM",
+        "stream": "recyclable",
+        "quantity": 1,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_06_l1",
+        "serviceItem": "COMP 20CBM GEN",
+        "stream": "general",
+        "frequency": "daily",
+        "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+        "window": "night",
+        "uom": "trip",
+        "quantity": 2
+      },
+      {
+        "id": "sp_06_l2",
+        "serviceItem": "COMP 15CBM REC",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["mon", "thu"],
+        "window": "night",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_07",
+    "number": "REN-SP-000307",
+    "customerId": "cust_03",
+    "name": "Marina Gate Mall Management - Food Court",
+    "location": "Food Court",
+    "address": "Level 2, Marina Gate Mall, Dubai",
+    "emirate": "Dubai",
+    "area": "Dubai Marina",
+    "lat": 25.0871,
+    "lng": 55.1475,
+    "status": "active",
+    "attributes": ["Grease trap on site"],
+    "containers": [
+      {
+        "type": "bin",
+        "size": "240L",
+        "stream": "food",
+        "quantity": 16,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "recyclable",
+        "quantity": 4,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_07_l1",
+        "serviceItem": "FOOD 240L",
+        "stream": "food",
+        "frequency": "daily",
+        "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+        "window": "night",
+        "uom": "pcs",
+        "quantity": 16
+      },
+      {
+        "id": "sp_07_l2",
+        "serviceItem": "REC 1.1CBM",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["wed", "sat"],
+        "window": "night",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_08",
+    "number": "REN-SP-000308",
+    "customerId": "cust_04",
+    "name": "Desert Rose Construction LLC - Dubai South Villas Site",
+    "location": "Dubai South Villas Site",
+    "address": "Plot 14, Dubai South, Dubai",
+    "emirate": "Dubai",
+    "area": "Dubai South",
+    "lat": 24.896,
+    "lng": 55.161,
+    "status": "active",
+    "accessNotes": "Site gate 2. PPE mandatory: hard hat, hi-vis, boots.",
+    "attributes": ["PPE required", "Unpaved access road"],
+    "containers": [
+      {
+        "type": "roro",
+        "size": "30CBM",
+        "stream": "cd",
+        "quantity": 2,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "skip",
+        "size": "10CBM",
+        "stream": "general",
+        "quantity": 1,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_08_l1",
+        "serviceItem": "RORO 30CBM C&D",
+        "stream": "cd",
+        "frequency": "weekly",
+        "days": ["mon", "thu"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_08_l2",
+        "serviceItem": "10CBM GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["sat"],
+        "window": "AM",
+        "uom": "skip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_09",
+    "number": "REN-SP-000309",
+    "customerId": "cust_04",
+    "name": "Desert Rose Construction LLC - Al Furjan Tower Site",
+    "location": "Al Furjan Tower Site",
+    "address": "Al Furjan West, Dubai",
+    "emirate": "Dubai",
+    "area": "Jebel Ali",
+    "lat": 25.03,
+    "lng": 55.145,
+    "status": "active",
+    "attributes": ["PPE required"],
+    "containers": [
+      {
+        "type": "skip",
+        "size": "20CBM",
+        "stream": "cd",
+        "quantity": 2,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_09_l1",
+        "serviceItem": "20CBM C&D",
+        "stream": "cd",
+        "frequency": "on-call",
+        "days": [],
+        "window": "AT",
+        "uom": "skip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_10",
+    "number": "REN-SP-000310",
+    "customerId": "cust_05",
+    "name": "Gulf Pharma Distribution - JAFZA Warehouse 7",
+    "location": "JAFZA Warehouse 7",
+    "address": "JAFZA South, Jebel Ali, Dubai",
+    "emirate": "Dubai",
+    "area": "Jebel Ali",
+    "lat": 24.9857,
+    "lng": 55.089,
+    "status": "active",
+    "accessNotes": "Free zone gate pass issued at Gate 5. Expired stock staged in cage C.",
+    "attributes": ["Free zone gate pass", "Destruction certificate required"],
+    "containers": [
+      {
+        "type": "drum",
+        "size": "200L",
+        "stream": "hazardous",
+        "quantity": 6,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 3,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_10_l1",
+        "serviceItem": "HAZ DRUM 200L",
+        "stream": "hazardous",
+        "frequency": "monthly",
+        "days": ["wed"],
+        "window": "AM",
+        "uom": "pcs",
+        "quantity": 6
+      },
+      {
+        "id": "sp_10_l2",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["tue", "fri"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_10_l3",
+        "serviceItem": "PHARMA DESTRUCTION",
+        "stream": "medical",
+        "frequency": "on-call",
+        "days": [],
+        "window": "AT",
+        "uom": "kg",
+        "quantity": 500
+      }
+    ]
+  },
+  {
+    "id": "sp_11",
+    "number": "REN-SP-000311",
+    "customerId": "cust_06",
+    "name": "Bayview International School - Al Barsha South Campus",
+    "location": "Al Barsha South Campus",
+    "address": "Al Barsha South 2, Dubai",
+    "emirate": "Dubai",
+    "area": "Al Barsha",
+    "lat": 25.064,
+    "lng": 55.228,
+    "status": "active",
+    "accessNotes": "No collections 07:15–08:15 or 14:30–15:30 (school run).",
+    "attributes": ["School run blackout"],
+    "containers": [
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 4,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "recyclable",
+        "quantity": 3,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_11_l1",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["mon", "wed", "fri"],
+        "window": "PM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_11_l2",
+        "serviceItem": "REC 1.1CBM",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["thu"],
+        "window": "PM",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_12",
+    "number": "REN-SP-000312",
+    "customerId": "cust_07",
+    "name": "Emirates Fresh Foods Factory - Production Plant",
+    "location": "Production Plant",
+    "address": "Dubai Industrial City, Zone 3, Dubai",
+    "emirate": "Dubai",
+    "area": "Dubai Industrial City",
+    "lat": 24.865,
+    "lng": 55.078,
+    "status": "active",
+    "accessNotes": "Food-grade site. Drivers must sign the hygiene log.",
+    "attributes": ["Hygiene log", "Weighbridge on site"],
+    "containers": [
+      {
+        "type": "roro",
+        "size": "30CBM",
+        "stream": "food",
+        "quantity": 1,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "compactor",
+        "size": "20CBM",
+        "stream": "general",
+        "quantity": 1,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "skip",
+        "size": "10CBM",
+        "stream": "recyclable",
+        "quantity": 2,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_12_l1",
+        "serviceItem": "RORO 30CBM FOOD",
+        "stream": "food",
+        "frequency": "daily",
+        "days": ["mon", "tue", "wed", "thu", "fri", "sat"],
+        "window": "AM",
+        "uom": "ton",
+        "quantity": 4
+      },
+      {
+        "id": "sp_12_l2",
+        "serviceItem": "COMP 20CBM GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["mon", "thu"],
+        "window": "PM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_12_l3",
+        "serviceItem": "10CBM REC",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["wed"],
+        "window": "PM",
+        "uom": "skip",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "sp_13",
+    "number": "REN-SP-000313",
+    "customerId": "cust_07",
+    "name": "Emirates Fresh Foods Factory - Cold Store",
+    "location": "Cold Store",
+    "address": "Dubai Industrial City, Zone 5, Dubai",
+    "emirate": "Dubai",
+    "area": "Dubai Industrial City",
+    "lat": 24.871,
+    "lng": 55.085,
+    "status": "active",
+    "containers": [
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 3,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_13_l1",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["tue", "sat"],
+        "window": "PM",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_14",
+    "number": "REN-SP-000314",
+    "customerId": "cust_08",
+    "name": "Horizon Business Towers - Tower A",
+    "location": "Tower A",
+    "address": "Marasi Dr, Business Bay, Dubai",
+    "emirate": "Dubai",
+    "area": "Business Bay",
+    "lat": 25.185,
+    "lng": 55.265,
+    "status": "active",
+    "accessNotes": "Collect from B1 chute room; key with concierge.",
+    "attributes": ["Key with concierge"],
+    "containers": [
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 10,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "recyclable",
+        "quantity": 4,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_14_l1",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "daily",
+        "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_14_l2",
+        "serviceItem": "REC 1.1CBM",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["tue", "fri"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_15",
+    "number": "REN-SP-000315",
+    "customerId": "cust_08",
+    "name": "Horizon Business Towers - Tower B",
+    "location": "Tower B",
+    "address": "Marasi Dr, Business Bay, Dubai",
+    "emirate": "Dubai",
+    "area": "Business Bay",
+    "lat": 25.1862,
+    "lng": 55.2668,
+    "status": "active",
+    "containers": [
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 8,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_15_l1",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["mon", "wed", "fri"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_16",
+    "number": "REN-SP-000316",
+    "customerId": "cust_09",
+    "name": "Sharjah Logistics Park - Al Sajaa Warehouse 3",
+    "location": "Al Sajaa Warehouse 3",
+    "address": "Al Sajaa Industrial Area, Sharjah",
+    "emirate": "Sharjah",
+    "area": "Al Sajaa",
+    "lat": 25.329,
+    "lng": 55.635,
+    "status": "active",
+    "containers": [
+      {
+        "type": "roro",
+        "size": "40CBM",
+        "stream": "recyclable",
+        "quantity": 1,
+        "ownership": "renuterra"
+      },
+      {
+        "type": "skip",
+        "size": "10CBM",
+        "stream": "general",
+        "quantity": 2,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_16_l1",
+        "serviceItem": "RORO 40CBM REC",
+        "stream": "recyclable",
+        "frequency": "weekly",
+        "days": ["mon", "thu"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      },
+      {
+        "id": "sp_16_l2",
+        "serviceItem": "10CBM GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["wed", "sat"],
+        "window": "AM",
+        "uom": "skip",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": "sp_17",
+    "number": "REN-SP-000317",
+    "customerId": "cust_09",
+    "name": "Sharjah Logistics Park - Al Sajaa Cross-Dock",
+    "location": "Al Sajaa Cross-Dock",
+    "address": "Al Sajaa Industrial Area, Block 2, Sharjah",
+    "emirate": "Sharjah",
+    "area": "Al Sajaa",
+    "lat": 25.331,
+    "lng": 55.642,
+    "status": "active",
+    "containers": [
+      {
+        "type": "bin",
+        "size": "1100L",
+        "stream": "general",
+        "quantity": 4,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_17_l1",
+        "serviceItem": "REL 1100L GEN",
+        "stream": "general",
+        "frequency": "weekly",
+        "days": ["tue", "fri"],
+        "window": "AM",
+        "uom": "trip",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": "sp_18",
+    "number": "REN-SP-000318",
+    "customerId": "cust_10",
+    "name": "Ajman Marine Workshop - Dry Dock Yard",
+    "location": "Dry Dock Yard",
+    "address": "Al Jurf Industrial 2, Ajman",
+    "emirate": "Ajman",
+    "area": "Al Jurf",
+    "lat": 25.433,
+    "lng": 55.495,
+    "status": "active",
+    "accessNotes": "Waste oil and sludge in bunded area. Hazmat-licensed crew only.",
+    "attributes": ["Hazmat crew only", "Bunded storage"],
+    "containers": [
+      {
+        "type": "drum",
+        "size": "200L",
+        "stream": "hazardous",
+        "quantity": 10,
+        "ownership": "renuterra"
+      }
+    ],
+    "serviceLines": [
+      {
+        "id": "sp_18_l1",
+        "serviceItem": "HAT OIL/SLUDGE",
+        "stream": "hazardous",
+        "frequency": "weekly",
+        "days": ["thu"],
+        "window": "AM",
+        "uom": "pcs",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "id": "sp_19",
+    "number": "REN-SP-000319",
+    "customerId": "cust_11",
+    "name": "Coral Bay Restaurants Group - Jumeirah Beach Outlet",
+    "location": "Jumeirah Beach Outlet",
+    "address": "Jumeirah Beach Rd, Jumeirah 1, Dubai",
+    "emirate": "Dubai",
+    "area": "Jumeirah",
+    "lat": 25.221,
+    "lng": 55.256,
+    "status": "inactive",
+    "attributes": [],
+    "containers": [
+      {
+        "type": "bin",
+        "size": "240L",
+        "stream": "food",
+        "quantity": 4,
+        "ownership": "customer"
+      }
+    ],
+    "serviceLines": []
+  },
+  {
+    "id": "sp_20",
+    "number": "REN-SP-000320",
+    "customerId": "cust_12",
+    "name": "Al Quoz Print House - Print Shop",
+    "location": "Print Shop",
+    "address": "Al Quoz Industrial 4, Dubai",
+    "emirate": "Dubai",
+    "area": "Al Quoz",
+    "lat": 25.132,
+    "lng": 55.23,
+    "status": "inactive",
+    "attributes": [],
+    "containers": [
+      {
+        "type": "bin",
+        "size": "660L",
+        "stream": "recyclable",
+        "quantity": 2,
+        "ownership": "customer"
+      }
+    ],
+    "serviceLines": []
+  }
+]

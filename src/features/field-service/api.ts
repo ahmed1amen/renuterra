@@ -6,9 +6,15 @@
  * that consume them stay untouched.
  */
 import {
+  APPOINTMENTS,
+  type Appointment,
+  CUSTOMERS,
+  type Customer,
   JOBS,
   type Job,
   mockFetch,
+  SERVICE_POINTS,
+  type ServicePoint,
   TECHNICIANS,
   type Technician,
 } from "@/mocks";
@@ -20,4 +26,14 @@ export const fieldServiceApi = {
     ),
 
   listTechnicians: (): Promise<Technician[]> => mockFetch(TECHNICIANS),
+
+  listCustomers: (): Promise<Customer[]> =>
+    mockFetch([...CUSTOMERS].sort((a, b) => a.name.localeCompare(b.name))),
+
+  getCustomer: (id: string): Promise<Customer | null> =>
+    mockFetch(CUSTOMERS.find((c) => c.id === id) ?? null),
+
+  listServicePoints: (): Promise<ServicePoint[]> => mockFetch(SERVICE_POINTS),
+
+  listAppointments: (): Promise<Appointment[]> => mockFetch(APPOINTMENTS),
 };
