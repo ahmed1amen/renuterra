@@ -1,0 +1,128 @@
+[
+  {
+    "id": "ct_bin_240",
+    "name": "240L wheelie bin",
+    "kind": "bin",
+    "capacityLitres": 240,
+    "vehicleClass": "compactor",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_bin_660",
+    "name": "660L wheelie bin",
+    "kind": "bin",
+    "capacityLitres": 660,
+    "vehicleClass": "compactor",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_bin_1100",
+    "name": "1100L wheelie bin",
+    "kind": "bin",
+    "capacityLitres": 1100,
+    "vehicleClass": "compactor",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_med_240",
+    "name": "240L medical storage bin",
+    "kind": "bin",
+    "capacityLitres": 240,
+    "vehicleClass": "box-truck",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_skip_10",
+    "name": "10 CBM skip",
+    "kind": "skip",
+    "capacityLitres": 10000,
+    "vehicleClass": "skip-loader",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_skip_20",
+    "name": "20 CBM skip",
+    "kind": "skip",
+    "capacityLitres": 20000,
+    "vehicleClass": "skip-loader",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_roro_30",
+    "name": "30 CBM RORO",
+    "kind": "roro",
+    "capacityLitres": 30000,
+    "vehicleClass": "hook-loader",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_roro_40",
+    "name": "40 CBM RORO",
+    "kind": "roro",
+    "capacityLitres": 40000,
+    "vehicleClass": "hook-loader",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_comp_15",
+    "name": "15 CBM static compactor",
+    "kind": "compactor",
+    "capacityLitres": 15000,
+    "vehicleClass": "hook-loader",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_comp_20",
+    "name": "20 CBM static compactor",
+    "kind": "compactor",
+    "capacityLitres": 20000,
+    "vehicleClass": "hook-loader",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_tank_5000",
+    "name": "5,000L waste-oil tank",
+    "kind": "tank",
+    "capacityLitres": 5000,
+    "vehicleClass": "tanker",
+    "tracked": true,
+    "active": true
+  },
+  {
+    "id": "ct_drum_200",
+    "name": "200L steel drum",
+    "kind": "drum",
+    "capacityLitres": 200,
+    "vehicleClass": "box-truck",
+    "tracked": false,
+    "active": true
+  },
+  {
+    "id": "ct_sharps_20",
+    "name": "20L sharps box",
+    "kind": "sharps-box",
+    "capacityLitres": 20,
+    "vehicleClass": "box-truck",
+    "tracked": false,
+    "active": true
+  },
+  {
+    "id": "ct_bag_med",
+    "name": "Yellow medical waste bag",
+    "kind": "bag",
+    "capacityLitres": 90,
+    "vehicleClass": "box-truck",
+    "tracked": false,
+    "active": true
+  }
+]

@@ -1,11 +1,13 @@
 import {
   BarChart3,
+  Boxes,
   Building2,
   CalendarCheck,
   FileSignature,
   Gauge,
   Home,
   LayoutDashboard,
+  ListChecks,
   type LucideIcon,
   Palette,
   Radio,
@@ -97,6 +99,21 @@ export const APP_NAVS: AppNav[] = [
             label: "Customers",
             href: "/field-service/customers",
             icon: Building2,
+          },
+        ],
+      },
+      {
+        label: "Settings",
+        items: [
+          {
+            label: "Service items",
+            href: "/field-service/settings/service-items",
+            icon: ListChecks,
+          },
+          {
+            label: "Container types",
+            href: "/field-service/settings/container-types",
+            icon: Boxes,
           },
         ],
       },

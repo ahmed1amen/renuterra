@@ -2,7 +2,6 @@ import { StatusPill, type StatusTone } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import type {
   ContactRole,
-  ContainerType,
   CustomerFlag,
   CustomerStatus,
   CustomerTier,
@@ -61,15 +60,6 @@ export const CONTACT_ROLE: Record<ContactRole, string> = {
   billing: "Billing",
   sales: "Sales",
   technical: "Technical",
-};
-
-export const CONTAINER_TYPE: Record<ContainerType, string> = {
-  bin: "Bin",
-  skip: "Skip",
-  roro: "RORO",
-  compactor: "Compactor",
-  drum: "Drum",
-  "sharps-box": "Sharps box",
 };
 
 export const FREQUENCY_LABEL: Record<ServiceFrequency, string> = {

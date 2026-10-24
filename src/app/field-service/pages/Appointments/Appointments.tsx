@@ -17,6 +17,7 @@ import {
   NativeSelectOption,
 } from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppointments, useDirectory } from "@/features/field-service";
 import { cn } from "@/lib/utils";
 import {
@@ -34,11 +35,13 @@ import {
   CLOSED_STATUSES,
 } from "../../components";
 import { formatCount, toDubaiDayKey } from "../../utils";
+import { WorkOrdersList } from "./components";
 
 const SKELETON_ROWS = [0, 1, 2, 3, 4, 5];
 const PAGE_SIZE = 25;
 
 type Period = "today" | "upcoming" | "past" | "all";
+type View = "appointments" | "work-orders";
 
 const PERIODS: { id: Period; label: string }[] = [
   { id: "today", label: "Today" },
@@ -62,6 +65,7 @@ export default function Appointments() {
   const directory = useDirectory();
   const openBooking = useBookAppointmentModal((s) => s.openModal);
 
+  const [view, setView] = useState<View>("appointments");
   const [period, setPeriod] = useState<Period>("today");
   const [status, setStatus] = useState<AppointmentStatus | "all">("all");
   const [stream, setStream] = useState<WasteStreamId | "all">("all");
@@ -113,6 +117,11 @@ export default function Appointments() {
     // Past work reads newest first; everything else soonest first.
     return period === "past" ? rows.reverse() : rows;
   }, [all, period, status, stream, query, directory]);
+
+  const inSelectedPeriod = useMemo(() => {
+    const rows = all.filter((a) => inPeriod(a, period));
+    return period === "past" ? rows.reverse() : rows;
+  }, [all, period]);
 
   const filtered = status !== "all" || stream !== "all" || query !== "";
   const clearFilters = () => {
@@ -174,6 +183,12 @@ export default function Appointments() {
 
       <Card className="mt-4">
         <CardContent className="space-y-4">
+          <Tabs value={view} onValueChange={(next) => setView(next as View)}>
+            <TabsList>
+              <TabsTrigger value="appointments">Appointments</TabsTrigger>
+              <TabsTrigger value="work-orders">Work orders</TabsTrigger>
+            </TabsList>
+          </Tabs>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <ul className="flex flex-wrap items-center gap-1.5">
               {PERIODS.map((p) => {
@@ -204,54 +219,58 @@ export default function Appointments() {
               })}
             </ul>
 
-            <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-              <NativeSelect
-                size="sm"
-                aria-label="Filter by status"
-                value={status}
-                onChange={(e) =>
-                  setStatus(e.target.value as AppointmentStatus | "all")
-                }
-              >
-                <NativeSelectOption value="all">
-                  All statuses
-                </NativeSelectOption>
-                {APPOINTMENT_STATUS_ORDER.map((s) => (
-                  <NativeSelectOption key={s} value={s}>
-                    {APPOINTMENT_STATUS[s].label}
+            {view === "appointments" ? (
+              <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+                <NativeSelect
+                  size="sm"
+                  aria-label="Filter by status"
+                  value={status}
+                  onChange={(e) =>
+                    setStatus(e.target.value as AppointmentStatus | "all")
+                  }
+                >
+                  <NativeSelectOption value="all">
+                    All statuses
                   </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <NativeSelect
-                size="sm"
-                aria-label="Filter by waste stream"
-                value={stream}
-                onChange={(e) =>
-                  setStream(e.target.value as WasteStreamId | "all")
-                }
-              >
-                <NativeSelectOption value="all">All streams</NativeSelectOption>
-                {WASTE_STREAMS.map((s) => (
-                  <NativeSelectOption key={s.id} value={s.id}>
-                    {s.label}
+                  {APPOINTMENT_STATUS_ORDER.map((s) => (
+                    <NativeSelectOption key={s} value={s}>
+                      {APPOINTMENT_STATUS[s].label}
+                    </NativeSelectOption>
+                  ))}
+                </NativeSelect>
+                <NativeSelect
+                  size="sm"
+                  aria-label="Filter by waste stream"
+                  value={stream}
+                  onChange={(e) =>
+                    setStream(e.target.value as WasteStreamId | "all")
+                  }
+                >
+                  <NativeSelectOption value="all">
+                    All streams
                   </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <span className="relative flex w-full sm:w-56">
-                <Search
-                  className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
-                  aria-hidden
-                />
-                <Input
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search appointments…"
-                  aria-label="Search appointments"
-                  className="h-8 ps-9"
-                />
-              </span>
-            </div>
+                  {WASTE_STREAMS.map((s) => (
+                    <NativeSelectOption key={s.id} value={s.id}>
+                      {s.label}
+                    </NativeSelectOption>
+                  ))}
+                </NativeSelect>
+                <span className="relative flex w-full sm:w-56">
+                  <Search
+                    className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
+                    aria-hidden
+                  />
+                  <Input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search appointments…"
+                    aria-label="Search appointments"
+                    className="h-8 ps-9"
+                  />
+                </span>
+              </div>
+            ) : null}
           </div>
 
           {appointments.isPending || directory.isPending ? (
@@ -269,6 +288,8 @@ export default function Appointments() {
               error={appointments.error}
               onRetry={() => appointments.refetch()}
             />
+          ) : view === "work-orders" ? (
+            <WorkOrdersList appointments={inSelectedPeriod} />
           ) : visible.length === 0 ? (
             <EmptyState
               icon={SearchX}

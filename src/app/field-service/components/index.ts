@@ -15,7 +15,6 @@ export { AppointmentsTable } from "./appointments-table";
 export { BookAppointmentDialog } from "./book-appointment-dialog";
 export {
   CONTACT_ROLE,
-  CONTAINER_TYPE,
   CUSTOMER_STATUS,
   CustomerFlags,
   CustomerStatusPill,
@@ -54,3 +53,18 @@ export {
   TechnicianLaneCard,
   TechnicianStatusPill,
 } from "./technician-lane";
+export {
+  CONTAINER_KIND,
+  CONTAINER_LOCATION,
+  DISPOSAL_FACILITIES,
+  formatCountUnit,
+  HANDLING_METHOD,
+  HANDLING_METHOD_ORDER,
+  SHORTFALL_REASON,
+  unitLabel,
+  VEHICLE_CLASS,
+  WEIGHT_SOURCE,
+  WORK_ORDER_STATUS,
+  WORK_ORDER_STATUS_ORDER,
+  WorkOrderStatusPill,
+} from "./work-order-meta";

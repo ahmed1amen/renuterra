@@ -31,6 +31,7 @@ import {
 import {
   useAppointments,
   useCustomers,
+  useServiceItems,
   useServicePoints,
 } from "@/features/field-service";
 import { cn } from "@/lib/utils";
@@ -67,6 +68,11 @@ export default function Customers() {
   const router = useRouter();
   const customers = useCustomers();
   const servicePoints = useServicePoints();
+  const serviceItems = useServiceItems();
+  const streamOf = useMemo(
+    () => new Map((serviceItems.data ?? []).map((i) => [i.id, i.stream])),
+    [serviceItems.data],
+  );
   const appointments = useAppointments();
 
   const [status, setStatus] = useState<StatusFilter>("active");
@@ -289,7 +295,9 @@ export default function Customers() {
                   const streams = [
                     ...new Set(
                       sites.flatMap((sp) =>
-                        sp.serviceLines.map((l) => l.stream),
+                        sp.serviceLines.flatMap(
+                          (l) => streamOf.get(l.serviceItemId) ?? [],
+                        ),
                       ),
                     ),
                   ] as WasteStreamId[];

@@ -20,15 +20,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useContainers, useDirectory } from "@/features/field-service";
 import { cn } from "@/lib/utils";
-import type { ServicePoint } from "@/mocks";
+import type { ServicePoint, WasteStreamId } from "@/mocks";
 import { useBookAppointmentModal } from "@/stores/book-appointment-modal";
 import {
-  CONTAINER_TYPE,
+  CONTAINER_LOCATION,
   FREQUENCY_LABEL,
+  formatCountUnit,
+  HANDLING_METHOD,
   ServicePointMap,
   WINDOW_LABEL,
 } from "../../../components";
+import { formatDate } from "../../../utils";
 
 const DAY_LABEL: Record<string, string> = {
   mon: "Mon",
@@ -50,8 +54,21 @@ export function ServicePointsTab({
   bookable: boolean;
 }) {
   const openBooking = useBookAppointmentModal((s) => s.openModal);
+  const directory = useDirectory();
+  const containers = useContainers();
   const [selectedId, setSelectedId] = useState(servicePoints[0]?.id ?? null);
   const selected = servicePoints.find((sp) => sp.id === selectedId);
+  const containersOnSite = (containers.data ?? []).filter(
+    (c) => c.servicePointId === selectedId,
+  );
+  const streamsAt = (sp: ServicePoint) => [
+    ...new Set(
+      sp.serviceLines.flatMap((l): WasteStreamId[] => {
+        const stream = directory.serviceItem(l.serviceItemId)?.stream;
+        return stream ? [stream] : [];
+      }),
+    ),
+  ];
 
   if (!servicePoints.length) {
     return (
@@ -68,7 +85,7 @@ export function ServicePointsTab({
       <ul className="space-y-2" aria-label="Service points">
         {servicePoints.map((sp) => {
           const active = sp.id === selectedId;
-          const streams = [...new Set(sp.containers.map((c) => c.stream))];
+          const streams = streamsAt(sp);
           return (
             <li key={sp.id}>
               <button
@@ -169,48 +186,54 @@ export function ServicePointsTab({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {selected.serviceLines.map((line) => (
-                      <TableRow key={line.id}>
-                        <TableCell className="font-mono text-xs">
-                          {line.serviceItem}
-                          <span className="text-muted-foreground block font-sans">
-                            {line.quantity} {line.uom} per visit
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <StreamTag stream={line.stream} />
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {FREQUENCY_LABEL[line.frequency]}
-                          {line.frequency === "weekly" ? (
+                    {selected.serviceLines.map((line) => {
+                      const item = directory.serviceItem(line.serviceItemId);
+                      return (
+                        <TableRow key={line.id}>
+                          <TableCell className="text-sm">
+                            {item?.name ?? line.serviceItemId}
                             <span className="text-muted-foreground block text-xs">
-                              {line.days.map((d) => DAY_LABEL[d]).join(", ")}
+                              <span className="font-mono">{item?.code}</span>
+                              {item
+                                ? ` · ${formatCountUnit(line.quantity, item.countUnit)} per visit · ${HANDLING_METHOD[item.method].label}`
+                                : null}
                             </span>
-                          ) : null}
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {WINDOW_LABEL[line.window]}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {bookable && selected.status === "active" ? (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() =>
-                                openBooking({
-                                  customerId: selected.customerId,
-                                  servicePointId: selected.id,
-                                  serviceLineId: line.id,
-                                })
-                              }
-                            >
-                              <CalendarPlus data-icon="inline-start" />
-                              Book
-                            </Button>
-                          ) : null}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          </TableCell>
+                          <TableCell>
+                            {item ? <StreamTag stream={item.stream} /> : null}
+                          </TableCell>
+                          <TableCell className="text-sm">
+                            {FREQUENCY_LABEL[line.frequency]}
+                            {line.frequency === "weekly" ? (
+                              <span className="text-muted-foreground block text-xs">
+                                {line.days.map((d) => DAY_LABEL[d]).join(", ")}
+                              </span>
+                            ) : null}
+                          </TableCell>
+                          <TableCell className="text-sm">
+                            {WINDOW_LABEL[line.window]}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {bookable && selected.status === "active" ? (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() =>
+                                  openBooking({
+                                    customerId: selected.customerId,
+                                    servicePointId: selected.id,
+                                    serviceLineId: line.id,
+                                  })
+                                }
+                              >
+                                <CalendarPlus data-icon="inline-start" />
+                                Book
+                              </Button>
+                            ) : null}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   </TableBody>
                 </Table>
               ) : (
@@ -224,36 +247,63 @@ export function ServicePointsTab({
           <Card>
             <CardHeader>
               <CardTitle>Containers on site</CardTitle>
+              <CardDescription>
+                Tagged containers placed here. Bags, sharps boxes and drums are
+                counted on each work order instead.
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Container</TableHead>
-                    <TableHead>Stream</TableHead>
-                    <TableHead className="text-right">Qty</TableHead>
-                    <TableHead>Owned by</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {selected.containers.map((c) => (
-                    <TableRow key={`${c.type}-${c.size}-${c.stream}`}>
-                      <TableCell className="text-sm">
-                        {c.size} {CONTAINER_TYPE[c.type].toLowerCase()}
-                      </TableCell>
-                      <TableCell>
-                        <StreamTag stream={c.stream} />
-                      </TableCell>
-                      <TableCell className="text-right font-mono text-sm tabular-nums">
-                        {c.quantity}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {c.ownership === "renuterra" ? "Renuterra" : "Customer"}
-                      </TableCell>
+              {containersOnSite.length ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Tag</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Stream</TableHead>
+                      <TableHead>Owned by</TableHead>
+                      <TableHead>Where</TableHead>
+                      <TableHead>Last serviced</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {containersOnSite.map((c) => {
+                      const location = CONTAINER_LOCATION[c.location];
+                      return (
+                        <TableRow key={c.id}>
+                          <TableCell className="font-mono text-xs">
+                            {c.tag}
+                          </TableCell>
+                          <TableCell className="text-sm">
+                            {directory.containerType(c.containerTypeId)?.name}
+                          </TableCell>
+                          <TableCell>
+                            <StreamTag stream={c.stream} />
+                          </TableCell>
+                          <TableCell className="text-muted-foreground text-sm">
+                            {c.ownership === "renuterra"
+                              ? "Renuterra (rental)"
+                              : "Customer"}
+                          </TableCell>
+                          <TableCell>
+                            <StatusPill tone={location.tone} dot>
+                              {location.label}
+                            </StatusPill>
+                          </TableCell>
+                          <TableCell className="text-muted-foreground text-sm">
+                            {c.lastServicedAt
+                              ? formatDate(c.lastServicedAt)
+                              : "—"}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              ) : (
+                <p className="text-muted-foreground text-sm">
+                  No tagged containers at this site.
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>

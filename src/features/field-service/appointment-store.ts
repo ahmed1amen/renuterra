@@ -8,15 +8,18 @@ import {
   type AppointmentType,
   type ArrivalWindow,
   MOCK_NOW,
+  type ServiceItem,
   type ServiceLine,
 } from "@/mocks";
 import { useAppointmentsQuery } from "./hooks/use-appointments-query";
+import { newWorkOrder } from "./work-orders";
 
 /** What the booking dialog collects; the store fills in the rest. */
 export type BookingInput = {
   customerId: string;
   servicePointId: string;
   serviceLine: ServiceLine;
+  serviceItem: ServiceItem;
   type: AppointmentType;
   serviceType: AppointmentServiceType;
   window: ArrivalWindow;
@@ -29,10 +32,12 @@ export type BookingInput = {
 
 let bookingSeq = 30000;
 
-/** A new appointment from a booking — fake refs, one work order, 30 min on site. */
+/** A new appointment from a booking — fake refs, one work order for the service line. */
 function toAppointment(input: BookingInput): Appointment {
   const seq = bookingSeq++;
   const line = input.serviceLine;
+  const item = input.serviceItem;
+  const workOrder = newWorkOrder(item, line.quantity, line.containerIds);
   return {
     id: `apt_${seq}`,
     ref: `APT-${seq}`,
@@ -41,26 +46,20 @@ function toAppointment(input: BookingInput): Appointment {
     serviceLineId: line.id,
     type: input.type,
     serviceType: input.serviceType,
-    stream: line.stream,
+    stream: item.stream,
     source: "customer-request",
     status: "scheduled",
     window: input.window,
     windowStart: input.windowStart,
     windowEnd: input.windowEnd,
     plannedStart: input.windowStart,
-    durationMins: 30,
+    durationMins: Math.max(
+      10,
+      Math.round(5 + item.minutesPerUnit * line.quantity),
+    ),
     serviceProId: input.serviceProId,
     vehiclePlate: null,
-    workOrders: [
-      {
-        ref: `WO-${seq}`,
-        description: `${line.serviceItem} — ${line.quantity} ${line.uom}`,
-        serviceItem: line.serviceItem,
-        quantityPlanned: line.quantity,
-        quantityActual: null,
-        uom: line.uom,
-      },
-    ],
+    workOrders: [workOrder],
     startedAt: null,
     completedAt: null,
     failedReason: null,

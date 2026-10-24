@@ -13,59 +13,53 @@
     "status": "active",
     "accessNotes": "Service entrance off the Crescent; call security 10 min ahead.",
     "attributes": ["Security badge required", "Loading bay 05:00–09:00 only"],
-    "containers": [
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 8,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "recyclable",
-        "quantity": 4,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "240L",
-        "stream": "food",
-        "quantity": 10,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_01_l1",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 8,
         "frequency": "daily",
         "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": [
+          "cnt_00402",
+          "cnt_00407",
+          "cnt_00410",
+          "cnt_00419",
+          "cnt_00426",
+          "cnt_00428",
+          "cnt_00437",
+          "cnt_00446"
+        ]
       },
       {
         "id": "sp_01_l2",
-        "serviceItem": "REC 1.1CBM",
-        "stream": "recyclable",
+        "serviceItemId": "si_rec_1100",
+        "quantity": 4,
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00455", "cnt_00463", "cnt_00464", "cnt_00471"]
       },
       {
         "id": "sp_01_l3",
-        "serviceItem": "FOOD 240L",
-        "stream": "food",
+        "serviceItemId": "si_food_240",
+        "quantity": 10,
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "AM",
-        "uom": "pcs",
-        "quantity": 10
+        "containerIds": [
+          "cnt_00474",
+          "cnt_00480",
+          "cnt_00487",
+          "cnt_00493",
+          "cnt_00494",
+          "cnt_00503",
+          "cnt_00505",
+          "cnt_00511",
+          "cnt_00513",
+          "cnt_00517"
+        ]
       }
     ]
   },
@@ -83,42 +77,31 @@
     "status": "active",
     "accessNotes": "Basement B2 waste room. Height limit 3.2 m.",
     "attributes": ["Height restriction 3.2 m"],
-    "containers": [
-      {
-        "type": "compactor",
-        "size": "15CBM",
-        "stream": "general",
-        "quantity": 1,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "660L",
-        "stream": "recyclable",
-        "quantity": 6,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_02_l1",
-        "serviceItem": "COMP 15CBM GEN",
-        "stream": "general",
+        "serviceItemId": "si_comp_15_gen",
+        "quantity": 1,
         "frequency": "weekly",
         "days": ["tue", "sat"],
         "window": "night",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00521"]
       },
       {
         "id": "sp_02_l2",
-        "serviceItem": "REC 660L",
-        "stream": "recyclable",
+        "serviceItemId": "si_rec_660",
+        "quantity": 6,
         "frequency": "weekly",
         "days": ["wed"],
         "window": "night",
-        "uom": "pcs",
-        "quantity": 6
+        "containerIds": [
+          "cnt_00526",
+          "cnt_00532",
+          "cnt_00538",
+          "cnt_00543",
+          "cnt_00545",
+          "cnt_00548"
+        ]
       }
     ]
   },
@@ -135,42 +118,40 @@
     "lng": 55.1336,
     "status": "active",
     "attributes": ["Night collection only"],
-    "containers": [
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 6,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "240L",
-        "stream": "food",
-        "quantity": 8,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_03_l1",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 6,
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "night",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": [
+          "cnt_00552",
+          "cnt_00559",
+          "cnt_00568",
+          "cnt_00574",
+          "cnt_00575",
+          "cnt_00580"
+        ]
       },
       {
         "id": "sp_03_l2",
-        "serviceItem": "FOOD 240L",
-        "stream": "food",
+        "serviceItemId": "si_food_240",
+        "quantity": 8,
         "frequency": "weekly",
         "days": ["tue", "thu", "sat"],
         "window": "night",
-        "uom": "pcs",
-        "quantity": 8
+        "containerIds": [
+          "cnt_00586",
+          "cnt_00594",
+          "cnt_00602",
+          "cnt_00605",
+          "cnt_00614",
+          "cnt_00621",
+          "cnt_00627",
+          "cnt_00636"
+        ]
       }
     ]
   },
@@ -188,49 +169,33 @@
     "status": "active",
     "accessNotes": "Sharps and clinical bags handed over at the rear dock. Sign the consignment note.",
     "attributes": ["Consignment note required"],
-    "containers": [
-      {
-        "type": "sharps-box",
-        "size": "20L",
-        "stream": "medical",
-        "quantity": 12,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "240L",
-        "stream": "medical",
-        "quantity": 4,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "660L",
-        "stream": "general",
-        "quantity": 2,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_04_l1",
-        "serviceItem": "MED COLL",
-        "stream": "medical",
+        "serviceItemId": "si_med_bag",
+        "quantity": 10,
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "AM",
-        "uom": "kg",
-        "quantity": 60
+        "containerIds": []
       },
       {
         "id": "sp_04_l2",
-        "serviceItem": "REL 660L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_660_gen",
+        "quantity": 2,
         "frequency": "weekly",
         "days": ["tue", "sat"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00659", "cnt_00661"]
+      },
+      {
+        "id": "sp_04_l3",
+        "serviceItemId": "si_med_sharps",
+        "quantity": 3,
+        "frequency": "weekly",
+        "days": ["mon", "wed", "fri"],
+        "window": "AM",
+        "containerIds": []
       }
     ]
   },
@@ -247,32 +212,24 @@
     "lng": 55.199,
     "status": "active",
     "attributes": ["Consignment note required"],
-    "containers": [
-      {
-        "type": "sharps-box",
-        "size": "20L",
-        "stream": "medical",
-        "quantity": 6,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "240L",
-        "stream": "medical",
-        "quantity": 2,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_05_l1",
-        "serviceItem": "MED COLL",
-        "stream": "medical",
+        "serviceItemId": "si_med_bag",
+        "quantity": 4,
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "uom": "kg",
-        "quantity": 25
+        "containerIds": []
+      },
+      {
+        "id": "sp_05_l2",
+        "serviceItemId": "si_med_sharps",
+        "quantity": 2,
+        "frequency": "weekly",
+        "days": ["tue", "fri"],
+        "window": "AM",
+        "containerIds": []
       }
     ]
   },
@@ -290,42 +247,24 @@
     "status": "active",
     "accessNotes": "Bay B only. Max 20 min dwell.",
     "attributes": ["Loading bay 22:00–06:00", "Max dwell 20 min"],
-    "containers": [
-      {
-        "type": "compactor",
-        "size": "20CBM",
-        "stream": "general",
-        "quantity": 2,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "compactor",
-        "size": "15CBM",
-        "stream": "recyclable",
-        "quantity": 1,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_06_l1",
-        "serviceItem": "COMP 20CBM GEN",
-        "stream": "general",
+        "serviceItemId": "si_comp_20_gen",
+        "quantity": 2,
         "frequency": "daily",
         "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
         "window": "night",
-        "uom": "trip",
-        "quantity": 2
+        "containerIds": ["cnt_00671", "cnt_00676"]
       },
       {
         "id": "sp_06_l2",
-        "serviceItem": "COMP 15CBM REC",
-        "stream": "recyclable",
+        "serviceItemId": "si_comp_15_rec",
+        "quantity": 1,
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "night",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00679"]
       }
     ]
   },
@@ -342,42 +281,41 @@
     "lng": 55.1475,
     "status": "active",
     "attributes": ["Grease trap on site"],
-    "containers": [
-      {
-        "type": "bin",
-        "size": "240L",
-        "stream": "food",
-        "quantity": 16,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "recyclable",
-        "quantity": 4,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_07_l1",
-        "serviceItem": "FOOD 240L",
-        "stream": "food",
+        "serviceItemId": "si_food_240",
+        "quantity": 16,
         "frequency": "daily",
         "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
         "window": "night",
-        "uom": "pcs",
-        "quantity": 16
+        "containerIds": [
+          "cnt_00684",
+          "cnt_00688",
+          "cnt_00691",
+          "cnt_00700",
+          "cnt_00706",
+          "cnt_00708",
+          "cnt_00713",
+          "cnt_00717",
+          "cnt_00719",
+          "cnt_00721",
+          "cnt_00724",
+          "cnt_00732",
+          "cnt_00737",
+          "cnt_00744",
+          "cnt_00748",
+          "cnt_00755"
+        ]
       },
       {
         "id": "sp_07_l2",
-        "serviceItem": "REC 1.1CBM",
-        "stream": "recyclable",
+        "serviceItemId": "si_rec_1100",
+        "quantity": 4,
         "frequency": "weekly",
         "days": ["wed", "sat"],
         "window": "night",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00761", "cnt_00769", "cnt_00773", "cnt_00774"]
       }
     ]
   },
@@ -395,42 +333,24 @@
     "status": "active",
     "accessNotes": "Site gate 2. PPE mandatory: hard hat, hi-vis, boots.",
     "attributes": ["PPE required", "Unpaved access road"],
-    "containers": [
-      {
-        "type": "roro",
-        "size": "30CBM",
-        "stream": "cd",
-        "quantity": 2,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "skip",
-        "size": "10CBM",
-        "stream": "general",
-        "quantity": 1,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_08_l1",
-        "serviceItem": "RORO 30CBM C&D",
-        "stream": "cd",
+        "serviceItemId": "si_roro_30_cd",
+        "quantity": 1,
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00778", "cnt_00779"]
       },
       {
         "id": "sp_08_l2",
-        "serviceItem": "10CBM GEN",
-        "stream": "general",
+        "serviceItemId": "si_skip_10_gen",
+        "quantity": 1,
         "frequency": "weekly",
         "days": ["sat"],
         "window": "AM",
-        "uom": "skip",
-        "quantity": 1
+        "containerIds": ["cnt_00780"]
       }
     ]
   },
@@ -447,25 +367,15 @@
     "lng": 55.145,
     "status": "active",
     "attributes": ["PPE required"],
-    "containers": [
-      {
-        "type": "skip",
-        "size": "20CBM",
-        "stream": "cd",
-        "quantity": 2,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_09_l1",
-        "serviceItem": "20CBM C&D",
-        "stream": "cd",
+        "serviceItemId": "si_skip_20_cd",
+        "quantity": 1,
         "frequency": "on-call",
         "days": [],
         "window": "AT",
-        "uom": "skip",
-        "quantity": 1
+        "containerIds": ["cnt_00781", "cnt_00790"]
       }
     ]
   },
@@ -483,52 +393,33 @@
     "status": "active",
     "accessNotes": "Free zone gate pass issued at Gate 5. Expired stock staged in cage C.",
     "attributes": ["Free zone gate pass", "Destruction certificate required"],
-    "containers": [
-      {
-        "type": "drum",
-        "size": "200L",
-        "stream": "hazardous",
-        "quantity": 6,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 3,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_10_l1",
-        "serviceItem": "HAZ DRUM 200L",
-        "stream": "hazardous",
+        "serviceItemId": "si_haz_drum",
+        "quantity": 6,
         "frequency": "monthly",
         "days": ["wed"],
         "window": "AM",
-        "uom": "pcs",
-        "quantity": 6
+        "containerIds": []
       },
       {
         "id": "sp_10_l2",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 3,
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00798", "cnt_00801", "cnt_00809"]
       },
       {
         "id": "sp_10_l3",
-        "serviceItem": "PHARMA DESTRUCTION",
-        "stream": "medical",
+        "serviceItemId": "si_pharma_dest",
+        "quantity": 500,
         "frequency": "on-call",
         "days": [],
         "window": "AT",
-        "uom": "kg",
-        "quantity": 500
+        "containerIds": []
       }
     ]
   },
@@ -546,42 +437,24 @@
     "status": "active",
     "accessNotes": "No collections 07:15–08:15 or 14:30–15:30 (school run).",
     "attributes": ["School run blackout"],
-    "containers": [
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 4,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "recyclable",
-        "quantity": 3,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_11_l1",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 4,
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "PM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00817", "cnt_00819", "cnt_00826", "cnt_00833"]
       },
       {
         "id": "sp_11_l2",
-        "serviceItem": "REC 1.1CBM",
-        "stream": "recyclable",
+        "serviceItemId": "si_rec_1100",
+        "quantity": 3,
         "frequency": "weekly",
         "days": ["thu"],
         "window": "PM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00834", "cnt_00836", "cnt_00842"]
       }
     ]
   },
@@ -599,59 +472,33 @@
     "status": "active",
     "accessNotes": "Food-grade site. Drivers must sign the hygiene log.",
     "attributes": ["Hygiene log", "Weighbridge on site"],
-    "containers": [
-      {
-        "type": "roro",
-        "size": "30CBM",
-        "stream": "food",
-        "quantity": 1,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "compactor",
-        "size": "20CBM",
-        "stream": "general",
-        "quantity": 1,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "skip",
-        "size": "10CBM",
-        "stream": "recyclable",
-        "quantity": 2,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_12_l1",
-        "serviceItem": "RORO 30CBM FOOD",
-        "stream": "food",
+        "serviceItemId": "si_roro_30_food",
+        "quantity": 1,
         "frequency": "daily",
         "days": ["mon", "tue", "wed", "thu", "fri", "sat"],
         "window": "AM",
-        "uom": "ton",
-        "quantity": 4
+        "containerIds": ["cnt_00846"]
       },
       {
         "id": "sp_12_l2",
-        "serviceItem": "COMP 20CBM GEN",
-        "stream": "general",
+        "serviceItemId": "si_comp_20_gen",
+        "quantity": 1,
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "PM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00854"]
       },
       {
         "id": "sp_12_l3",
-        "serviceItem": "10CBM REC",
-        "stream": "recyclable",
+        "serviceItemId": "si_skip_10_rec",
+        "quantity": 2,
         "frequency": "weekly",
         "days": ["wed"],
         "window": "PM",
-        "uom": "skip",
-        "quantity": 2
+        "containerIds": ["cnt_00857", "cnt_00861"]
       }
     ]
   },
@@ -667,25 +514,15 @@
     "lat": 24.871,
     "lng": 55.085,
     "status": "active",
-    "containers": [
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 3,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_13_l1",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 3,
         "frequency": "weekly",
         "days": ["tue", "sat"],
         "window": "PM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00870", "cnt_00879", "cnt_00883"]
       }
     ]
   },
@@ -703,42 +540,32 @@
     "status": "active",
     "accessNotes": "Collect from B1 chute room; key with concierge.",
     "attributes": ["Key with concierge"],
-    "containers": [
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 10,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "recyclable",
-        "quantity": 4,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_14_l1",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 7,
         "frequency": "daily",
         "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": [
+          "cnt_00891",
+          "cnt_00898",
+          "cnt_00917",
+          "cnt_00926",
+          "cnt_00934",
+          "cnt_00939",
+          "cnt_00948"
+        ]
       },
       {
         "id": "sp_14_l2",
-        "serviceItem": "REC 1.1CBM",
-        "stream": "recyclable",
+        "serviceItemId": "si_rec_1100",
+        "quantity": 3,
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_00971", "cnt_00980", "cnt_00983"]
       }
     ]
   },
@@ -754,25 +581,24 @@
     "lat": 25.1862,
     "lng": 55.2668,
     "status": "active",
-    "containers": [
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 8,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_15_l1",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 8,
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": [
+          "cnt_00985",
+          "cnt_00989",
+          "cnt_00993",
+          "cnt_00994",
+          "cnt_01001",
+          "cnt_01010",
+          "cnt_01014",
+          "cnt_01020"
+        ]
       }
     ]
   },
@@ -788,42 +614,24 @@
     "lat": 25.329,
     "lng": 55.635,
     "status": "active",
-    "containers": [
-      {
-        "type": "roro",
-        "size": "40CBM",
-        "stream": "recyclable",
-        "quantity": 1,
-        "ownership": "renuterra"
-      },
-      {
-        "type": "skip",
-        "size": "10CBM",
-        "stream": "general",
-        "quantity": 2,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_16_l1",
-        "serviceItem": "RORO 40CBM REC",
-        "stream": "recyclable",
+        "serviceItemId": "si_roro_40_rec",
+        "quantity": 1,
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_01027"]
       },
       {
         "id": "sp_16_l2",
-        "serviceItem": "10CBM GEN",
-        "stream": "general",
+        "serviceItemId": "si_skip_10_gen",
+        "quantity": 2,
         "frequency": "weekly",
         "days": ["wed", "sat"],
         "window": "AM",
-        "uom": "skip",
-        "quantity": 2
+        "containerIds": ["cnt_01032", "cnt_01034"]
       }
     ]
   },
@@ -839,25 +647,15 @@
     "lat": 25.331,
     "lng": 55.642,
     "status": "active",
-    "containers": [
-      {
-        "type": "bin",
-        "size": "1100L",
-        "stream": "general",
-        "quantity": 4,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_17_l1",
-        "serviceItem": "REL 1100L GEN",
-        "stream": "general",
+        "serviceItemId": "si_rel_1100_gen",
+        "quantity": 4,
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "uom": "trip",
-        "quantity": 1
+        "containerIds": ["cnt_01036", "cnt_01040", "cnt_01043", "cnt_01047"]
       }
     ]
   },
@@ -875,25 +673,15 @@
     "status": "active",
     "accessNotes": "Waste oil and sludge in bunded area. Hazmat-licensed crew only.",
     "attributes": ["Hazmat crew only", "Bunded storage"],
-    "containers": [
-      {
-        "type": "drum",
-        "size": "200L",
-        "stream": "hazardous",
-        "quantity": 10,
-        "ownership": "renuterra"
-      }
-    ],
     "serviceLines": [
       {
         "id": "sp_18_l1",
-        "serviceItem": "HAT OIL/SLUDGE",
-        "stream": "hazardous",
+        "serviceItemId": "si_hat_oil",
+        "quantity": 2000,
         "frequency": "weekly",
         "days": ["thu"],
         "window": "AM",
-        "uom": "pcs",
-        "quantity": 10
+        "containerIds": ["cnt_01050"]
       }
     ]
   },
@@ -910,15 +698,6 @@
     "lng": 55.256,
     "status": "inactive",
     "attributes": [],
-    "containers": [
-      {
-        "type": "bin",
-        "size": "240L",
-        "stream": "food",
-        "quantity": 4,
-        "ownership": "customer"
-      }
-    ],
     "serviceLines": []
   },
   {
@@ -934,15 +713,6 @@
     "lng": 55.23,
     "status": "inactive",
     "attributes": [],
-    "containers": [
-      {
-        "type": "bin",
-        "size": "660L",
-        "stream": "recyclable",
-        "quantity": 2,
-        "ownership": "customer"
-      }
-    ],
     "serviceLines": []
   }
 ]

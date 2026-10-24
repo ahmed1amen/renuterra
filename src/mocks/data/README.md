@@ -14,8 +14,11 @@ render — edit them freely, no code changes needed.
 | `technicians.json` | `Technician[]` | `useTechnicians()` — Field Service crew |
 | `jobs.json` | `Job[]` | `useJobs()` — dispatch board (legacy; being replaced by appointments) |
 | `customers.json` | `Customer[]` | `useCustomers()`, `useCustomer(id)` — Field Ops customers with contacts |
-| `service-points.json` | `ServicePoint[]` | `useServicePoints()` — sites with containers and contracted service lines |
-| `appointments.json` | `Appointment[]` | `useAppointments()`, `useAppointment(id)` — visits around `MOCK_NOW`, merged with session bookings/edits |
+| `service-points.json` | `ServicePoint[]` | `useServicePoints()` — sites with their contracted service lines |
+| `service-items.json` | `ServiceItem[]` | `useServiceItems()` — service catalogue; each item's handling method drives its work orders |
+| `container-types.json` | `ContainerType[]` | `useContainerTypes()` — container catalogue (bins, skips, RORO, bags…) |
+| `containers.json` | `Container[]` | `useContainers()` — tagged containers at service points or in the depot |
+| `appointments.json` | `Appointment[]` | `useAppointments()`, `useAppointment(id)` — visits around `MOCK_NOW` with their work orders, merged with session bookings/edits |
 
 ## Adding a dataset
 

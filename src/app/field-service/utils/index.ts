@@ -219,3 +219,12 @@ const aed = new Intl.NumberFormat("en-AE", {
 export function formatAed(value: number) {
   return aed.format(value);
 }
+
+const kg = new Intl.NumberFormat("en-AE", { maximumFractionDigits: 1 });
+
+/** "61.5 kg", or "6.2 t" from 1,000 kg up. */
+export function formatKg(value: number) {
+  return value >= 1000
+    ? `${kg.format(value / 1000)} t`
+    : `${kg.format(value)} kg`;
+}

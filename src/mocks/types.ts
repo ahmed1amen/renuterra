@@ -211,40 +211,147 @@ export type Customer = {
   createdAt: string;
 };
 
-export type ContainerType =
+/**
+ * How a service pro physically handles a service item. It decides what gets
+ * counted, where the weight comes from and what proof is captured.
+ */
+export type HandlingMethod =
+  /** Bin stays on site and is emptied into the truck (lifts). */
+  | "empty-on-site"
+  /** Full container taken to a facility, tipped and returned or swapped (trips). */
+  | "exchange"
+  /** Sealed bags, boxes or drums taken away; empties left behind. */
+  | "packaged"
+  /** Tanker pumps liquid out of a tank or grease trap (litres). */
+  | "pump-out"
+  /** An empty container is delivered, removed or relocated. */
+  | "logistics"
+  /** Items taken for witnessed destruction and a certificate. */
+  | "destruction";
+
+export type VehicleClass =
+  | "compactor"
+  | "skip-loader"
+  | "hook-loader"
+  | "tanker"
+  | "box-truck";
+
+/** What the service pro counts on a work order. */
+export type CountUnit =
+  | "lift"
+  | "trip"
+  | "bag"
+  | "box"
+  | "drum"
+  | "litre"
+  | "container"
+  | "kg";
+
+/** Where a work order's actual weight comes from. */
+export type WeightSource =
+  /** Planned units × the item's kg per unit. */
+  | "estimated"
+  /** The route's weighbridge ticket split across its stops. */
+  | "allocated"
+  | "weighbridge"
+  /** Hanging or platform scale on site. */
+  | "scale"
+  /** Tanker flow meter (litres, converted). */
+  | "metered";
+
+export type ContainerKind =
   | "bin"
   | "skip"
   | "roro"
   | "compactor"
+  | "tank"
   | "drum"
-  | "sharps-box";
+  | "sharps-box"
+  | "bag";
 
-export type Container = {
-  type: ContainerType;
-  /** "1100L", "10CBM", "200L" … */
-  size: string;
+/** Catalogue entry for a kind and size of container. */
+export type ContainerType = {
+  id: string;
+  /** e.g. "1100L wheelie bin". */
+  name: string;
+  kind: ContainerKind;
+  capacityLitres: number;
+  vehicleClass: VehicleClass;
+  /**
+   * Tracked containers are assets with a tag and a location. Untracked ones
+   * (bags, sharps boxes, drums) are consumables counted on the work order.
+   */
+  tracked: boolean;
+  active: boolean;
+};
+
+/** Catalogue entry for one service Renuterra sells and performs. */
+export type ServiceItem = {
+  id: string;
+  /** e.g. `REL-1100-GEN`. Contract lines and work orders point at the id, never the text. */
+  code: string;
+  name: string;
   stream: WasteStreamId;
-  quantity: number;
-  ownership: "renuterra" | "customer";
+  method: HandlingMethod;
+  containerTypeId: string | null;
+  countUnit: CountUnit;
+  /** Planning estimate used until a real weight is recorded. */
+  estKgPerUnit: number;
+  minutesPerUnit: number;
+  vehicleClass: VehicleClass;
+  /** Where the actual weight is expected to come from. `null` for logistics. */
+  weightSource: WeightSource | null;
+  /** Each unit carries a numbered seal (medical, hazardous). */
+  requiresSeals: boolean;
+  /** Consignment note / manifest travels with the waste (chain of custody). */
+  requiresConsignmentNote: boolean;
+  /** Left behind on each service, e.g. "Yellow bag". */
+  consumable: string | null;
+  active: boolean;
+};
+
+export type ContainerOwnership = "renuterra" | "customer";
+export type ContainerLocation =
+  | "on-site"
+  | "in-transit"
+  | "at-facility"
+  | "in-depot"
+  | "maintenance";
+
+/** One physical, tagged container. */
+export type Container = {
+  id: string;
+  /** Printed tag / barcode, e.g. `RT-1100-00412`. */
+  tag: string;
+  containerTypeId: string;
+  /** Where it is placed; `null` while in the depot. */
+  servicePointId: string | null;
+  stream: WasteStreamId;
+  ownership: ContainerOwnership;
+  location: ContainerLocation;
+  placedAt: string | null;
+  lastServicedAt: string | null;
 };
 
 export type DayOfWeek = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
 export type ServiceFrequency = "daily" | "weekly" | "monthly" | "on-call";
 /** Arrival window: morning, afternoon, night, or anytime. */
 export type ArrivalWindow = "AM" | "PM" | "night" | "AT";
-export type BillingUom = "trip" | "skip" | "pcs" | "kg" | "ton";
 
-/** One contracted service at a service point — what recurring appointments are generated from. */
+/**
+ * One contracted service at a service point — what recurring appointments are
+ * generated from. Prices stay on the CRM contract; Field Ops needs quantities.
+ */
 export type ServiceLine = {
   id: string;
-  /** Catalogue code, e.g. `REL 1100L GEN`. */
-  serviceItem: string;
-  stream: WasteStreamId;
+  serviceItemId: string;
+  /** Units per visit, in the item's count unit. */
+  quantity: number;
   frequency: ServiceFrequency;
   days: DayOfWeek[];
   window: ArrivalWindow;
-  uom: BillingUom;
-  quantity: number;
+  /** Tracked containers this line services. */
+  containerIds: string[];
 };
 
 /** A physical site where waste is collected. Named "Customer - Location". */
@@ -263,7 +370,6 @@ export type ServicePoint = {
   status: "active" | "inactive";
   accessNotes?: string;
   attributes: string[];
-  containers: Container[];
   serviceLines: ServiceLine[];
 };
 
@@ -300,15 +406,66 @@ export type CancelReason =
   | "weather"
   | "other";
 
+export type WorkOrderStatus =
+  | "scheduled"
+  | "in-progress"
+  | "completed"
+  | "partial"
+  | "not-done"
+  | "deferred"
+  | "cancelled";
+
+/** Why a work order fell short (partial or not done). */
+export type ShortfallReason =
+  | FailedReason
+  | "vehicle_full"
+  | "container_damaged"
+  | "overweight";
+
+/** Proof captured on close-out. Which fields apply depends on the handling method. */
+export type WorkOrderEvidence = {
+  /** empty-on-site: average fill level of the lifted containers. */
+  fillLevelPct?: number;
+  contamination?: boolean;
+  /** exchange: tag of the full container taken and the one left. */
+  containerOut?: string;
+  containerIn?: string;
+  weighbridgeTicket?: string;
+  facility?: string;
+  /** packaged: one seal number per unit. */
+  seals?: string[];
+  /** packaged / pump-out / destruction: consignment note or manifest. */
+  consignmentNote?: string;
+  consumablesLeft?: number;
+  photos?: number;
+};
+
+/** One unit of work on an appointment: a service item, how much, and what happened. */
 export type WorkOrder = {
+  id: string;
   /** e.g. `WO-10412`. */
   ref: string;
-  description: string;
-  serviceItem: string;
-  quantityPlanned: number;
-  /** Recorded on completion; `null` until then. */
-  quantityActual: number | null;
-  uom: BillingUom;
+  serviceItemId: string;
+  /** Copied from the item at booking so later renames don't rewrite history. */
+  itemCode: string;
+  itemName: string;
+  stream: WasteStreamId;
+  method: HandlingMethod;
+  countUnit: CountUnit;
+  status: WorkOrderStatus;
+  origin: "planned" | "added-on-site";
+  containerIds: string[];
+  countPlanned: number;
+  /** `null` until recorded. */
+  countDone: number | null;
+  weightEstKg: number;
+  /** `null` until recorded, and for logistics. */
+  weightKg: number | null;
+  weightSource: WeightSource | null;
+  startedAt: string | null;
+  completedAt: string | null;
+  reason: ShortfallReason | null;
+  evidence: WorkOrderEvidence;
 };
 
 /** A booked visit by a service pro to a service point. */

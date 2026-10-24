@@ -101,7 +101,10 @@ export function AppointmentsTable({
               <TableCell>
                 <StreamTag stream={apt.stream} />
                 <span className="text-muted-foreground mt-1 block font-mono text-[11px]">
-                  {apt.workOrders[0]?.serviceItem}
+                  {apt.workOrders[0]?.itemCode}
+                  {apt.workOrders.length > 1
+                    ? ` +${apt.workOrders.length - 1}`
+                    : ""}
                 </span>
               </TableCell>
               <TableCell className="text-sm">

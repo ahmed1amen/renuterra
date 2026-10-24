@@ -7,4 +7,7 @@ export const fieldServiceKeys = {
   customer: (id: string) => [...fieldServiceKeys.customers(), id] as const,
   servicePoints: () => [...fieldServiceKeys.all, "service-points"] as const,
   appointments: () => [...fieldServiceKeys.all, "appointments"] as const,
+  serviceItems: () => [...fieldServiceKeys.all, "service-items"] as const,
+  containerTypes: () => [...fieldServiceKeys.all, "container-types"] as const,
+  containers: () => [...fieldServiceKeys.all, "containers"] as const,
 };

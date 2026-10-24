@@ -5,6 +5,7 @@ import {
   CalendarPlus,
   Camera,
   CircleCheck,
+  ClipboardCheck,
   FileSearch,
   MapPin,
   MoreHorizontal,
@@ -43,18 +44,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  isWorkOrderClosed,
+  newWorkOrder,
   useAppointment,
   useAppointmentStore,
+  useCatalogItems,
   useDirectory,
   useTechnicians,
 } from "@/features/field-service";
@@ -63,6 +59,7 @@ import {
   type CancelReason,
   type FailedReason,
   MOCK_NOW,
+  type WorkOrder,
 } from "@/mocks";
 import { useBookAppointmentModal } from "@/stores/book-appointment-modal";
 import {
@@ -86,17 +83,23 @@ import {
   formatDate,
   formatDateTime,
   formatDuration,
+  formatKg,
   formatTime,
   formatWindowRange,
 } from "../../utils";
 import {
-  CompleteDialog,
+  AddWorkOrderDialog,
   ReasonDialog,
+  RecordWorkOrderDialog,
   RescheduleDialog,
   VisitProgress,
+  WorkOrdersCard,
 } from "./components";
 
-type DialogId = "reschedule" | "cancel" | "fail" | "complete" | null;
+type DialogId =
+  | { kind: "reschedule" | "cancel" | "fail" | "add-work-order" }
+  | { kind: "record"; workOrderId: string }
+  | null;
 
 /** What happens next, by status — the one button the header leads with. */
 const NEXT_STEP: Partial<
@@ -171,6 +174,8 @@ export default function AppointmentDetail({ id }: { id: string }) {
 function Detail({ appointment: apt }: { appointment: Appointment }) {
   const directory = useDirectory();
   const pros = useTechnicians();
+  // Includes items added in Settings this session.
+  const serviceItems = useCatalogItems();
   const update = useAppointmentStore((s) => s.update);
   const openBooking = useBookAppointmentModal((s) => s.openModal);
   const [dialog, setDialog] = useState<DialogId>(null);
@@ -183,6 +188,16 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
   const closed = CLOSED_STATUSES.includes(apt.status);
   const next = NEXT_STEP[apt.status];
   const primaryContact = customer?.contacts.find((c) => c.isPrimary);
+  const onSite = apt.status === "in-progress";
+  const openWorkOrders = apt.workOrders.filter((wo) => !isWorkOrderClosed(wo));
+  const recording =
+    dialog?.kind === "record"
+      ? apt.workOrders.find((wo) => wo.id === dialog.workOrderId)
+      : undefined;
+  const collectedKg = apt.workOrders.reduce(
+    (sum, wo) => sum + (wo.weightKg ?? 0),
+    0,
+  );
 
   function patch(changes: Partial<Appointment>, message: string) {
     update(apt.id, changes);
@@ -190,15 +205,88 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
     toast.success(message);
   }
 
+  /** Apply `change` to every still-open work order. */
+  function closeOpenWorkOrders(change: Partial<WorkOrder>) {
+    return apt.workOrders.map((wo) =>
+      isWorkOrderClosed(wo) ? wo : { ...wo, ...change },
+    );
+  }
+
   function advance() {
     if (!next) return;
+    const checkIn = next.status === "in-progress";
     patch(
       {
         status: next.status,
-        startedAt:
-          next.status === "in-progress" ? actionTime(apt) : apt.startedAt,
+        startedAt: checkIn ? actionTime(apt) : apt.startedAt,
+        workOrders: checkIn
+          ? closeOpenWorkOrders({ status: "in-progress" })
+          : apt.workOrders,
       },
       `${apt.ref} ${next.done}`,
+    );
+  }
+
+  function patchWorkOrder(
+    id: string,
+    changes: Partial<WorkOrder>,
+    message: string,
+  ) {
+    const workOrders = apt.workOrders.map((wo) =>
+      wo.id === id ? { ...wo, ...changes } : wo,
+    );
+    update(apt.id, { workOrders });
+    setDialog(null);
+    const remaining = workOrders.filter((wo) => !isWorkOrderClosed(wo));
+    if (onSite && !remaining.length) {
+      toast.success(message, {
+        description: "All work orders are closed.",
+        action: {
+          label: "Complete visit",
+          onClick: () => completeVisit(workOrders),
+        },
+      });
+    } else {
+      toast.success(message);
+    }
+  }
+
+  /**
+   * Close the visit once its work orders are closed: completed if anything was
+   * done, otherwise a failed visit carrying the first work order's reason.
+   */
+  function completeVisit(workOrders = apt.workOrders) {
+    const anyDone = workOrders.some(
+      (wo) => wo.status === "completed" || wo.status === "partial",
+    );
+    const firstReason = workOrders.find((wo) => wo.reason)?.reason;
+    const failedReason: FailedReason =
+      firstReason && firstReason in FAILED_REASON
+        ? (firstReason as FailedReason)
+        : "no_waste";
+    const lastEnd = workOrders
+      .map((wo) => wo.completedAt)
+      .filter((at): at is string => Boolean(at))
+      .sort()
+      .at(-1);
+    const completedAt = lastEnd ?? actionTime(apt);
+    update(apt.id, {
+      workOrders,
+      status: anyDone ? "completed" : "failed",
+      failedReason: anyDone ? null : failedReason,
+      completedAt,
+      durationMins: apt.startedAt
+        ? Math.max(
+            1,
+            Math.round(
+              (Date.parse(completedAt) - Date.parse(apt.startedAt)) / 60_000,
+            ),
+          )
+        : apt.durationMins,
+    });
+    setDialog(null);
+    toast.success(
+      anyDone ? `${apt.ref} completed` : `${apt.ref} closed as failed visit`,
     );
   }
 
@@ -238,8 +326,21 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                 <Button size="sm" onClick={advance}>
                   {next.label}
                 </Button>
+              ) : openWorkOrders.length ? (
+                <Button
+                  size="sm"
+                  onClick={() =>
+                    setDialog({
+                      kind: "record",
+                      workOrderId: openWorkOrders[0].id,
+                    })
+                  }
+                >
+                  <ClipboardCheck data-icon="inline-start" />
+                  Record {openWorkOrders[0].ref}
+                </Button>
               ) : (
-                <Button size="sm" onClick={() => setDialog("complete")}>
+                <Button size="sm" onClick={() => completeVisit()}>
                   <CircleCheck data-icon="inline-start" />
                   Complete visit
                 </Button>
@@ -257,24 +358,20 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                   <MoreHorizontal />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52">
-                  <DropdownMenuItem onClick={() => setDialog("reschedule")}>
+                  <DropdownMenuItem
+                    onClick={() => setDialog({ kind: "reschedule" })}
+                  >
                     <CalendarClock />
                     Reschedule
                   </DropdownMenuItem>
-                  {next ? (
-                    <DropdownMenuItem onClick={() => setDialog("complete")}>
-                      <CircleCheck />
-                      Complete visit
-                    </DropdownMenuItem>
-                  ) : null}
-                  <DropdownMenuItem onClick={() => setDialog("fail")}>
+                  <DropdownMenuItem onClick={() => setDialog({ kind: "fail" })}>
                     <OctagonAlert />
                     Report failed visit
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     variant="destructive"
-                    onClick={() => setDialog("cancel")}
+                    onClick={() => setDialog({ kind: "cancel" })}
                   >
                     Cancel appointment
                   </DropdownMenuItem>
@@ -359,6 +456,13 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                     {formatDateTime(apt.completedAt)}
                   </Fact>
                 ) : null}
+                {collectedKg > 0 ? (
+                  <Fact label="Collected">
+                    <span className="font-mono tabular-nums">
+                      {formatKg(collectedKg)}
+                    </span>
+                  </Fact>
+                ) : null}
                 {apt.originalAppointmentId ? (
                   <Fact label="Follows up">
                     <Link
@@ -373,46 +477,27 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Work orders</CardTitle>
-              <CardDescription>
-                What the service pro does on this visit.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Ref</TableHead>
-                    <TableHead>Work</TableHead>
-                    <TableHead className="text-right">Planned</TableHead>
-                    <TableHead className="text-right">Actual</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {apt.workOrders.map((wo) => (
-                    <TableRow key={wo.ref}>
-                      <TableCell className="font-mono text-xs">
-                        {wo.ref}
-                      </TableCell>
-                      <TableCell className="text-sm">
-                        {wo.description}
-                      </TableCell>
-                      <TableCell className="text-right font-mono text-sm tabular-nums">
-                        {wo.quantityPlanned} {wo.uom}
-                      </TableCell>
-                      <TableCell className="text-right font-mono text-sm tabular-nums">
-                        {wo.quantityActual === null
-                          ? "—"
-                          : `${wo.quantityActual} ${wo.uom}`}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+          <WorkOrdersCard
+            workOrders={apt.workOrders}
+            onSite={onSite}
+            editable={!closed}
+            onRecord={(wo) => setDialog({ kind: "record", workOrderId: wo.id })}
+            onDefer={(wo) =>
+              patchWorkOrder(
+                wo.id,
+                { status: "deferred" },
+                `${wo.ref} deferred to the next visit`,
+              )
+            }
+            onCancel={(wo) =>
+              patchWorkOrder(
+                wo.id,
+                { status: "cancelled" },
+                `${wo.ref} cancelled`,
+              )
+            }
+            onAdd={() => setDialog({ kind: "add-work-order" })}
+          />
 
           {apt.status === "completed" || apt.status === "failed" ? (
             <ProofOfService
@@ -613,7 +698,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
         </aside>
       </div>
 
-      {dialog === "reschedule" ? (
+      {dialog?.kind === "reschedule" ? (
         <RescheduleDialog
           open
           onOpenChange={(open) => !open && setDialog(null)}
@@ -634,7 +719,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
           }}
         />
       ) : null}
-      {dialog === "cancel" ? (
+      {dialog?.kind === "cancel" ? (
         <ReasonDialog<CancelReason>
           open
           onOpenChange={(open) => !open && setDialog(null)}
@@ -649,13 +734,14 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                 status: "cancelled",
                 cancelReason: reason,
                 notes: note || apt.notes,
+                workOrders: closeOpenWorkOrders({ status: "cancelled" }),
               },
               `${apt.ref} cancelled`,
             )
           }
         />
       ) : null}
-      {dialog === "fail" ? (
+      {dialog?.kind === "fail" ? (
         <ReasonDialog<FailedReason>
           open
           onOpenChange={(open) => !open && setDialog(null)}
@@ -672,35 +758,63 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                 notes: note || apt.notes,
                 startedAt: apt.startedAt ?? actionTime(apt),
                 completedAt: actionTime(apt),
-                workOrders: apt.workOrders.map((wo) => ({
-                  ...wo,
-                  quantityActual: 0,
-                })),
+                workOrders: closeOpenWorkOrders({
+                  status: "not-done",
+                  countDone: 0,
+                  reason,
+                  startedAt: apt.startedAt ?? actionTime(apt),
+                  completedAt: actionTime(apt),
+                  evidence: { photos: 1 },
+                }),
               },
               `${apt.ref} marked as failed visit`,
             )
           }
         />
       ) : null}
-      {dialog === "complete" ? (
-        <CompleteDialog
+      {recording ? (
+        <RecordWorkOrderDialog
           open
           onOpenChange={(open) => !open && setDialog(null)}
-          appointment={apt}
-          onConfirm={(actuals) =>
+          workOrder={recording}
+          item={serviceItems.data?.find(
+            (i) => i.id === recording.serviceItemId,
+          )}
+          at={actionTime(apt)}
+          onConfirm={(changes) =>
+            patchWorkOrder(recording.id, changes, `${recording.ref} recorded`)
+          }
+        />
+      ) : null}
+      {dialog?.kind === "add-work-order" ? (
+        <AddWorkOrderDialog
+          open
+          onOpenChange={(open) => !open && setDialog(null)}
+          items={(serviceItems.data ?? []).filter((i) => i.active)}
+          onSite={onSite}
+          onConfirm={(item, count) => {
+            const wo = newWorkOrder(
+              item,
+              count,
+              [],
+              onSite ? "added-on-site" : "planned",
+            );
             patch(
               {
-                status: "completed",
-                startedAt: apt.startedAt ?? actionTime(apt),
-                completedAt: actionTime(apt),
-                workOrders: apt.workOrders.map((wo, i) => ({
-                  ...wo,
-                  quantityActual: actuals[i],
-                })),
+                workOrders: [
+                  ...apt.workOrders,
+                  onSite
+                    ? {
+                        ...wo,
+                        status: "in-progress",
+                        startedAt: actionTime(apt),
+                      }
+                    : wo,
+                ],
               },
-              `${apt.ref} completed`,
-            )
-          }
+              `${wo.ref} added`,
+            );
+          }}
         />
       ) : null}
 

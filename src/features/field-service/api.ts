@@ -8,12 +8,18 @@
 import {
   APPOINTMENTS,
   type Appointment,
+  CONTAINER_TYPES,
+  CONTAINERS,
+  type Container,
+  type ContainerType,
   CUSTOMERS,
   type Customer,
   JOBS,
   type Job,
   mockFetch,
+  SERVICE_ITEMS,
   SERVICE_POINTS,
+  type ServiceItem,
   type ServicePoint,
   TECHNICIANS,
   type Technician,
@@ -36,4 +42,12 @@ export const fieldServiceApi = {
   listServicePoints: (): Promise<ServicePoint[]> => mockFetch(SERVICE_POINTS),
 
   listAppointments: (): Promise<Appointment[]> => mockFetch(APPOINTMENTS),
+
+  listServiceItems: (): Promise<ServiceItem[]> =>
+    mockFetch([...SERVICE_ITEMS].sort((a, b) => a.code.localeCompare(b.code))),
+
+  listContainerTypes: (): Promise<ContainerType[]> =>
+    mockFetch(CONTAINER_TYPES),
+
+  listContainers: (): Promise<Container[]> => mockFetch(CONTAINERS),
 };

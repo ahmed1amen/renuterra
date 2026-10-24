@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   useAppointmentStore,
   useCustomers,
+  useServiceItems,
   useServicePoints,
   useTechnicians,
 } from "@/features/field-service";
@@ -37,7 +38,7 @@ import {
   type BookingPreset,
   useBookAppointmentModal,
 } from "@/stores/book-appointment-modal";
-import { addDays, dubaiDateTime, TODAY, toDayKey } from "../utils";
+import { addDays, dubaiDateTime, formatKg, TODAY, toDayKey } from "../utils";
 import {
   APPOINTMENT_TYPE,
   SERVICE_TYPE_LABEL,
@@ -46,6 +47,7 @@ import {
 } from "./appointment-meta";
 import { FREQUENCY_LABEL } from "./customer-meta";
 import { ChoiceChips, Field } from "./form-field";
+import { formatCountUnit } from "./work-order-meta";
 
 const SERVICE_TYPES = (
   Object.keys(SERVICE_TYPE_LABEL) as AppointmentServiceType[]
@@ -86,6 +88,8 @@ function BookingForm({
   const customers = useCustomers();
   const servicePoints = useServicePoints();
   const pros = useTechnicians();
+  const serviceItems = useServiceItems();
+  const itemOf = (id: string) => serviceItems.data?.find((i) => i.id === id);
 
   const [customerId, setCustomerId] = useState(preset.customerId ?? "");
   const [servicePointId, setServicePointId] = useState(
@@ -117,21 +121,24 @@ function BookingForm({
     (sp) => sp.id === servicePointId,
   );
   const line = servicePoint?.serviceLines.find((l) => l.id === serviceLineId);
+  const item = line ? itemOf(line.serviceItemId) : undefined;
   // Default the window to the contracted one until the user picks another.
   const effectiveWindow = arrivalWindow ?? line?.window ?? "AM";
   const type = preset.type ?? "standard";
   const blocked = customer?.flags.includes("do_not_service") ?? false;
-  const ready = Boolean(customer && servicePoint && line && day) && !blocked;
+  const ready =
+    Boolean(customer && servicePoint && line && item && day) && !blocked;
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
-    if (!customer || !servicePoint || !line) return;
+    if (!customer || !servicePoint || !line || !item) return;
 
     const [from, to] = WINDOW_HOURS[effectiveWindow];
     const appointment = book({
       customerId: customer.id,
       servicePointId: servicePoint.id,
       serviceLine: line,
+      serviceItem: item,
       type,
       serviceType,
       window: effectiveWindow,
@@ -249,13 +256,23 @@ function BookingForm({
               <NativeSelectOption value="">
                 Select a service…
               </NativeSelectOption>
-              {servicePoint?.serviceLines.map((l) => (
-                <NativeSelectOption key={l.id} value={l.id}>
-                  {l.serviceItem} · {FREQUENCY_LABEL[l.frequency]}
-                </NativeSelectOption>
-              ))}
+              {servicePoint?.serviceLines.map((l) => {
+                const lineItem = itemOf(l.serviceItemId);
+                return (
+                  <NativeSelectOption key={l.id} value={l.id}>
+                    {lineItem?.name ?? l.serviceItemId} ·{" "}
+                    {FREQUENCY_LABEL[l.frequency]}
+                  </NativeSelectOption>
+                );
+              })}
             </NativeSelect>
-            {line ? <StreamTag stream={line.stream} className="mt-2" /> : null}
+            {line && item ? (
+              <p className="text-muted-foreground mt-2 flex flex-wrap items-center gap-2 text-xs">
+                <StreamTag stream={item.stream} />
+                {formatCountUnit(line.quantity, item.countUnit)} per visit ·
+                est. {formatKg(line.quantity * item.estKgPerUnit)}
+              </p>
+            ) : null}
           </Field>
 
           <Field label="Visit type">
