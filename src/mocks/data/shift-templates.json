@@ -1,0 +1,50 @@
+[
+  {
+    "id": "tpl_day_early",
+    "name": "Day early",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "active": true
+  },
+  {
+    "id": "tpl_day_long",
+    "name": "Day long",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "active": true
+  },
+  {
+    "id": "tpl_day_medical",
+    "name": "Medical round",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "active": true
+  },
+  {
+    "id": "tpl_night",
+    "name": "Night",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "active": true
+  },
+  {
+    "id": "tpl_on_call",
+    "name": "On call",
+    "type": "on-call",
+    "startTime": "08:00",
+    "endTime": "20:00",
+    "active": true
+  },
+  {
+    "id": "tpl_training",
+    "name": "Training",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "active": true
+  }
+]

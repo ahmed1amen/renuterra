@@ -3,89 +3,110 @@
 import {
   ChevronDown,
   ChevronUp,
-  Clock,
+  Factory,
+  Lock,
   Minus,
-  MoreVertical,
   Plus,
 } from "lucide-react";
 import {
+  type DragEvent,
+  type ReactNode,
   type PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
-import { toast } from "sonner";
+import { findStream } from "@/components/shared";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useDirectory } from "@/features/field-service";
 import { cn } from "@/lib/utils";
-import type { Job } from "@/mocks";
-import { MOCK_NOW } from "@/mocks";
 import {
-  formatDuration,
-  formatHour,
-  formatTime,
-  isSameDay,
-  minutesOfDay,
-  TODAY,
-} from "../utils";
-import { JOB_STATUS } from "./job-status";
-import { type Route, routeColors } from "./route-sidebar";
+  type Appointment,
+  type AppointmentStatus,
+  MOCK_NOW,
+  type TippingTrip,
+} from "@/mocks";
+import { formatDuration, formatHour, formatTime, minutesOfDay } from "../utils";
+import { APPOINTMENT_STATUS } from "./appointment-meta";
+import { isMovable, type RoutePlan } from "./dispatch-meta";
 
-const LANE_WIDTH = 224;
-const MIN_HOUR_WIDTH = 60;
+const LANE_WIDTH = 248;
+const MIN_HOUR_WIDTH = 48;
 const MAX_HOUR_WIDTH = 220;
+const DEFAULT_HOUR_WIDTH = 150;
+
+/** Waste runs early and at night, so the grid always covers 04:00–24:00. */
+const START_HOUR = 4;
+const END_HOUR = 24;
+const HOURS = Array.from(
+  { length: END_HOUR - START_HOUR },
+  (_, i) => START_HOUR + i,
+);
 
 const MIN_HEIGHT = 140;
-const DEFAULT_HEIGHT = 320;
-/** Leave at least the date bar and a strip of map visible. */
+const DEFAULT_HEIGHT = 300;
+/** Leave at least the header and a strip of map visible. */
 const MAX_HEIGHT_FRACTION = 0.75;
 
+/** Drop-target key for the backlog lane. */
+const BACKLOG = "__backlog__";
+
 /** Block tint per status, so a lane reads at a glance. */
-const BLOCK_TONE: Record<Job["status"], string> = {
-  unassigned: "bg-muted border-border",
+const BLOCK_TONE: Record<AppointmentStatus, string> = {
   scheduled: "bg-card border-border",
-  "en-route": "bg-sky-50 border-sky-300 dark:bg-sky-950 dark:border-sky-800",
-  "on-site": "bg-sky-100 border-sky-400 dark:bg-sky-900 dark:border-sky-700",
-  completed:
-    "bg-emerald-50 border-emerald-300 dark:bg-emerald-950 dark:border-emerald-800",
-  blocked: "bg-red-50 border-red-300 dark:bg-red-950 dark:border-red-800",
+  confirmed: "bg-card border-border",
+  "en-route": "bg-info-bg border-info/40",
+  "in-progress": "bg-info-bg border-info/60",
+  completed: "bg-success-bg border-success/40",
+  failed: "bg-destructive-bg border-destructive/40",
+  cancelled: "bg-muted border-border text-muted-foreground line-through",
 };
 
 /**
- * The dispatcher's day in one picture: a lane per route — each run belongs to
- * one service pro — with the appointments they travel between laid out on a
- * shared hour axis. Collapses to its header so the map can take the screen.
+ * The dispatcher's day in one picture: a lane per route on a shared hour
+ * axis, with its stops and tipping trips, and the backlog at the foot. Drag a
+ * stop onto another lane to move it. Collapses so the map can take the screen.
  */
 export function RouteTimeline({
-  routes,
-  unassigned,
-  date,
+  plans,
+  backlog,
+  isToday,
+  matches,
   selectedRouteId,
-  selectedJobId,
+  selectedAppointmentId,
   onSelectRoute,
-  onSelectJob,
+  onSelectAppointment,
+  onMove,
+  empty,
 }: {
-  routes: Route[];
-  unassigned: Job[];
-  date: Date;
+  plans: RoutePlan[];
+  /** The day's unrouted appointments. */
+  backlog: Appointment[];
+  isToday: boolean;
+  /** Whether an appointment passes the board's filters. */
+  matches: (appointment: Appointment) => boolean;
   selectedRouteId: string | null;
-  selectedJobId: string | null;
-  onSelectRoute: (technicianId: string | null) => void;
-  onSelectJob: (jobId: string | null) => void;
+  selectedAppointmentId: string | null;
+  onSelectRoute: (routeId: string | null) => void;
+  onSelectAppointment: (appointmentId: string | null) => void;
+  onMove: (appointmentId: string, routeId: string | null) => void;
+  /** Shown in place of the lanes when the day has no routes. */
+  empty?: ReactNode;
 }) {
   const [open, setOpen] = useState(true);
-  const [hourWidth, setHourWidth] = useState(110);
+  const [hourWidth, setHourWidth] = useState(DEFAULT_HOUR_WIDTH);
   const [height, setHeight] = useState(DEFAULT_HEIGHT);
+  const [dragging, setDragging] = useState<{
+    id: string;
+    from: string;
+  } | null>(null);
+  const [over, setOver] = useState<string | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const resize = useRef<{ y: number; height: number } | null>(null);
+  // The scroller only exists while the panel is open and the day has routes.
+  const hasLanes = open && plans.length > 0;
 
   const clampHourWidth = useCallback(
     (value: number) =>
@@ -99,7 +120,7 @@ export function RouteTimeline({
    */
   useEffect(() => {
     const el = scroller.current;
-    if (!el) return;
+    if (!el || !hasLanes) return;
     const onWheel = (e: WheelEvent) => {
       if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
@@ -118,7 +139,7 @@ export function RouteTimeline({
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
-  }, [clampHourWidth]);
+  }, [clampHourWidth, hasLanes]);
 
   const onResizeStart = (e: ReactPointerEvent<HTMLButtonElement>) => {
     if (!open) return;
@@ -144,45 +165,83 @@ export function RouteTimeline({
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
-  const allJobs = useMemo(
-    () => [...routes.flatMap((route) => route.jobs), ...unassigned],
-    [routes, unassigned],
-  );
-
-  /** Whole-hour window wide enough for the day's work, 6 hours minimum. */
-  const { startHour, endHour } = useMemo(() => {
-    if (allJobs.length === 0) return { startHour: 6, endHour: 18 };
-    const starts = allJobs.map((job) => minutesOfDay(job.scheduledFor));
-    const ends = allJobs.map(
-      (job) => minutesOfDay(job.scheduledFor) + job.durationMins,
-    );
-    const first = Math.floor(Math.min(...starts) / 60) - 1;
-    const last = Math.ceil(Math.max(...ends) / 60) + 1;
-    return {
-      startHour: Math.max(0, first),
-      endHour: Math.min(24, Math.max(last, first + 6)),
-    };
-  }, [allJobs]);
-
-  const hours = Array.from(
-    { length: endHour - startHour },
-    (_, i) => startHour + i,
-  );
-  const trackWidth = hours.length * hourWidth;
+  const trackWidth = HOURS.length * hourWidth;
 
   /** Where a minute-of-day sits on the track. */
   const xFor = (minutes: number) =>
-    ((minutes - startHour * 60) / 60) * hourWidth;
+    ((minutes - START_HOUR * 60) / 60) * hourWidth;
 
   // The now line only means anything on today's board.
   const nowMinutes = minutesOfDay(MOCK_NOW);
-  const showNow =
-    isSameDay(date, TODAY) &&
-    nowMinutes >= startHour * 60 &&
-    nowMinutes <= endHour * 60;
 
-  const totalStops = allJobs.length;
-  const doneStops = allJobs.filter((job) => job.status === "completed").length;
+  // Open today's board scrolled to a little before now.
+  const initialHourWidth = useRef(hourWidth);
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el || !hasLanes) return;
+    const minutes = isToday ? nowMinutes - 90 : 5 * 60;
+    el.scrollLeft = Math.max(
+      0,
+      ((minutes - START_HOUR * 60) / 60) * initialHourWidth.current,
+    );
+  }, [isToday, nowMinutes, hasLanes]);
+
+  const allStops = plans.flatMap((plan) => plan.stops);
+  const doneStops = allStops.filter((a) => a.status === "completed").length;
+
+  /** Drag-and-drop: a lane takes a stop unless it's locked or its own. */
+  const canDrop = (laneId: string, locked: boolean) =>
+    dragging !== null && !locked && laneId !== dragging.from;
+
+  const dropProps = (laneId: string, locked: boolean) => ({
+    onDragOver: (e: DragEvent) => {
+      if (!canDrop(laneId, locked)) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      if (over !== laneId) setOver(laneId);
+    },
+    onDragLeave: (e: DragEvent) => {
+      if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+      if (over === laneId) setOver(null);
+    },
+    onDrop: (e: DragEvent) => {
+      e.preventDefault();
+      if (dragging && canDrop(laneId, locked)) {
+        onMove(dragging.id, laneId === BACKLOG ? null : laneId);
+      }
+      setDragging(null);
+      setOver(null);
+    },
+  });
+
+  const blockProps = (
+    appointment: Appointment,
+    from: string,
+    locked: boolean,
+  ) => {
+    const draggable = !locked && isMovable(appointment);
+    return {
+      appointment,
+      x: xFor(minutesOfDay(appointment.plannedStart)),
+      width: (appointment.durationMins / 60) * hourWidth,
+      selected: selectedAppointmentId === appointment.id,
+      draggable,
+      dragging: dragging?.id === appointment.id,
+      onClick: () =>
+        onSelectAppointment(
+          selectedAppointmentId === appointment.id ? null : appointment.id,
+        ),
+      onDragStart: (e: DragEvent) => {
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", appointment.id);
+        setDragging({ id: appointment.id, from });
+      },
+      onDragEnd: () => {
+        setDragging(null);
+        setOver(null);
+      },
+    };
+  };
 
   return (
     <section
@@ -202,7 +261,7 @@ export function RouteTimeline({
             if (e.key === "ArrowUp") setHeight((h) => clampHeight(h + 24));
             if (e.key === "ArrowDown") setHeight((h) => clampHeight(h - 24));
           }}
-          aria-label="Resize the routes panel"
+          aria-label="Resize the timeline"
           title="Drag to resize · double-click to reset"
           className="hover:bg-primary/40 focus-visible:bg-primary/40 absolute inset-x-0 -top-1 z-40 h-2 cursor-row-resize transition-colors outline-none"
         />
@@ -219,37 +278,36 @@ export function RouteTimeline({
           ) : (
             <ChevronUp className="size-4" aria-hidden />
           )}
-          Routes
+          Timeline
         </button>
 
         <Badge variant="neutral" className="font-mono text-[10px] tabular-nums">
-          {routes.length} routes · {doneStops}/{totalStops} appts
+          {plans.length} {plans.length === 1 ? "route" : "routes"} · {doneStops}
+          /{allStops.length} done
         </Badge>
 
-        {unassigned.length > 0 ? (
-          <Badge variant="warning" className="font-mono text-[10px]">
-            {unassigned.length} unassigned
-          </Badge>
+        {open ? (
+          <span className="text-muted-foreground text-[11px]">
+            Drag a stop onto another route to move it
+          </span>
         ) : null}
 
         {open ? (
           <span className="ml-auto flex items-center gap-1.5">
-            <span className="text-muted-foreground mr-1 hidden text-[11px] lg:inline">
+            <span className="text-muted-foreground mr-1 text-[11px]">
               Ctrl + scroll to zoom
             </span>
             <ZoomButton
               label="Zoom out"
               icon={Minus}
               disabled={hourWidth <= MIN_HOUR_WIDTH}
-              onClick={() =>
-                setHourWidth(Math.max(MIN_HOUR_WIDTH, hourWidth - 25))
-              }
+              onClick={() => setHourWidth(clampHourWidth(hourWidth - 24))}
             />
             <input
               type="range"
               min={MIN_HOUR_WIDTH}
               max={MAX_HOUR_WIDTH}
-              step={5}
+              step={4}
               value={hourWidth}
               onChange={(e) => setHourWidth(Number(e.target.value))}
               aria-label="Timeline zoom"
@@ -259,15 +317,17 @@ export function RouteTimeline({
               label="Zoom in"
               icon={Plus}
               disabled={hourWidth >= MAX_HOUR_WIDTH}
-              onClick={() =>
-                setHourWidth(Math.min(MAX_HOUR_WIDTH, hourWidth + 25))
-              }
+              onClick={() => setHourWidth(clampHourWidth(hourWidth + 24))}
             />
           </span>
         ) : null}
       </header>
 
-      {open ? (
+      {open && plans.length === 0 ? (
+        <div className="min-h-0 flex-1 overflow-auto">{empty}</div>
+      ) : null}
+
+      {open && plans.length > 0 ? (
         <div ref={scroller} className="min-h-0 flex-1 overflow-auto">
           <div
             className="relative"
@@ -279,7 +339,7 @@ export function RouteTimeline({
                 className="bg-background border-border sticky left-0 z-10 shrink-0 border-r"
                 style={{ width: LANE_WIDTH }}
               />
-              {hours.map((hour) => (
+              {HOURS.map((hour) => (
                 <span
                   key={hour}
                   className="border-border/60 text-muted-foreground shrink-0 border-r px-2 text-[11px] leading-8"
@@ -290,58 +350,73 @@ export function RouteTimeline({
               ))}
             </div>
 
-            {routes.map((route, index) => (
-              <Lane
-                key={route.technician.id}
-                route={route}
-                colors={routeColors(index)}
-                hours={hours}
-                hourWidth={hourWidth}
-                xFor={xFor}
-                selected={selectedRouteId === route.technician.id}
-                selectedJobId={selectedJobId}
-                onSelectRoute={() =>
-                  onSelectRoute(
-                    selectedRouteId === route.technician.id
-                      ? null
-                      : route.technician.id,
-                  )
-                }
-                onSelectJob={onSelectJob}
-              />
-            ))}
+            {plans.map((plan) => {
+              const id = plan.route.id;
+              const selected = selectedRouteId === id;
+              return (
+                <Lane
+                  key={id}
+                  plan={plan}
+                  hourWidth={hourWidth}
+                  selected={selected}
+                  dimmed={selectedRouteId !== null && !selected}
+                  dropTarget={over === id}
+                  dropBlocked={
+                    dragging !== null && plan.locked && dragging.from !== id
+                  }
+                  onSelectRoute={() => onSelectRoute(selected ? null : id)}
+                  {...dropProps(id, plan.locked)}
+                >
+                  {plan.route.tippingTrips.map((trip) => (
+                    <TippingBlock
+                      key={trip.id}
+                      trip={trip}
+                      x={xFor(minutesOfDay(trip.plannedStart))}
+                      width={(trip.durationMins / 60) * hourWidth}
+                    />
+                  ))}
+                  {plan.stops.filter(matches).map((apt) => (
+                    <AppointmentBlock
+                      key={apt.id}
+                      stop={plan.stops.indexOf(apt) + 1}
+                      {...blockProps(apt, id, plan.locked)}
+                    />
+                  ))}
+                </Lane>
+              );
+            })}
 
-            {/* Unassigned sits at the foot of the board, as its own lane. */}
-            <div className="border-border/60 bg-warning-bg/30 flex border-b">
+            {/* The backlog sits at the foot of the board, as its own lane. */}
+            <div
+              className={cn(
+                "border-border/60 flex border-b transition-colors",
+                over === BACKLOG ? "bg-warning-bg" : "bg-warning-bg/30",
+              )}
+              {...dropProps(BACKLOG, false)}
+            >
               <div
                 className="bg-background border-border sticky left-0 z-10 shrink-0 border-r px-3 py-2"
                 style={{ width: LANE_WIDTH }}
               >
-                <p className="text-[13px] font-medium">Unassigned</p>
+                <p className="text-[13px] font-medium">Backlog</p>
                 <p className="text-muted-foreground text-[11px]">
-                  {unassigned.length} appointment
-                  {unassigned.length === 1 ? "" : "s"}
+                  {backlog.length} appointment
+                  {backlog.length === 1 ? "" : "s"} · drop here to unroute
                 </p>
               </div>
               <div
                 className="relative py-2"
-                style={{ width: hours.length * hourWidth, minHeight: 56 }}
+                style={{ width: trackWidth, minHeight: 56 }}
               >
-                <HourGrid hours={hours} hourWidth={hourWidth} />
-                {unassigned.map((job) => (
+                <HourGrid hourWidth={hourWidth} />
+                {backlog.filter(matches).map((apt) => (
                   <AppointmentBlock
-                    key={job.id}
-                    job={job}
-                    x={xFor(minutesOfDay(job.scheduledFor))}
-                    width={(job.durationMins / 60) * hourWidth}
-                    selected={selectedJobId === job.id}
-                    onClick={() =>
-                      onSelectJob(selectedJobId === job.id ? null : job.id)
-                    }
+                    key={apt.id}
+                    {...blockProps(apt, BACKLOG, false)}
                   />
                 ))}
-                {unassigned.length === 0 ? (
-                  <p className="text-muted-foreground absolute inset-0 flex items-center justify-center text-xs">
+                {backlog.length === 0 ? (
+                  <p className="text-muted-foreground sticky left-0 flex h-10 items-center px-3 text-xs">
                     Nothing waiting — every appointment is on a route.
                   </p>
                 ) : null}
@@ -349,13 +424,13 @@ export function RouteTimeline({
             </div>
 
             {/* Now line, drawn over every lane. */}
-            {showNow ? (
+            {isToday ? (
               <span
                 aria-hidden
-                className="pointer-events-none absolute top-8 bottom-0 z-30 w-px bg-red-500"
+                className="bg-destructive pointer-events-none absolute top-8 bottom-0 z-30 w-px"
                 style={{ left: LANE_WIDTH + xFor(nowMinutes) }}
               >
-                <span className="absolute -top-1 -left-[3px] size-[7px] rounded-full bg-red-500" />
+                <span className="bg-destructive absolute -top-1 -left-[3px] size-[7px] rounded-full" />
               </span>
             ) : null}
           </div>
@@ -366,40 +441,42 @@ export function RouteTimeline({
 }
 
 function Lane({
-  route,
-  colors,
-  hours,
+  plan,
   hourWidth,
-  xFor,
   selected,
-  selectedJobId,
+  dimmed,
+  dropTarget,
+  dropBlocked,
   onSelectRoute,
-  onSelectJob,
+  children,
+  ...drop
 }: {
-  route: Route;
-  colors: { bar: string; tint: string; fill: string };
-  hours: number[];
+  plan: RoutePlan;
   hourWidth: number;
-  xFor: (minutes: number) => number;
   selected: boolean;
-  selectedJobId: string | null;
+  dimmed: boolean;
+  dropTarget: boolean;
+  dropBlocked: boolean;
   onSelectRoute: () => void;
-  onSelectJob: (jobId: string | null) => void;
+  children: ReactNode;
+  onDragOver: (e: DragEvent) => void;
+  onDragLeave: (e: DragEvent) => void;
+  onDrop: (e: DragEvent) => void;
 }) {
-  const { technician, jobs, bookedMins } = route;
-  const done = jobs.filter((job) => job.status === "completed").length;
+  const { route, pro, vehicle, colors, locked } = plan;
 
   return (
     <div
       className={cn(
-        "border-border/60 flex border-b",
+        "border-border/60 flex border-b transition-colors",
         selected ? "bg-accent/40" : colors.tint,
+        dropTarget && "bg-primary/15",
       )}
+      {...drop}
     >
       <div
         className={cn(
           "bg-background border-border sticky left-0 z-10 flex shrink-0 items-center gap-2 border-r pr-2 pl-3",
-          selected && "bg-accent/40",
         )}
         style={{ width: LANE_WIDTH }}
       >
@@ -411,83 +488,60 @@ function Lane({
           type="button"
           onClick={onSelectRoute}
           aria-pressed={selected}
-          className="flex min-w-0 flex-1 items-center gap-2 py-2 text-left"
+          className={cn(
+            "flex min-w-0 flex-1 items-center gap-2 py-2 text-left transition-opacity",
+            dimmed && "opacity-60",
+          )}
         >
           <Avatar size="sm" className="size-7 shrink-0">
             <AvatarFallback className="text-[10px] font-semibold">
-              {technician.initials}
+              {pro?.initials ?? "?"}
             </AvatarFallback>
           </Avatar>
           <span className="min-w-0 leading-tight">
-            <span className="block truncate text-[13px] font-medium">
-              {technician.name}
+            <span className="flex items-center gap-1 text-[13px] font-medium">
+              <span className="truncate">{route.name}</span>
+              {locked ? (
+                <Lock
+                  className="text-muted-foreground size-3 shrink-0"
+                  aria-label="Locked"
+                />
+              ) : null}
             </span>
-            <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
-              <Clock className="size-3" aria-hidden />
-              {formatDuration(bookedMins)}
+            <span className="text-muted-foreground block truncate text-[11px]">
+              {pro?.name ?? "No primary pro"}
+              {vehicle ? (
+                <span className="font-mono"> · {vehicle.plate}</span>
+              ) : null}
             </span>
           </span>
         </button>
 
         <span className="text-muted-foreground shrink-0 font-mono text-[11px] tabular-nums">
-          {done}/{jobs.length}
+          {plan.activeStops}/{route.maxStops}
         </span>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            aria-label={`Actions for ${technician.name}`}
-            className="text-muted-foreground hover:bg-muted hover:text-foreground flex size-6 shrink-0 items-center justify-center rounded-md transition-colors"
-          >
-            <MoreVertical className="size-3.5" aria-hidden />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => toast("Optimise order — prototype only")}
-            >
-              Optimise order
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => toast("Break added — prototype only")}
-            >
-              Add break
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
       <div
-        className="relative py-2"
-        style={{ width: hours.length * hourWidth, minHeight: 56 }}
+        className={cn(
+          "relative py-2 transition-opacity",
+          dimmed && "opacity-40",
+          dropBlocked && "cursor-not-allowed opacity-50",
+        )}
+        style={{ width: HOURS.length * hourWidth, minHeight: 56 }}
       >
-        <HourGrid hours={hours} hourWidth={hourWidth} />
-        {jobs.map((job) => (
-          <AppointmentBlock
-            key={job.id}
-            job={job}
-            x={xFor(minutesOfDay(job.scheduledFor))}
-            width={(job.durationMins / 60) * hourWidth}
-            selected={selectedJobId === job.id}
-            onClick={() =>
-              onSelectJob(selectedJobId === job.id ? null : job.id)
-            }
-          />
-        ))}
+        <HourGrid hourWidth={hourWidth} />
+        {children}
       </div>
     </div>
   );
 }
 
 /** Hour column rules behind the blocks. */
-function HourGrid({
-  hours,
-  hourWidth,
-}: {
-  hours: number[];
-  hourWidth: number;
-}) {
+function HourGrid({ hourWidth }: { hourWidth: number }) {
   return (
     <span aria-hidden className="pointer-events-none absolute inset-0 flex">
-      {hours.map((hour) => (
+      {HOURS.map((hour) => (
         <span
           key={hour}
           className="border-border/40 shrink-0 border-r"
@@ -498,44 +552,103 @@ function HourGrid({
   );
 }
 
-/** One appointment: the service point the pro drives to, at its booked slot. */
+/** One stop: the service point the route drives to, at its planned arrival. */
 function AppointmentBlock({
-  job,
+  appointment,
+  stop,
   x,
   width,
   selected,
+  draggable,
+  dragging,
   onClick,
+  onDragStart,
+  onDragEnd,
 }: {
-  job: Job;
+  appointment: Appointment;
+  stop?: number;
   x: number;
   width: number;
   selected: boolean;
+  draggable: boolean;
+  dragging: boolean;
   onClick: () => void;
+  onDragStart: (e: DragEvent) => void;
+  onDragEnd: () => void;
 }) {
-  const status = JOB_STATUS[job.status];
+  const directory = useDirectory();
+  const customer = directory.customer(appointment.customerId)?.name;
+  const status = APPOINTMENT_STATUS[appointment.status];
   const StatusIcon = status.icon;
+  const stream = findStream(appointment.stream);
+  const label = [
+    stop ? `Stop ${stop}` : "Backlog",
+    appointment.ref,
+    customer,
+    status.label,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <button
       type="button"
       onClick={onClick}
-      title={`${job.ref} · ${job.customer} · ${job.window}`}
-      aria-label={`${job.ref}, ${job.customer}, ${status.label}`}
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      title={`${label} · ${formatTime(appointment.plannedStart)}, ${formatDuration(appointment.durationMins)}`}
+      aria-label={label}
+      aria-pressed={selected}
       className={cn(
-        "absolute top-2 flex h-10 flex-col justify-center gap-0.5 overflow-hidden rounded-md border px-2 text-left transition-shadow",
-        BLOCK_TONE[job.status],
+        "absolute top-2 flex h-10 flex-col justify-center gap-0.5 overflow-hidden rounded-md border pr-1.5 pl-2.5 text-left transition-shadow",
+        BLOCK_TONE[appointment.status],
+        draggable && "cursor-grab active:cursor-grabbing",
         selected ? "ring-primary z-10 ring-2" : "hover:shadow-sm",
+        dragging && "opacity-40",
       )}
       style={{ left: x, width: Math.max(width, 56) }}
     >
-      <span className="flex items-center gap-1 text-[11px] leading-none font-semibold">
+      <span
+        aria-hidden
+        className={cn("absolute inset-y-0 left-0 w-1", stream.swatchClass)}
+      />
+      <span className="flex min-w-0 items-center gap-1 text-[11px] leading-none font-semibold">
         <StatusIcon className="size-3 shrink-0" aria-hidden />
-        <span className="font-mono tabular-nums">
-          {formatTime(job.scheduledFor)}
+        <span className="truncate font-mono tabular-nums">
+          {stop ? `${stop} · ` : null}
+          {formatTime(appointment.plannedStart)}
         </span>
       </span>
-      <span className="truncate text-[11px] leading-none">{job.customer}</span>
+      <span className="truncate text-[11px] leading-none">
+        {customer ?? appointment.ref}
+      </span>
     </button>
+  );
+}
+
+/** A run to the disposal facility to empty the truck — not a customer stop. */
+function TippingBlock({
+  trip,
+  x,
+  width,
+}: {
+  trip: TippingTrip;
+  x: number;
+  width: number;
+}) {
+  return (
+    <span
+      title={`Tipping · ${trip.facility} · ${formatTime(trip.plannedStart)}, ${formatDuration(trip.durationMins)}`}
+      className={cn(
+        "border-muted-foreground/40 text-muted-foreground absolute top-2 flex h-10 items-center gap-1 overflow-hidden rounded-md border border-dashed px-1.5 text-[11px]",
+        "bg-muted bg-[image:repeating-linear-gradient(135deg,var(--color-border)_0_2px,transparent_2px_7px)]",
+      )}
+      style={{ left: x, width: Math.max(width, 28) }}
+    >
+      <Factory className="size-3 shrink-0" aria-hidden />
+      <span className="truncate">{trip.facility}</span>
+    </span>
   );
 }
 

@@ -15,8 +15,6 @@
     "windowEnd": "2026-08-31T06:00:00.000Z",
     "plannedStart": "2026-08-31T04:03:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10508",
@@ -52,7 +50,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_hook-day"
   },
   {
     "id": "apt_20410",
@@ -70,8 +69,6 @@
     "windowEnd": "2026-08-31T06:00:00.000Z",
     "plannedStart": "2026-08-31T04:34:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10410",
@@ -116,7 +113,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_compactor-day"
   },
   {
     "id": "apt_20462",
@@ -134,8 +132,6 @@
     "windowEnd": "2026-08-31T06:00:00.000Z",
     "plannedStart": "2026-08-31T04:40:00.000Z",
     "durationMins": 40,
-    "serviceProId": "tech_5",
-    "vehiclePlate": "DXB T 39021",
     "workOrders": [
       {
         "id": "wo_10462",
@@ -171,7 +167,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_hook-day"
   },
   {
     "id": "apt_20406",
@@ -189,8 +186,6 @@
     "windowEnd": "2026-08-31T06:00:00.000Z",
     "plannedStart": "2026-08-31T05:02:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10406",
@@ -224,7 +219,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_compactor-day"
   },
   {
     "id": "apt_20503",
@@ -242,8 +238,6 @@
     "windowEnd": "2026-08-31T06:00:00.000Z",
     "plannedStart": "2026-08-31T05:02:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10503",
@@ -312,7 +306,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_compactor-day"
   },
   {
     "id": "apt_20430",
@@ -330,8 +325,6 @@
     "windowEnd": "2026-08-31T06:00:00.000Z",
     "plannedStart": "2026-08-31T05:25:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10430",
@@ -404,7 +397,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_medical"
   },
   {
     "id": "apt_20471",
@@ -422,8 +416,6 @@
     "windowEnd": "2026-08-31T14:00:00.000Z",
     "plannedStart": "2026-08-31T10:26:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10471",
@@ -457,7 +449,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_compactor-day"
   },
   {
     "id": "apt_20483",
@@ -475,8 +468,6 @@
     "windowEnd": "2026-08-31T14:00:00.000Z",
     "plannedStart": "2026-08-31T11:07:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10483",
@@ -512,7 +503,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_hook-day"
   },
   {
     "id": "apt_20523",
@@ -530,8 +522,6 @@
     "windowEnd": "2026-08-31T14:00:00.000Z",
     "plannedStart": "2026-08-31T13:05:00.000Z",
     "durationMins": 40,
-    "serviceProId": "tech_4",
-    "vehiclePlate": "DXB L 15530",
     "workOrders": [
       {
         "id": "wo_10523",
@@ -564,7 +554,8 @@
     "cancelReason": null,
     "notes": "Deliver 3 × 1100L recycling bins and brief the facilities team.",
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "usr_1"
+    "bookedBy": "usr_1",
+    "routeId": "route_20260831_skip"
   },
   {
     "id": "apt_20451",
@@ -582,8 +573,6 @@
     "windowEnd": "2026-08-31T20:00:00.000Z",
     "plannedStart": "2026-08-31T17:56:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10451",
@@ -619,7 +608,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_hook-night"
   },
   {
     "id": "apt_20420",
@@ -637,8 +627,6 @@
     "windowEnd": "2026-08-31T20:00:00.000Z",
     "plannedStart": "2026-08-31T18:53:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10420",
@@ -679,7 +667,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_compactor-night"
   },
   {
     "id": "apt_20441",
@@ -697,8 +686,6 @@
     "windowEnd": "2026-08-31T20:00:00.000Z",
     "plannedStart": "2026-08-31T18:53:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10441",
@@ -734,7 +721,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-17T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260831_hook-night"
   },
   {
     "id": "apt_20468",
@@ -752,8 +740,6 @@
     "windowEnd": "2026-09-01T06:00:00.000Z",
     "plannedStart": "2026-09-01T02:26:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10468",
@@ -787,7 +773,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-day"
   },
   {
     "id": "apt_20438",
@@ -805,8 +792,6 @@
     "windowEnd": "2026-09-01T06:00:00.000Z",
     "plannedStart": "2026-09-01T02:49:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10438",
@@ -868,7 +853,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_medical"
   },
   {
     "id": "apt_20515",
@@ -886,8 +872,6 @@
     "windowEnd": "2026-09-01T06:00:00.000Z",
     "plannedStart": "2026-09-01T03:18:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10515",
@@ -921,7 +905,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-day"
   },
   {
     "id": "apt_20500",
@@ -939,8 +924,6 @@
     "windowEnd": "2026-09-01T06:00:00.000Z",
     "plannedStart": "2026-09-01T03:52:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10500",
@@ -974,7 +957,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-day"
   },
   {
     "id": "apt_20435",
@@ -992,8 +976,6 @@
     "windowEnd": "2026-09-01T06:00:00.000Z",
     "plannedStart": "2026-09-01T04:10:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10435",
@@ -1027,7 +1009,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-day"
   },
   {
     "id": "apt_20492",
@@ -1045,8 +1028,6 @@
     "windowEnd": "2026-09-01T06:00:00.000Z",
     "plannedStart": "2026-09-01T04:37:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10492",
@@ -1088,7 +1069,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-day"
   },
   {
     "id": "apt_20489",
@@ -1106,8 +1088,6 @@
     "windowEnd": "2026-09-01T14:00:00.000Z",
     "plannedStart": "2026-09-01T13:00:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10489",
@@ -1141,7 +1121,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-day"
   },
   {
     "id": "apt_20415",
@@ -1159,8 +1140,6 @@
     "windowEnd": "2026-09-01T20:00:00.000Z",
     "plannedStart": "2026-09-01T17:53:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10415",
@@ -1196,7 +1175,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_hook-night"
   },
   {
     "id": "apt_20455",
@@ -1214,8 +1194,6 @@
     "windowEnd": "2026-09-01T20:00:00.000Z",
     "plannedStart": "2026-09-01T18:43:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10455",
@@ -1266,7 +1244,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-night"
   },
   {
     "id": "apt_20425",
@@ -1284,8 +1263,6 @@
     "windowEnd": "2026-09-01T20:00:00.000Z",
     "plannedStart": "2026-09-01T18:48:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10425",
@@ -1328,7 +1305,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_compactor-night"
   },
   {
     "id": "apt_20442",
@@ -1346,8 +1324,6 @@
     "windowEnd": "2026-09-01T20:00:00.000Z",
     "plannedStart": "2026-09-01T18:49:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10442",
@@ -1380,7 +1356,8 @@
     "cancelReason": null,
     "notes": "Gate locked on arrival; site contact unreachable.",
     "createdAt": "2026-08-18T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260901_hook-night"
   },
   {
     "id": "apt_20411",
@@ -1398,8 +1375,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T02:21:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10411",
@@ -1444,7 +1419,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-day"
   },
   {
     "id": "apt_20520",
@@ -1462,8 +1438,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T02:21:00.000Z",
     "durationMins": 60,
-    "serviceProId": "tech_5",
-    "vehiclePlate": "DXB T 39021",
     "workOrders": [
       {
         "id": "wo_10520",
@@ -1496,7 +1470,8 @@
     "cancelReason": null,
     "notes": "Skip full ahead of slab pour — swap requested by site PM.",
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "usr_3"
+    "bookedBy": "usr_3",
+    "routeId": "route_20260902_skip"
   },
   {
     "id": "apt_20400",
@@ -1514,8 +1489,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T02:48:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10400",
@@ -1558,7 +1531,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-day"
   },
   {
     "id": "apt_20431",
@@ -1576,8 +1550,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T02:59:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10431",
@@ -1650,7 +1622,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_medical"
   },
   {
     "id": "apt_20493",
@@ -1668,8 +1641,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T04:25:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10493",
@@ -1711,7 +1682,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-day"
   },
   {
     "id": "apt_20512",
@@ -1729,8 +1701,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T04:35:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10512",
@@ -1766,7 +1736,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_skip"
   },
   {
     "id": "apt_20467",
@@ -1784,8 +1755,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T05:09:00.000Z",
     "durationMins": 45,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10467",
@@ -1827,7 +1796,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_medical"
   },
   {
     "id": "apt_20504",
@@ -1845,8 +1815,6 @@
     "windowEnd": "2026-09-02T06:00:00.000Z",
     "plannedStart": "2026-09-02T05:12:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10504",
@@ -1889,7 +1857,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-day"
   },
   {
     "id": "apt_20487",
@@ -1907,8 +1876,6 @@
     "windowEnd": "2026-09-02T14:00:00.000Z",
     "plannedStart": "2026-09-02T12:41:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10487",
@@ -1944,7 +1911,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_skip"
   },
   {
     "id": "apt_20472",
@@ -1962,8 +1930,6 @@
     "windowEnd": "2026-09-02T14:00:00.000Z",
     "plannedStart": "2026-09-02T13:11:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10472",
@@ -1997,7 +1963,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-day"
   },
   {
     "id": "apt_20418",
@@ -2015,8 +1982,6 @@
     "windowEnd": "2026-09-02T20:00:00.000Z",
     "plannedStart": "2026-09-02T17:20:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10418",
@@ -2057,7 +2022,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-night"
   },
   {
     "id": "apt_20456",
@@ -2075,8 +2041,6 @@
     "windowEnd": "2026-09-02T20:00:00.000Z",
     "plannedStart": "2026-09-02T17:43:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10456",
@@ -2127,7 +2091,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-night"
   },
   {
     "id": "apt_20421",
@@ -2145,8 +2110,6 @@
     "windowEnd": "2026-09-02T20:00:00.000Z",
     "plannedStart": "2026-09-02T18:21:00.000Z",
     "durationMins": 17,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10421",
@@ -2183,7 +2146,8 @@
     "failedReason": null,
     "cancelReason": "customer_request",
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-night"
   },
   {
     "id": "apt_20459",
@@ -2201,8 +2165,6 @@
     "windowEnd": "2026-09-02T20:00:00.000Z",
     "plannedStart": "2026-09-02T18:50:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10459",
@@ -2262,7 +2224,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_compactor-night"
   },
   {
     "id": "apt_20443",
@@ -2280,8 +2243,6 @@
     "windowEnd": "2026-09-02T20:00:00.000Z",
     "plannedStart": "2026-09-02T19:02:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10443",
@@ -2317,7 +2278,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-19T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260902_hook-night"
   },
   {
     "id": "apt_20407",
@@ -2335,8 +2297,6 @@
     "windowEnd": "2026-09-03T06:00:00.000Z",
     "plannedStart": "2026-09-03T02:04:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10407",
@@ -2370,7 +2330,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_compactor-day"
   },
   {
     "id": "apt_20509",
@@ -2388,8 +2349,6 @@
     "windowEnd": "2026-09-03T06:00:00.000Z",
     "plannedStart": "2026-09-03T03:26:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10509",
@@ -2425,7 +2384,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_hook-day"
   },
   {
     "id": "apt_20518",
@@ -2443,8 +2403,6 @@
     "windowEnd": "2026-09-03T06:00:00.000Z",
     "plannedStart": "2026-09-03T04:24:00.000Z",
     "durationMins": 45,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10518",
@@ -2477,7 +2435,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_tanker"
   },
   {
     "id": "apt_20478",
@@ -2495,8 +2454,6 @@
     "windowEnd": "2026-09-03T06:00:00.000Z",
     "plannedStart": "2026-09-03T04:27:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10478",
@@ -2532,7 +2489,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_hook-day"
   },
   {
     "id": "apt_20463",
@@ -2550,8 +2508,6 @@
     "windowEnd": "2026-09-03T06:00:00.000Z",
     "plannedStart": "2026-09-03T04:56:00.000Z",
     "durationMins": 40,
-    "serviceProId": "tech_5",
-    "vehiclePlate": "DXB T 39021",
     "workOrders": [
       {
         "id": "wo_10463",
@@ -2587,7 +2543,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_hook-day"
   },
   {
     "id": "apt_20476",
@@ -2605,8 +2562,6 @@
     "windowEnd": "2026-09-03T14:00:00.000Z",
     "plannedStart": "2026-09-03T11:37:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10476",
@@ -2640,7 +2595,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_compactor-day"
   },
   {
     "id": "apt_20484",
@@ -2658,8 +2614,6 @@
     "windowEnd": "2026-09-03T14:00:00.000Z",
     "plannedStart": "2026-09-03T12:56:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10484",
@@ -2695,7 +2649,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_hook-day"
   },
   {
     "id": "apt_20452",
@@ -2713,8 +2668,6 @@
     "windowEnd": "2026-09-03T20:00:00.000Z",
     "plannedStart": "2026-09-03T17:04:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10452",
@@ -2750,7 +2703,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_hook-night"
   },
   {
     "id": "apt_20426",
@@ -2768,8 +2722,6 @@
     "windowEnd": "2026-09-03T20:00:00.000Z",
     "plannedStart": "2026-09-03T17:23:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10426",
@@ -2808,7 +2760,8 @@
     "failedReason": null,
     "cancelReason": "service_pro_unavailable",
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_compactor-night"
   },
   {
     "id": "apt_20444",
@@ -2826,8 +2779,6 @@
     "windowEnd": "2026-09-03T20:00:00.000Z",
     "plannedStart": "2026-09-03T17:48:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10444",
@@ -2863,7 +2814,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_hook-night"
   },
   {
     "id": "apt_20457",
@@ -2881,8 +2833,6 @@
     "windowEnd": "2026-09-03T20:00:00.000Z",
     "plannedStart": "2026-09-03T18:41:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10457",
@@ -2933,7 +2883,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-20T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260903_compactor-night"
   },
   {
     "id": "apt_20501",
@@ -2951,8 +2902,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T02:08:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10501",
@@ -2984,7 +2933,8 @@
     "failedReason": "bin_not_out",
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20412",
@@ -3002,8 +2952,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T02:27:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10412",
@@ -3074,7 +3022,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20505",
@@ -3092,8 +3041,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T02:34:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10505",
@@ -3136,7 +3083,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20432",
@@ -3154,8 +3102,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T02:41:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10432",
@@ -3227,7 +3173,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_medical"
   },
   {
     "id": "apt_20494",
@@ -3245,8 +3192,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T04:08:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10494",
@@ -3314,7 +3259,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20516",
@@ -3332,8 +3278,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T04:30:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10516",
@@ -3367,7 +3311,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20439",
@@ -3385,8 +3330,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T05:14:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10439",
@@ -3443,7 +3386,8 @@
     "cancelReason": null,
     "notes": "Gate locked on arrival; site contact unreachable.",
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_medical"
   },
   {
     "id": "apt_20469",
@@ -3461,8 +3405,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T05:24:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10469",
@@ -3496,7 +3438,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20479",
@@ -3514,8 +3457,6 @@
     "windowEnd": "2026-09-04T06:00:00.000Z",
     "plannedStart": "2026-09-04T05:30:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10479",
@@ -3551,7 +3492,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_hook-day"
   },
   {
     "id": "apt_20525",
@@ -3569,8 +3511,6 @@
     "windowEnd": "2026-09-04T13:00:00.000Z",
     "plannedStart": "2026-09-04T08:30:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10525",
@@ -3607,7 +3547,8 @@
     "cancelReason": null,
     "notes": "Extra lift: inbound shipment packaging.",
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "usr_1"
+    "bookedBy": "usr_1",
+    "routeId": "route_20260904_hook-day"
   },
   {
     "id": "apt_20526",
@@ -3625,8 +3566,6 @@
     "windowEnd": "2026-09-04T13:00:00.000Z",
     "plannedStart": "2026-09-04T08:45:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_11014",
@@ -3700,7 +3639,8 @@
     "cancelReason": null,
     "notes": "Ad-hoc cardboard pickup after weekend promotion.",
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "usr_2"
+    "bookedBy": "usr_2",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20473",
@@ -3718,8 +3658,6 @@
     "windowEnd": "2026-09-04T14:00:00.000Z",
     "plannedStart": "2026-09-04T10:20:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10473",
@@ -3749,7 +3687,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-day"
   },
   {
     "id": "apt_20445",
@@ -3767,8 +3706,6 @@
     "windowEnd": "2026-09-04T20:00:00.000Z",
     "plannedStart": "2026-09-04T17:40:00.000Z",
     "durationMins": 55,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10445",
@@ -3798,7 +3735,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_hook-night"
   },
   {
     "id": "apt_20422",
@@ -3816,8 +3754,6 @@
     "windowEnd": "2026-09-04T20:00:00.000Z",
     "plannedStart": "2026-09-04T18:36:00.000Z",
     "durationMins": 17,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10422",
@@ -3854,7 +3790,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-21T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260904_compactor-night"
   },
   {
     "id": "apt_20466",
@@ -3872,8 +3809,6 @@
     "windowEnd": "2026-09-05T06:00:00.000Z",
     "plannedStart": "2026-09-05T02:50:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10466",
@@ -3903,7 +3838,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_skip"
   },
   {
     "id": "apt_20527",
@@ -3916,13 +3852,11 @@
     "stream": "medical",
     "source": "customer-request",
     "status": "scheduled",
-    "window": "AM",
-    "windowStart": "2026-09-05T02:00:00.000Z",
-    "windowEnd": "2026-09-05T06:00:00.000Z",
-    "plannedStart": "2026-09-05T03:35:00.000Z",
+    "window": "PM",
+    "windowStart": "2026-09-04T10:00:00.000Z",
+    "windowEnd": "2026-09-04T14:00:00.000Z",
+    "plannedStart": "2026-09-04T11:35:00.000Z",
     "durationMins": 11,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10527",
@@ -3974,9 +3908,10 @@
     "failedReason": null,
     "cancelReason": null,
     "notes": "Return visit after failed APT-20439.",
-    "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "usr_2",
-    "originalAppointmentId": "apt_20439"
+    "createdAt": "2026-09-04T06:30:00.000Z",
+    "bookedBy": "usr_1",
+    "originalAppointmentId": "apt_20439",
+    "routeId": null
   },
   {
     "id": "apt_20513",
@@ -3994,8 +3929,6 @@
     "windowEnd": "2026-09-05T06:00:00.000Z",
     "plannedStart": "2026-09-05T04:02:00.000Z",
     "durationMins": 35,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10513",
@@ -4025,7 +3958,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_skip"
   },
   {
     "id": "apt_20436",
@@ -4043,8 +3977,6 @@
     "windowEnd": "2026-09-05T06:00:00.000Z",
     "plannedStart": "2026-09-05T04:12:00.000Z",
     "durationMins": 10,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10436",
@@ -4074,7 +4006,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_compactor-day"
   },
   {
     "id": "apt_20495",
@@ -4090,10 +4023,8 @@
     "window": "AM",
     "windowStart": "2026-09-05T02:00:00.000Z",
     "windowEnd": "2026-09-05T06:00:00.000Z",
-    "plannedStart": "2026-09-05T04:25:00.000Z",
+    "plannedStart": "2026-09-05T04:34:00.000Z",
     "durationMins": 19,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10495",
@@ -4131,7 +4062,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_compactor-day"
   },
   {
     "id": "apt_20401",
@@ -4149,8 +4081,6 @@
     "windowEnd": "2026-09-05T06:00:00.000Z",
     "plannedStart": "2026-09-05T05:38:00.000Z",
     "durationMins": 21,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10401",
@@ -4189,7 +4119,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_compactor-day"
   },
   {
     "id": "apt_20522",
@@ -4207,8 +4138,6 @@
     "windowEnd": "2026-09-05T13:00:00.000Z",
     "plannedStart": "2026-09-05T05:42:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10522",
@@ -4239,7 +4168,8 @@
     "cancelReason": null,
     "notes": "Expired stock, ~500 kg. Destruction certificate to be issued.",
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "usr_1"
+    "bookedBy": "usr_1",
+    "routeId": "route_20260905_medical"
   },
   {
     "id": "apt_20490",
@@ -4257,8 +4187,6 @@
     "windowEnd": "2026-09-05T14:00:00.000Z",
     "plannedStart": "2026-09-05T12:42:00.000Z",
     "durationMins": 11,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10490",
@@ -4288,7 +4216,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_compactor-day"
   },
   {
     "id": "apt_20446",
@@ -4306,8 +4235,6 @@
     "windowEnd": "2026-09-05T20:00:00.000Z",
     "plannedStart": "2026-09-05T17:05:00.000Z",
     "durationMins": 55,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10446",
@@ -4337,7 +4264,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_hook-night"
   },
   {
     "id": "apt_20416",
@@ -4348,15 +4276,13 @@
     "type": "standard",
     "serviceType": "collection",
     "stream": "general",
-    "source": "recurring",
+    "source": "customer-request",
     "status": "scheduled",
     "window": "night",
-    "windowStart": "2026-09-05T17:00:00.000Z",
-    "windowEnd": "2026-09-05T20:00:00.000Z",
-    "plannedStart": "2026-09-05T17:30:00.000Z",
+    "windowStart": "2026-09-04T17:00:00.000Z",
+    "windowEnd": "2026-09-04T20:00:00.000Z",
+    "plannedStart": "2026-09-04T18:12:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10416",
@@ -4385,8 +4311,9 @@
     "completedAt": null,
     "failedReason": null,
     "cancelReason": null,
-    "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "createdAt": "2026-09-04T06:30:00.000Z",
+    "bookedBy": "usr_1",
+    "routeId": null
   },
   {
     "id": "apt_20427",
@@ -4397,15 +4324,13 @@
     "type": "standard",
     "serviceType": "collection",
     "stream": "food",
-    "source": "recurring",
+    "source": "customer-request",
     "status": "scheduled",
     "window": "night",
-    "windowStart": "2026-09-05T17:00:00.000Z",
-    "windowEnd": "2026-09-05T20:00:00.000Z",
-    "plannedStart": "2026-09-05T18:41:00.000Z",
+    "windowStart": "2026-09-04T17:00:00.000Z",
+    "windowEnd": "2026-09-04T20:00:00.000Z",
+    "plannedStart": "2026-09-04T18:41:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10427",
@@ -4443,8 +4368,9 @@
     "completedAt": null,
     "failedReason": null,
     "cancelReason": null,
-    "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "createdAt": "2026-09-04T06:30:00.000Z",
+    "bookedBy": "usr_1",
+    "routeId": null
   },
   {
     "id": "apt_20460",
@@ -4460,10 +4386,8 @@
     "window": "night",
     "windowStart": "2026-09-05T17:00:00.000Z",
     "windowEnd": "2026-09-05T20:00:00.000Z",
-    "plannedStart": "2026-09-05T18:56:00.000Z",
+    "plannedStart": "2026-09-05T19:06:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10460",
@@ -4493,7 +4417,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-22T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260905_compactor-night"
   },
   {
     "id": "apt_20496",
@@ -4511,8 +4436,6 @@
     "windowEnd": "2026-09-06T06:00:00.000Z",
     "plannedStart": "2026-09-06T03:16:00.000Z",
     "durationMins": 19,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10496",
@@ -4550,7 +4473,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-23T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260906_compactor-day"
   },
   {
     "id": "apt_20402",
@@ -4568,8 +4492,6 @@
     "windowEnd": "2026-09-06T06:00:00.000Z",
     "plannedStart": "2026-09-06T04:21:00.000Z",
     "durationMins": 21,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10402",
@@ -4608,7 +4530,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-23T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260906_compactor-day"
   },
   {
     "id": "apt_20447",
@@ -4626,8 +4549,6 @@
     "windowEnd": "2026-09-06T20:00:00.000Z",
     "plannedStart": "2026-09-06T19:24:00.000Z",
     "durationMins": 55,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10447",
@@ -4657,7 +4578,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-23T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260906_hook-night"
   },
   {
     "id": "apt_20403",
@@ -4675,8 +4597,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T02:19:00.000Z",
     "durationMins": 21,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10403",
@@ -4715,7 +4635,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_compactor-day"
   },
   {
     "id": "apt_20510",
@@ -4733,8 +4654,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T02:49:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10510",
@@ -4764,7 +4683,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_hook-day"
   },
   {
     "id": "apt_20480",
@@ -4780,10 +4700,8 @@
     "window": "AM",
     "windowStart": "2026-09-07T02:00:00.000Z",
     "windowEnd": "2026-09-07T06:00:00.000Z",
-    "plannedStart": "2026-09-07T02:55:00.000Z",
+    "plannedStart": "2026-09-07T03:26:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10480",
@@ -4813,7 +4731,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_hook-day"
   },
   {
     "id": "apt_20433",
@@ -4831,8 +4750,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T03:24:00.000Z",
     "durationMins": 18,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10433",
@@ -4884,7 +4801,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_medical"
   },
   {
     "id": "apt_20464",
@@ -4902,8 +4820,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T03:43:00.000Z",
     "durationMins": 25,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10464",
@@ -4933,7 +4849,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20506",
@@ -4951,8 +4868,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T03:44:00.000Z",
     "durationMins": 21,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10506",
@@ -4991,7 +4906,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_compactor-day"
   },
   {
     "id": "apt_20497",
@@ -5009,8 +4925,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T04:00:00.000Z",
     "durationMins": 19,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10497",
@@ -5048,7 +4962,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20413",
@@ -5066,8 +4981,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T04:52:00.000Z",
     "durationMins": 15,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10413",
@@ -5108,7 +5021,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20408",
@@ -5126,8 +5040,6 @@
     "windowEnd": "2026-09-07T06:00:00.000Z",
     "plannedStart": "2026-09-07T05:05:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10408",
@@ -5157,7 +5069,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_compactor-day"
   },
   {
     "id": "apt_20485",
@@ -5175,8 +5088,6 @@
     "windowEnd": "2026-09-07T14:00:00.000Z",
     "plannedStart": "2026-09-07T12:52:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10485",
@@ -5206,7 +5117,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_hook-day"
   },
   {
     "id": "apt_20474",
@@ -5224,8 +5136,6 @@
     "windowEnd": "2026-09-07T14:00:00.000Z",
     "plannedStart": "2026-09-07T13:24:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10474",
@@ -5255,7 +5165,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_compactor-day"
   },
   {
     "id": "apt_20453",
@@ -5273,8 +5184,6 @@
     "windowEnd": "2026-09-07T20:00:00.000Z",
     "plannedStart": "2026-09-07T17:11:00.000Z",
     "durationMins": 30,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10453",
@@ -5304,7 +5213,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20423",
@@ -5322,8 +5232,6 @@
     "windowEnd": "2026-09-07T20:00:00.000Z",
     "plannedStart": "2026-09-07T18:18:00.000Z",
     "durationMins": 17,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10423",
@@ -5360,7 +5268,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20448",
@@ -5378,8 +5287,6 @@
     "windowEnd": "2026-09-07T20:00:00.000Z",
     "plannedStart": "2026-09-07T19:39:00.000Z",
     "durationMins": 55,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10448",
@@ -5409,7 +5316,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-24T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260907_hook-night"
   },
   {
     "id": "apt_20517",
@@ -5427,8 +5335,6 @@
     "windowEnd": "2026-09-08T06:00:00.000Z",
     "plannedStart": "2026-09-08T02:33:00.000Z",
     "durationMins": 13,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10517",
@@ -5458,7 +5364,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20502",
@@ -5476,8 +5383,6 @@
     "windowEnd": "2026-09-08T06:00:00.000Z",
     "plannedStart": "2026-09-08T03:18:00.000Z",
     "durationMins": 11,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10502",
@@ -5507,7 +5412,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_compactor-day"
   },
   {
     "id": "apt_20437",
@@ -5523,10 +5429,8 @@
     "window": "AM",
     "windowStart": "2026-09-08T02:00:00.000Z",
     "windowEnd": "2026-09-08T06:00:00.000Z",
-    "plannedStart": "2026-09-08T03:23:00.000Z",
+    "plannedStart": "2026-09-08T03:41:00.000Z",
     "durationMins": 10,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10437",
@@ -5556,7 +5460,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_compactor-day"
   },
   {
     "id": "apt_20440",
@@ -5574,8 +5479,6 @@
     "windowEnd": "2026-09-08T06:00:00.000Z",
     "plannedStart": "2026-09-08T03:53:00.000Z",
     "durationMins": 11,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10440",
@@ -5627,7 +5530,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_medical"
   },
   {
     "id": "apt_20521",
@@ -5645,8 +5549,6 @@
     "windowEnd": "2026-09-08T06:00:00.000Z",
     "plannedStart": "2026-09-08T04:34:00.000Z",
     "durationMins": 20,
-    "serviceProId": "tech_5",
-    "vehiclePlate": "DXB T 39021",
     "workOrders": [
       {
         "id": "wo_10521",
@@ -5677,7 +5579,8 @@
     "cancelReason": null,
     "notes": "Second swap this week; consider upgrading to scheduled service.",
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "usr_3"
+    "bookedBy": "usr_3",
+    "routeId": "route_20260908_skip"
   },
   {
     "id": "apt_20470",
@@ -5695,8 +5598,6 @@
     "windowEnd": "2026-09-08T06:00:00.000Z",
     "plannedStart": "2026-09-08T04:59:00.000Z",
     "durationMins": 11,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10470",
@@ -5726,7 +5627,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_compactor-day"
   },
   {
     "id": "apt_20498",
@@ -5742,10 +5644,8 @@
     "window": "AM",
     "windowStart": "2026-09-08T02:00:00.000Z",
     "windowEnd": "2026-09-08T06:00:00.000Z",
-    "plannedStart": "2026-09-08T05:11:00.000Z",
+    "plannedStart": "2026-09-08T05:22:00.000Z",
     "durationMins": 19,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10498",
@@ -5783,7 +5683,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_compactor-day"
   },
   {
     "id": "apt_20404",
@@ -5801,8 +5702,6 @@
     "windowEnd": "2026-09-08T06:00:00.000Z",
     "plannedStart": "2026-09-08T05:15:00.000Z",
     "durationMins": 21,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10404",
@@ -5841,7 +5740,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20491",
@@ -5859,8 +5759,6 @@
     "windowEnd": "2026-09-08T14:00:00.000Z",
     "plannedStart": "2026-09-08T11:25:00.000Z",
     "durationMins": 11,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10491",
@@ -5890,7 +5788,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_compactor-day"
   },
   {
     "id": "apt_20449",
@@ -5908,8 +5807,6 @@
     "windowEnd": "2026-09-08T20:00:00.000Z",
     "plannedStart": "2026-09-08T17:08:00.000Z",
     "durationMins": 55,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10449",
@@ -5939,7 +5836,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_hook-night"
   },
   {
     "id": "apt_20428",
@@ -5957,8 +5855,6 @@
     "windowEnd": "2026-09-08T20:00:00.000Z",
     "plannedStart": "2026-09-08T18:06:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10428",
@@ -5997,7 +5893,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_compactor-night"
   },
   {
     "id": "apt_20417",
@@ -6015,8 +5912,6 @@
     "windowEnd": "2026-09-08T20:00:00.000Z",
     "plannedStart": "2026-09-08T18:33:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10417",
@@ -6046,7 +5941,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-25T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260908_hook-night"
   },
   {
     "id": "apt_20514",
@@ -6064,8 +5960,6 @@
     "windowEnd": "2026-09-09T06:00:00.000Z",
     "plannedStart": "2026-09-09T02:38:00.000Z",
     "durationMins": 35,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10514",
@@ -6095,7 +5989,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_skip"
   },
   {
     "id": "apt_20405",
@@ -6113,8 +6008,6 @@
     "windowEnd": "2026-09-09T06:00:00.000Z",
     "plannedStart": "2026-09-09T02:56:00.000Z",
     "durationMins": 21,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10405",
@@ -6153,7 +6046,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_compactor-day"
   },
   {
     "id": "apt_20414",
@@ -6169,10 +6063,8 @@
     "window": "AM",
     "windowStart": "2026-09-09T02:00:00.000Z",
     "windowEnd": "2026-09-09T06:00:00.000Z",
-    "plannedStart": "2026-09-09T02:58:00.000Z",
+    "plannedStart": "2026-09-09T03:29:00.000Z",
     "durationMins": 15,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10414",
@@ -6213,7 +6105,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_compactor-day"
   },
   {
     "id": "apt_20481",
@@ -6231,8 +6124,6 @@
     "windowEnd": "2026-09-09T06:00:00.000Z",
     "plannedStart": "2026-09-09T03:03:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10481",
@@ -6262,7 +6153,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_hook-day"
   },
   {
     "id": "apt_20434",
@@ -6280,8 +6172,6 @@
     "windowEnd": "2026-09-09T06:00:00.000Z",
     "plannedStart": "2026-09-09T03:17:00.000Z",
     "durationMins": 18,
-    "serviceProId": "tech_6",
-    "vehiclePlate": "DXB M 70318",
     "workOrders": [
       {
         "id": "wo_10434",
@@ -6333,7 +6223,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_medical"
   },
   {
     "id": "apt_20507",
@@ -6349,10 +6240,8 @@
     "window": "AM",
     "windowStart": "2026-09-09T02:00:00.000Z",
     "windowEnd": "2026-09-09T06:00:00.000Z",
-    "plannedStart": "2026-09-09T03:31:00.000Z",
+    "plannedStart": "2026-09-09T03:56:00.000Z",
     "durationMins": 21,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10507",
@@ -6391,7 +6280,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_compactor-day"
   },
   {
     "id": "apt_20499",
@@ -6409,8 +6299,6 @@
     "windowEnd": "2026-09-09T06:00:00.000Z",
     "plannedStart": "2026-09-09T04:46:00.000Z",
     "durationMins": 19,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10499",
@@ -6448,7 +6336,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20524",
@@ -6466,8 +6355,6 @@
     "windowEnd": "2026-09-09T14:00:00.000Z",
     "plannedStart": "2026-09-09T12:54:00.000Z",
     "durationMins": 10,
-    "serviceProId": "tech_4",
-    "vehiclePlate": "DXB L 15530",
     "workOrders": [
       {
         "id": "wo_10524",
@@ -6498,7 +6385,8 @@
     "cancelReason": null,
     "notes": "Account review: contamination complaints on general waste.",
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "usr_2"
+    "bookedBy": "usr_2",
+    "routeId": "route_20260909_skip"
   },
   {
     "id": "apt_20488",
@@ -6516,8 +6404,6 @@
     "windowEnd": "2026-09-09T14:00:00.000Z",
     "plannedStart": "2026-09-09T13:09:00.000Z",
     "durationMins": 35,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10488",
@@ -6547,7 +6433,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20475",
@@ -6565,8 +6452,6 @@
     "windowEnd": "2026-09-09T14:00:00.000Z",
     "plannedStart": "2026-09-09T13:15:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10475",
@@ -6596,7 +6481,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_compactor-day"
   },
   {
     "id": "apt_20424",
@@ -6614,8 +6500,6 @@
     "windowEnd": "2026-09-09T20:00:00.000Z",
     "plannedStart": "2026-09-09T18:51:00.000Z",
     "durationMins": 17,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10424",
@@ -6652,7 +6536,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_compactor-night"
   },
   {
     "id": "apt_20461",
@@ -6668,10 +6553,8 @@
     "window": "night",
     "windowStart": "2026-09-09T17:00:00.000Z",
     "windowEnd": "2026-09-09T20:00:00.000Z",
-    "plannedStart": "2026-09-09T19:00:00.000Z",
+    "plannedStart": "2026-09-09T19:20:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10461",
@@ -6701,7 +6584,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_compactor-night"
   },
   {
     "id": "apt_20419",
@@ -6717,10 +6601,8 @@
     "window": "night",
     "windowStart": "2026-09-09T17:00:00.000Z",
     "windowEnd": "2026-09-09T20:00:00.000Z",
-    "plannedStart": "2026-09-09T19:27:00.000Z",
+    "plannedStart": "2026-09-09T19:45:00.000Z",
     "durationMins": 17,
-    "serviceProId": "tech_2",
-    "vehiclePlate": "DXB K 21907",
     "workOrders": [
       {
         "id": "wo_10419",
@@ -6757,7 +6639,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-26T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260909_compactor-night"
   },
   {
     "id": "apt_20482",
@@ -6775,8 +6658,6 @@
     "windowEnd": "2026-09-10T06:00:00.000Z",
     "plannedStart": "2026-09-10T02:10:00.000Z",
     "durationMins": 25,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10482",
@@ -6806,7 +6687,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20465",
@@ -6824,8 +6706,6 @@
     "windowEnd": "2026-09-10T06:00:00.000Z",
     "plannedStart": "2026-09-10T03:27:00.000Z",
     "durationMins": 25,
-    "serviceProId": "tech_5",
-    "vehiclePlate": "DXB T 39021",
     "workOrders": [
       {
         "id": "wo_10465",
@@ -6855,7 +6735,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260910_hook-day"
   },
   {
     "id": "apt_20519",
@@ -6873,8 +6754,6 @@
     "windowEnd": "2026-09-10T06:00:00.000Z",
     "plannedStart": "2026-09-10T03:33:00.000Z",
     "durationMins": 45,
-    "serviceProId": "tech_3",
-    "vehiclePlate": "DXB R 66042",
     "workOrders": [
       {
         "id": "wo_10519",
@@ -6904,7 +6783,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260910_tanker"
   },
   {
     "id": "apt_20409",
@@ -6922,8 +6802,6 @@
     "windowEnd": "2026-09-10T06:00:00.000Z",
     "plannedStart": "2026-09-10T04:08:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10409",
@@ -6953,7 +6831,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260910_compactor-day"
   },
   {
     "id": "apt_20511",
@@ -6971,8 +6850,6 @@
     "windowEnd": "2026-09-10T06:00:00.000Z",
     "plannedStart": "2026-09-10T05:34:00.000Z",
     "durationMins": 25,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10511",
@@ -7002,7 +6879,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20486",
@@ -7020,8 +6898,6 @@
     "windowEnd": "2026-09-10T14:00:00.000Z",
     "plannedStart": "2026-09-10T10:08:00.000Z",
     "durationMins": 30,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10486",
@@ -7051,7 +6927,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20477",
@@ -7069,8 +6946,6 @@
     "windowEnd": "2026-09-10T14:00:00.000Z",
     "plannedStart": "2026-09-10T11:49:00.000Z",
     "durationMins": 11,
-    "serviceProId": null,
-    "vehiclePlate": null,
     "workOrders": [
       {
         "id": "wo_10477",
@@ -7100,7 +6975,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": null
   },
   {
     "id": "apt_20450",
@@ -7118,8 +6994,6 @@
     "windowEnd": "2026-09-10T20:00:00.000Z",
     "plannedStart": "2026-09-10T17:03:00.000Z",
     "durationMins": 55,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10450",
@@ -7149,7 +7023,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260910_hook-night"
   },
   {
     "id": "apt_20429",
@@ -7167,8 +7042,6 @@
     "windowEnd": "2026-09-10T20:00:00.000Z",
     "plannedStart": "2026-09-10T17:07:00.000Z",
     "durationMins": 13,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10429",
@@ -7207,7 +7080,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260910_compactor-night"
   },
   {
     "id": "apt_20454",
@@ -7223,10 +7097,8 @@
     "window": "night",
     "windowStart": "2026-09-10T17:00:00.000Z",
     "windowEnd": "2026-09-10T20:00:00.000Z",
-    "plannedStart": "2026-09-10T17:41:00.000Z",
+    "plannedStart": "2026-09-10T18:10:00.000Z",
     "durationMins": 30,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10454",
@@ -7256,7 +7128,8 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260910_hook-night"
   },
   {
     "id": "apt_20458",
@@ -7274,8 +7147,6 @@
     "windowEnd": "2026-09-10T20:00:00.000Z",
     "plannedStart": "2026-09-10T18:39:00.000Z",
     "durationMins": 21,
-    "serviceProId": "tech_1",
-    "vehiclePlate": "DXB P 48213",
     "workOrders": [
       {
         "id": "wo_10458",
@@ -7322,6 +7193,7 @@
     "failedReason": null,
     "cancelReason": null,
     "createdAt": "2026-08-27T00:00:00.000Z",
-    "bookedBy": "system"
+    "bookedBy": "system",
+    "routeId": "route_20260910_compactor-night"
   }
 ]

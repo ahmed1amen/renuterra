@@ -7,13 +7,14 @@ import {
   CircleCheck,
   ClipboardCheck,
   FileSearch,
+  Lock,
   MapPin,
   MoreHorizontal,
   OctagonAlert,
   Phone,
+  Route,
   ShieldCheck,
   Truck,
-  UserPlus,
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -52,7 +53,8 @@ import {
   useAppointmentStore,
   useCatalogItems,
   useDirectory,
-  useTechnicians,
+  useDispatchActions,
+  useRoutes,
 } from "@/features/field-service";
 import {
   type Appointment,
@@ -70,11 +72,13 @@ import {
   CLOSED_STATUSES,
   CustomerFlags,
   FAILED_REASON,
+  fitsVehicle,
   SERVICE_TYPE_LABEL,
   ServicePointMap,
   SOURCE_LABEL,
   TechnicianIdentity,
   TIER_LABEL,
+  VEHICLE_CLASS,
   WINDOW_HOURS,
   WINDOW_LABEL,
 } from "../../components";
@@ -86,6 +90,7 @@ import {
   formatKg,
   formatTime,
   formatWindowRange,
+  toDubaiDayKey,
 } from "../../utils";
 import {
   AddWorkOrderDialog,
@@ -173,7 +178,8 @@ export default function AppointmentDetail({ id }: { id: string }) {
 
 function Detail({ appointment: apt }: { appointment: Appointment }) {
   const directory = useDirectory();
-  const pros = useTechnicians();
+  const routes = useRoutes();
+  const { move } = useDispatchActions();
   // Includes items added in Settings this session.
   const serviceItems = useCatalogItems();
   const update = useAppointmentStore((s) => s.update);
@@ -184,7 +190,12 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
 
   const customer = directory.customer(apt.customerId);
   const site = directory.servicePoint(apt.servicePointId);
-  const pro = directory.servicePro(apt.serviceProId);
+  const route = directory.route(apt.routeId);
+  const pro = directory.servicePro(route?.primaryServiceProId);
+  const vehicle = directory.vehicle(route?.vehicleId);
+  const sameDayRoutes = (routes.data ?? []).filter(
+    (r) => r.date === toDubaiDayKey(apt.windowStart),
+  );
   const closed = CLOSED_STATUSES.includes(apt.status);
   const next = NEXT_STEP[apt.status];
   const primaryContact = customer?.contacts.find((c) => c.isPrimary);
@@ -643,55 +654,141 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
 
           <Card>
             <CardHeader>
-              <CardTitle>Service pro</CardTitle>
+              <CardTitle>Route</CardTitle>
+              {route ? (
+                <CardDescription className="flex items-center gap-1.5">
+                  Stop {route.appointmentIds.indexOf(apt.id) + 1} of{" "}
+                  {route.appointmentIds.length}
+                  {route.lockedAt ? (
+                    <Badge variant="neutral" className="gap-1">
+                      <Lock className="size-3" aria-hidden />
+                      Locked
+                    </Badge>
+                  ) : null}
+                </CardDescription>
+              ) : null}
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
-              {pro ? (
-                <TechnicianIdentity technician={pro} showPhone />
+              {route ? (
+                <>
+                  <Link
+                    href="/field-service/dispatch"
+                    className="block font-medium hover:underline"
+                  >
+                    {route.name}
+                  </Link>
+                  {pro ? (
+                    <div>
+                      <p className="text-muted-foreground mb-1 text-xs">
+                        Primary service pro
+                      </p>
+                      <TechnicianIdentity technician={pro} showPhone />
+                    </div>
+                  ) : null}
+                  {route.crew.length ? (
+                    <ul className="text-muted-foreground space-y-0.5 text-xs">
+                      {route.crew.map((member) => (
+                        <li key={member.serviceProId}>
+                          {directory.servicePro(member.serviceProId)?.name} ·{" "}
+                          {member.role === "trainee" ? "Trainee" : "Loader"}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  {vehicle ? (
+                    <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
+                      <Truck className="size-3.5" aria-hidden />
+                      <span className="font-mono">{vehicle.plate}</span>·{" "}
+                      {VEHICLE_CLASS[vehicle.vehicleClass]}
+                    </p>
+                  ) : null}
+                </>
               ) : (
                 <p className="text-muted-foreground">
-                  Not assigned yet — dispatch will place this on a route.
+                  In the backlog — not on a route yet. Dispatch places it, or
+                  pick a route below.
                 </p>
               )}
-              {apt.vehiclePlate ? (
-                <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                  <Truck className="size-3.5" aria-hidden />
-                  <span className="font-mono">{apt.vehiclePlate}</span>
-                </p>
-              ) : null}
               {!closed ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger
                     render={
-                      <Button variant="outline" size="sm" className="w-full" />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full"
+                        disabled={Boolean(route?.lockedAt)}
+                      />
                     }
                   >
-                    <UserPlus data-icon="inline-start" />
-                    {pro ? "Reassign" : "Assign service pro"}
+                    <Route data-icon="inline-start" />
+                    {route ? "Move to another route" : "Add to a route"}
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuContent align="end" className="w-72">
                     <DropdownMenuGroup>
-                      <DropdownMenuLabel>Assign to</DropdownMenuLabel>
-                      {(pros.data ?? []).map((p) => (
-                        <DropdownMenuItem
-                          key={p.id}
-                          disabled={p.id === apt.serviceProId}
-                          onClick={() =>
-                            patch(
-                              { serviceProId: p.id },
-                              `${apt.ref} assigned to ${p.name}`,
-                            )
-                          }
-                        >
-                          <span className="truncate">{p.name}</span>
-                          <span className="text-muted-foreground ml-auto text-xs">
-                            {p.zone}
-                          </span>
+                      <DropdownMenuLabel>
+                        Routes on {formatDate(apt.windowStart)}
+                      </DropdownMenuLabel>
+                      {sameDayRoutes.length ? (
+                        sameDayRoutes.map((r) => (
+                          <DropdownMenuItem
+                            key={r.id}
+                            disabled={r.id === route?.id || Boolean(r.lockedAt)}
+                            onClick={() => {
+                              move(apt.id, r.id);
+                              toast.success(`${apt.ref} added to ${r.name}`);
+                            }}
+                          >
+                            <span className="min-w-0">
+                              <span className="block truncate">{r.name}</span>
+                              <span className="text-muted-foreground block text-xs">
+                                {
+                                  directory.servicePro(r.primaryServiceProId)
+                                    ?.name
+                                }{" "}
+                                · {r.appointmentIds.length}{" "}
+                                {r.appointmentIds.length === 1
+                                  ? "stop"
+                                  : "stops"}
+                                {r.lockedAt ? " · locked" : ""}
+                                {fitsVehicle(
+                                  apt,
+                                  directory.vehicle(r.vehicleId)?.vehicleClass,
+                                )
+                                  ? ""
+                                  : " · vehicle mismatch"}
+                              </span>
+                            </span>
+                          </DropdownMenuItem>
+                        ))
+                      ) : (
+                        <DropdownMenuItem disabled>
+                          No routes that day yet
                         </DropdownMenuItem>
-                      ))}
+                      )}
                     </DropdownMenuGroup>
+                    {route ? (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => {
+                            move(apt.id, null);
+                            toast.success(
+                              `${apt.ref} sent back to the backlog`,
+                            );
+                          }}
+                        >
+                          Send to backlog
+                        </DropdownMenuItem>
+                      </>
+                    ) : null}
                   </DropdownMenuContent>
                 </DropdownMenu>
+              ) : null}
+              {route?.lockedAt && !closed ? (
+                <p className="text-muted-foreground text-xs">
+                  Unlock the route on the Dispatch board to move this visit.
+                </p>
               ) : null}
             </CardContent>
           </Card>

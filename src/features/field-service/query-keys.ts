@@ -10,4 +10,8 @@ export const fieldServiceKeys = {
   serviceItems: () => [...fieldServiceKeys.all, "service-items"] as const,
   containerTypes: () => [...fieldServiceKeys.all, "container-types"] as const,
   containers: () => [...fieldServiceKeys.all, "containers"] as const,
+  routes: () => [...fieldServiceKeys.all, "routes"] as const,
+  vehicles: () => [...fieldServiceKeys.all, "vehicles"] as const,
+  shifts: () => [...fieldServiceKeys.all, "shifts"] as const,
+  shiftTemplates: () => [...fieldServiceKeys.all, "shift-templates"] as const,
 };

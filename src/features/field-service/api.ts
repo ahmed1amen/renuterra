@@ -17,12 +17,20 @@ import {
   JOBS,
   type Job,
   mockFetch,
+  ROUTES,
+  type Route,
   SERVICE_ITEMS,
   SERVICE_POINTS,
   type ServiceItem,
   type ServicePoint,
+  SHIFT_TEMPLATES,
+  SHIFTS,
+  type Shift,
+  type ShiftTemplate,
   TECHNICIANS,
   type Technician,
+  VEHICLES,
+  type Vehicle,
 } from "@/mocks";
 
 export const fieldServiceApi = {
@@ -50,4 +58,13 @@ export const fieldServiceApi = {
     mockFetch(CONTAINER_TYPES),
 
   listContainers: (): Promise<Container[]> => mockFetch(CONTAINERS),
+
+  listRoutes: (): Promise<Route[]> => mockFetch(ROUTES),
+
+  listVehicles: (): Promise<Vehicle[]> => mockFetch(VEHICLES),
+
+  listShifts: (): Promise<Shift[]> => mockFetch(SHIFTS),
+
+  listShiftTemplates: (): Promise<ShiftTemplate[]> =>
+    mockFetch(SHIFT_TEMPLATES),
 };

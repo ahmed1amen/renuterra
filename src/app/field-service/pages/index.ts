@@ -6,3 +6,7 @@ export { Customers } from "./Customers";
 export { Dashboard } from "./Dashboard";
 export { Dispatch } from "./Dispatch";
 export { ServiceItems } from "./ServiceItems";
+export { ServiceProDetail } from "./ServiceProDetail";
+export { ServicePros } from "./ServicePros";
+export { ShiftBoard } from "./ShiftBoard";
+export { ShiftTemplates } from "./ShiftTemplates";

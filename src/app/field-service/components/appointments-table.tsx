@@ -41,7 +41,7 @@ export function AppointmentsTable({
           <TableHead>When</TableHead>
           <TableHead>{showCustomer ? "Customer" : "Service point"}</TableHead>
           <TableHead>Service</TableHead>
-          <TableHead>Service pro</TableHead>
+          <TableHead>Route</TableHead>
           <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>
@@ -49,7 +49,8 @@ export function AppointmentsTable({
         {appointments.map((apt) => {
           const customer = directory.customer(apt.customerId);
           const site = directory.servicePoint(apt.servicePointId);
-          const pro = directory.servicePro(apt.serviceProId);
+          const route = directory.route(apt.routeId);
+          const pro = directory.servicePro(route?.primaryServiceProId);
           const href = `/field-service/appointments/${apt.id}`;
           return (
             <TableRow
@@ -107,12 +108,17 @@ export function AppointmentsTable({
                     : ""}
                 </span>
               </TableCell>
-              <TableCell className="text-sm">
-                {pro ? (
-                  pro.name
+              <TableCell className="max-w-56">
+                {route ? (
+                  <>
+                    <span className="block truncate text-sm">{pro?.name}</span>
+                    <span className="text-muted-foreground block truncate text-xs">
+                      {route.name}
+                    </span>
+                  </>
                 ) : (
-                  <span className="text-muted-foreground italic">
-                    Unassigned
+                  <span className="text-muted-foreground text-sm italic">
+                    In backlog
                   </span>
                 )}
               </TableCell>

@@ -24,9 +24,11 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   useAppointmentStore,
   useCustomers,
+  useDirectory,
+  useDispatchActions,
+  useRoutes,
   useServiceItems,
   useServicePoints,
-  useTechnicians,
 } from "@/features/field-service";
 import type {
   AppointmentServiceType,
@@ -87,7 +89,9 @@ function BookingForm({
   const book = useAppointmentStore((s) => s.book);
   const customers = useCustomers();
   const servicePoints = useServicePoints();
-  const pros = useTechnicians();
+  const routes = useRoutes();
+  const directory = useDirectory();
+  const { move } = useDispatchActions();
   const serviceItems = useServiceItems();
   const itemOf = (id: string) => serviceItems.data?.find((i) => i.id === id);
 
@@ -104,7 +108,7 @@ function BookingForm({
   const [arrivalWindow, setArrivalWindow] = useState<ArrivalWindow | null>(
     null,
   );
-  const [serviceProId, setServiceProId] = useState("");
+  const [routeId, setRouteId] = useState("");
   const [notes, setNotes] = useState("");
 
   const customer: Customer | undefined = customers.data?.find(
@@ -126,6 +130,7 @@ function BookingForm({
   const effectiveWindow = arrivalWindow ?? line?.window ?? "AM";
   const type = preset.type ?? "standard";
   const blocked = customer?.flags.includes("do_not_service") ?? false;
+  const dayRoutes = (routes.data ?? []).filter((r) => r.date === day);
   const ready =
     Boolean(customer && servicePoint && line && item && day) && !blocked;
 
@@ -144,10 +149,11 @@ function BookingForm({
       window: effectiveWindow,
       windowStart: dubaiDateTime(day, from),
       windowEnd: dubaiDateTime(day, to),
-      serviceProId: serviceProId || null,
+      routeId: routeId || null,
       notes: notes.trim() || undefined,
       originalAppointmentId: preset.originalAppointmentId,
     });
+    if (routeId) move(appointment.id, routeId);
     onDone();
     toast.success(`${appointment.ref} booked`, {
       description: `${servicePoint.name} · ${WINDOW_LABEL[effectiveWindow]}`,
@@ -291,7 +297,10 @@ function BookingForm({
                 type="date"
                 value={day}
                 min={toDayKey(TODAY)}
-                onChange={(e) => setDay(e.target.value)}
+                onChange={(e) => {
+                  setDay(e.target.value);
+                  setRouteId("");
+                }}
               />
             </Field>
             <Field label="Arrival window">
@@ -305,20 +314,29 @@ function BookingForm({
           </div>
 
           <Field
-            label="Service pro"
-            htmlFor={`${id}-pro`}
-            hint="Leave on auto-assign to let dispatch place it on a route."
+            label="Route"
+            htmlFor={`${id}-route`}
+            hint={
+              dayRoutes.length
+                ? "Leave it in the backlog to let dispatch place it."
+                : "No routes that day yet — it goes to the backlog."
+            }
           >
             <NativeSelect
-              id={`${id}-pro`}
+              id={`${id}-route`}
               className="w-full"
-              value={serviceProId}
-              onChange={(e) => setServiceProId(e.target.value)}
+              value={routeId}
+              onChange={(e) => setRouteId(e.target.value)}
             >
-              <NativeSelectOption value="">Auto-assign</NativeSelectOption>
-              {(pros.data ?? []).map((p) => (
-                <NativeSelectOption key={p.id} value={p.id}>
-                  {p.name} — {p.zone}
+              <NativeSelectOption value="">Leave in backlog</NativeSelectOption>
+              {dayRoutes.map((r) => (
+                <NativeSelectOption
+                  key={r.id}
+                  value={r.id}
+                  disabled={Boolean(r.lockedAt)}
+                >
+                  {r.name} — {directory.servicePro(r.primaryServiceProId)?.name}
+                  {r.lockedAt ? " (locked)" : ""}
                 </NativeSelectOption>
               ))}
             </NativeSelect>

@@ -22,8 +22,17 @@ export {
   TIER_LABEL,
 } from "./customer-meta";
 export { DateStrip } from "./date-strip";
+export {
+  appointmentLoadKg,
+  type BoardActions,
+  CREW_ROLE_LABEL,
+  fitsVehicle,
+  isMovable,
+  METHOD_VEHICLE_CLASSES,
+  type RoutePlan,
+  requiredClasses,
+} from "./dispatch-meta";
 export { ChoiceChips, Field } from "./form-field";
-export { JobCard } from "./job-card";
 export {
   JOB_STATUS,
   JOB_STATUS_ORDER,
@@ -32,16 +41,17 @@ export {
   SERVICE_TYPES,
 } from "./job-status";
 export {
-  JobPin,
   MapLegend,
   type RouteLine,
   RouteLines,
+  StopPin,
   VehicleMarker,
 } from "./map-markers";
 export { MonthCalendar } from "./month-calendar";
 export { type LatLng, OsmMap } from "./osm-map";
 export {
-  type Route,
+  AssignRouteMenu,
+  type RouteColors,
   RouteSidebar,
   routeColor,
   routeColors,
@@ -49,8 +59,24 @@ export {
 export { RouteTimeline } from "./route-timeline";
 export { ServicePointMap } from "./service-point-map";
 export {
+  LicenceBadge,
+  needsRenewal,
+  proRole,
+  routeRoleOf,
+  ShiftBadge,
+  ShiftSummary,
+  worstLicence,
+} from "./service-pro-meta";
+export {
+  formatShiftWindow,
+  LICENCE_TYPE,
+  licenceState,
+  SHIFT_TYPE,
+  SHIFT_TYPE_ORDER,
+  shiftHours,
+} from "./shift-meta";
+export {
   TechnicianIdentity,
-  TechnicianLaneCard,
   TechnicianStatusPill,
 } from "./technician-lane";
 export {

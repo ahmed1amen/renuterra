@@ -1,12 +1,9 @@
 "use client";
 
 import { Phone } from "lucide-react";
-import { EmptyState, StatusPill, type StatusTone } from "@/components/shared";
+import { StatusPill, type StatusTone } from "@/components/shared";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import type { TechnicianLane } from "@/features/field-service";
 import type { Technician, TechnicianStatus } from "@/mocks";
-import { formatDuration } from "../utils";
-import { JobCard } from "./job-card";
 
 const TECH_STATUS: Record<
   TechnicianStatus,
@@ -56,53 +53,5 @@ export function TechnicianIdentity({
         </span>
       </span>
     </span>
-  );
-}
-
-/** One technician column on the dispatch board. */
-export function TechnicianLaneCard({
-  lane,
-  technicians,
-  onAssign,
-}: {
-  lane: TechnicianLane;
-  technicians: Technician[];
-  onAssign: (jobId: string, technicianId: string | null) => void;
-}) {
-  const { technician, jobs, bookedMins } = lane;
-
-  return (
-    <section className="bg-muted/40 flex min-w-0 flex-col gap-3 rounded-xl p-3">
-      <header className="space-y-2">
-        <TechnicianIdentity technician={technician} />
-        <div className="flex items-center justify-between gap-2">
-          <TechnicianStatusPill status={technician.status} />
-          <span className="text-muted-foreground font-mono text-xs tabular-nums">
-            {jobs.length} · {formatDuration(bookedMins)}
-          </span>
-        </div>
-      </header>
-
-      {jobs.length === 0 ? (
-        <EmptyState
-          title="No jobs"
-          description="Assign one from the queue."
-          className="py-8"
-        />
-      ) : (
-        <ul className="space-y-2">
-          {jobs.map((job) => (
-            <li key={job.id}>
-              <JobCard
-                job={job}
-                technicians={technicians}
-                onAssign={(technicianId) => onAssign(job.id, technicianId)}
-                compact
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
   );
 }

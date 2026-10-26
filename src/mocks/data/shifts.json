@@ -1,0 +1,1070 @@
+[
+  {
+    "id": "shift_tech_1_20260830",
+    "serviceProId": "tech_1",
+    "date": "2026-08-30",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260830",
+    "serviceProId": "tech_4",
+    "date": "2026-08-30",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260830",
+    "serviceProId": "tech_7",
+    "date": "2026-08-30",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260830",
+    "serviceProId": "tech_9",
+    "date": "2026-08-30",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_1_20260831",
+    "serviceProId": "tech_1",
+    "date": "2026-08-31",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260831",
+    "serviceProId": "tech_2",
+    "date": "2026-08-31",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260831",
+    "serviceProId": "tech_3",
+    "date": "2026-08-31",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260831",
+    "serviceProId": "tech_4",
+    "date": "2026-08-31",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260831",
+    "serviceProId": "tech_5",
+    "date": "2026-08-31",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260831",
+    "serviceProId": "tech_6",
+    "date": "2026-08-31",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260831",
+    "serviceProId": "tech_7",
+    "date": "2026-08-31",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260831",
+    "serviceProId": "tech_8",
+    "date": "2026-08-31",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260831",
+    "serviceProId": "tech_9",
+    "date": "2026-08-31",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260831",
+    "serviceProId": "tech_10",
+    "date": "2026-08-31",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  },
+  {
+    "id": "shift_tech_1_20260901",
+    "serviceProId": "tech_1",
+    "date": "2026-09-01",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260901",
+    "serviceProId": "tech_2",
+    "date": "2026-09-01",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260901",
+    "serviceProId": "tech_3",
+    "date": "2026-09-01",
+    "type": "leave",
+    "startTime": null,
+    "endTime": null,
+    "templateId": null,
+    "trainerId": null,
+    "note": "Annual leave"
+  },
+  {
+    "id": "shift_tech_4_20260901",
+    "serviceProId": "tech_4",
+    "date": "2026-09-01",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260901",
+    "serviceProId": "tech_5",
+    "date": "2026-09-01",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260901",
+    "serviceProId": "tech_6",
+    "date": "2026-09-01",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260901",
+    "serviceProId": "tech_7",
+    "date": "2026-09-01",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260901",
+    "serviceProId": "tech_8",
+    "date": "2026-09-01",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260901",
+    "serviceProId": "tech_9",
+    "date": "2026-09-01",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260901",
+    "serviceProId": "tech_10",
+    "date": "2026-09-01",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  },
+  {
+    "id": "shift_tech_1_20260902",
+    "serviceProId": "tech_1",
+    "date": "2026-09-02",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260902",
+    "serviceProId": "tech_2",
+    "date": "2026-09-02",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260902",
+    "serviceProId": "tech_3",
+    "date": "2026-09-02",
+    "type": "leave",
+    "startTime": null,
+    "endTime": null,
+    "templateId": null,
+    "trainerId": null,
+    "note": "Annual leave"
+  },
+  {
+    "id": "shift_tech_4_20260902",
+    "serviceProId": "tech_4",
+    "date": "2026-09-02",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260902",
+    "serviceProId": "tech_5",
+    "date": "2026-09-02",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260902",
+    "serviceProId": "tech_6",
+    "date": "2026-09-02",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260902",
+    "serviceProId": "tech_7",
+    "date": "2026-09-02",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260902",
+    "serviceProId": "tech_8",
+    "date": "2026-09-02",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260902",
+    "serviceProId": "tech_9",
+    "date": "2026-09-02",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260902",
+    "serviceProId": "tech_10",
+    "date": "2026-09-02",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  },
+  {
+    "id": "shift_tech_1_20260903",
+    "serviceProId": "tech_1",
+    "date": "2026-09-03",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260903",
+    "serviceProId": "tech_2",
+    "date": "2026-09-03",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260903",
+    "serviceProId": "tech_3",
+    "date": "2026-09-03",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260903",
+    "serviceProId": "tech_4",
+    "date": "2026-09-03",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260903",
+    "serviceProId": "tech_5",
+    "date": "2026-09-03",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260903",
+    "serviceProId": "tech_6",
+    "date": "2026-09-03",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260903",
+    "serviceProId": "tech_7",
+    "date": "2026-09-03",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260903",
+    "serviceProId": "tech_8",
+    "date": "2026-09-03",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260903",
+    "serviceProId": "tech_9",
+    "date": "2026-09-03",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260903",
+    "serviceProId": "tech_10",
+    "date": "2026-09-03",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  },
+  {
+    "id": "shift_tech_1_20260904",
+    "serviceProId": "tech_1",
+    "date": "2026-09-04",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260904",
+    "serviceProId": "tech_2",
+    "date": "2026-09-04",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260904",
+    "serviceProId": "tech_3",
+    "date": "2026-09-04",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260904",
+    "serviceProId": "tech_4",
+    "date": "2026-09-04",
+    "type": "on-call",
+    "startTime": "08:00",
+    "endTime": "20:00",
+    "templateId": "tpl_on_call",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260904",
+    "serviceProId": "tech_5",
+    "date": "2026-09-04",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260904",
+    "serviceProId": "tech_6",
+    "date": "2026-09-04",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260904",
+    "serviceProId": "tech_7",
+    "date": "2026-09-04",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260904",
+    "serviceProId": "tech_8",
+    "date": "2026-09-04",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260904",
+    "serviceProId": "tech_9",
+    "date": "2026-09-04",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260904",
+    "serviceProId": "tech_10",
+    "date": "2026-09-04",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null,
+    "note": "Overtime"
+  },
+  {
+    "id": "shift_tech_1_20260905",
+    "serviceProId": "tech_1",
+    "date": "2026-09-05",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null,
+    "note": "Overtime"
+  },
+  {
+    "id": "shift_tech_2_20260905",
+    "serviceProId": "tech_2",
+    "date": "2026-09-05",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260905",
+    "serviceProId": "tech_5",
+    "date": "2026-09-05",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260905",
+    "serviceProId": "tech_6",
+    "date": "2026-09-05",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260905",
+    "serviceProId": "tech_7",
+    "date": "2026-09-05",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null,
+    "note": "Overtime"
+  },
+  {
+    "id": "shift_tech_8_20260905",
+    "serviceProId": "tech_8",
+    "date": "2026-09-05",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260905",
+    "serviceProId": "tech_9",
+    "date": "2026-09-05",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null,
+    "note": "Overtime"
+  },
+  {
+    "id": "shift_tech_1_20260906",
+    "serviceProId": "tech_1",
+    "date": "2026-09-06",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260906",
+    "serviceProId": "tech_4",
+    "date": "2026-09-06",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260906",
+    "serviceProId": "tech_7",
+    "date": "2026-09-06",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260906",
+    "serviceProId": "tech_8",
+    "date": "2026-09-06",
+    "type": "leave",
+    "startTime": null,
+    "endTime": null,
+    "templateId": null,
+    "trainerId": null,
+    "note": "Annual leave"
+  },
+  {
+    "id": "shift_tech_9_20260906",
+    "serviceProId": "tech_9",
+    "date": "2026-09-06",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_1_20260907",
+    "serviceProId": "tech_1",
+    "date": "2026-09-07",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260907",
+    "serviceProId": "tech_2",
+    "date": "2026-09-07",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260907",
+    "serviceProId": "tech_3",
+    "date": "2026-09-07",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260907",
+    "serviceProId": "tech_4",
+    "date": "2026-09-07",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260907",
+    "serviceProId": "tech_5",
+    "date": "2026-09-07",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260907",
+    "serviceProId": "tech_6",
+    "date": "2026-09-07",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260907",
+    "serviceProId": "tech_7",
+    "date": "2026-09-07",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260907",
+    "serviceProId": "tech_8",
+    "date": "2026-09-07",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260907",
+    "serviceProId": "tech_9",
+    "date": "2026-09-07",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260907",
+    "serviceProId": "tech_10",
+    "date": "2026-09-07",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  },
+  {
+    "id": "shift_tech_1_20260908",
+    "serviceProId": "tech_1",
+    "date": "2026-09-08",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260908",
+    "serviceProId": "tech_2",
+    "date": "2026-09-08",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260908",
+    "serviceProId": "tech_3",
+    "date": "2026-09-08",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260908",
+    "serviceProId": "tech_4",
+    "date": "2026-09-08",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260908",
+    "serviceProId": "tech_5",
+    "date": "2026-09-08",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260908",
+    "serviceProId": "tech_6",
+    "date": "2026-09-08",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260908",
+    "serviceProId": "tech_7",
+    "date": "2026-09-08",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260908",
+    "serviceProId": "tech_8",
+    "date": "2026-09-08",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260908",
+    "serviceProId": "tech_9",
+    "date": "2026-09-08",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260908",
+    "serviceProId": "tech_10",
+    "date": "2026-09-08",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  },
+  {
+    "id": "shift_tech_1_20260909",
+    "serviceProId": "tech_1",
+    "date": "2026-09-09",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260909",
+    "serviceProId": "tech_2",
+    "date": "2026-09-09",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260909",
+    "serviceProId": "tech_3",
+    "date": "2026-09-09",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260909",
+    "serviceProId": "tech_4",
+    "date": "2026-09-09",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260909",
+    "serviceProId": "tech_5",
+    "date": "2026-09-09",
+    "type": "leave",
+    "startTime": null,
+    "endTime": null,
+    "templateId": null,
+    "trainerId": null,
+    "note": "Annual leave"
+  },
+  {
+    "id": "shift_tech_6_20260909",
+    "serviceProId": "tech_6",
+    "date": "2026-09-09",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260909",
+    "serviceProId": "tech_7",
+    "date": "2026-09-09",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260909",
+    "serviceProId": "tech_8",
+    "date": "2026-09-09",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260909",
+    "serviceProId": "tech_9",
+    "date": "2026-09-09",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260909",
+    "serviceProId": "tech_10",
+    "date": "2026-09-09",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  },
+  {
+    "id": "shift_tech_1_20260910",
+    "serviceProId": "tech_1",
+    "date": "2026-09-10",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_2_20260910",
+    "serviceProId": "tech_2",
+    "date": "2026-09-10",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_3_20260910",
+    "serviceProId": "tech_3",
+    "date": "2026-09-10",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_4_20260910",
+    "serviceProId": "tech_4",
+    "date": "2026-09-10",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_day_early",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_5_20260910",
+    "serviceProId": "tech_5",
+    "date": "2026-09-10",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_6_20260910",
+    "serviceProId": "tech_6",
+    "date": "2026-09-10",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "templateId": "tpl_day_medical",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_7_20260910",
+    "serviceProId": "tech_7",
+    "date": "2026-09-10",
+    "type": "day",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "templateId": "tpl_day_long",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_8_20260910",
+    "serviceProId": "tech_8",
+    "date": "2026-09-10",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_9_20260910",
+    "serviceProId": "tech_9",
+    "date": "2026-09-10",
+    "type": "night",
+    "startTime": "20:00",
+    "endTime": "04:00",
+    "templateId": "tpl_night",
+    "trainerId": null
+  },
+  {
+    "id": "shift_tech_10_20260910",
+    "serviceProId": "tech_10",
+    "date": "2026-09-10",
+    "type": "training",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "templateId": "tpl_training",
+    "trainerId": "tech_1"
+  }
+]

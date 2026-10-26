@@ -2,45 +2,64 @@
 
 import {
   AlertTriangle,
-  ArrowUpDown,
-  ChevronDown,
-  ChevronRight,
-  Clock,
+  CalendarX2,
+  Inbox,
+  Lock,
+  LockOpen,
   MoreVertical,
-  Plus,
-  Search,
-  Star,
-  Wand2,
+  Route as RouteIcon,
+  Truck,
+  Undo2,
+  UserRound,
 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import type { ReactElement, ReactNode } from "react";
+import { EmptyState, StreamTag } from "@/components/shared";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  isWorkingShift,
+  useDirectory,
+  useShifts,
+  useTechnicians,
+  useVehicles,
+} from "@/features/field-service";
 import { cn } from "@/lib/utils";
-import type { Job, Technician } from "@/mocks";
-import { formatDuration, formatTime } from "../utils";
-import { JOB_STATUS } from "./job-status";
-
-/** A technician's day: the stops assigned to them, in time order. */
-export type Route = {
-  technician: Technician;
-  jobs: Job[];
-  bookedMins: number;
-};
+import type { Appointment } from "@/mocks";
+import {
+  formatDate,
+  formatDuration,
+  formatKg,
+  formatWindowRange,
+} from "../utils";
+import { WINDOW_LABEL } from "./appointment-meta";
+import {
+  type BoardActions,
+  CREW_ROLE_LABEL,
+  fitsVehicle,
+  isMovable,
+  type RoutePlan,
+} from "./dispatch-meta";
+import { VEHICLE_CLASS } from "./work-order-meta";
 
 /**
- * One fixed colour per lane, so a route reads the same in the sidebar, on the
+ * One fixed colour per route, so a route reads the same in the panel, on the
  * timeline and on the map: `bar` for the rail, `tint` behind a lane, `fill`
- * for its pins.
+ * for its pins, `stroke` for its line. Fixed rather than theme tokens, like
+ * the waste streams: a route has to hold its colour against the basemap.
  */
 const ROUTE_COLORS = [
   {
@@ -81,7 +100,9 @@ const ROUTE_COLORS = [
   },
 ];
 
-export function routeColors(index: number) {
+export type RouteColors = (typeof ROUTE_COLORS)[number];
+
+export function routeColors(index: number): RouteColors {
   return ROUTE_COLORS[index % ROUTE_COLORS.length];
 }
 
@@ -89,456 +110,578 @@ export function routeColor(index: number) {
   return routeColors(index).bar;
 }
 
-type SortField = "load" | "name" | "stops";
-
+/**
+ * The dispatch board's right panel: the day's routes with their capacity, and
+ * the backlog waiting for one. `top` holds the selected appointment's card.
+ */
 export function RouteSidebar({
-  routes,
-  unassigned,
+  plans,
+  backlog,
+  overdue,
   selectedRouteId,
+  tab,
+  onTabChange,
   onSelectRoute,
-  onSelectJob,
-  className,
+  onSelectAppointment,
+  actions,
+  top,
 }: {
-  routes: Route[];
-  unassigned: Job[];
+  plans: RoutePlan[];
+  backlog: Appointment[];
+  /** Earlier days' unrouted, still-open appointments. */
+  overdue: Appointment[];
   selectedRouteId: string | null;
-  onSelectRoute: (technicianId: string | null) => void;
-  onSelectJob?: (jobId: string) => void;
-  className?: string;
+  tab: "routes" | "backlog";
+  onTabChange: (tab: "routes" | "backlog") => void;
+  onSelectRoute: (routeId: string | null) => void;
+  onSelectAppointment: (appointmentId: string) => void;
+  actions: BoardActions;
+  top?: ReactNode;
 }) {
-  const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<SortField>("load");
-  const [expanded, setExpanded] = useState<string[]>([]);
-  const [starred, setStarred] = useState<string[]>([]);
-  const [showStaffed, setShowStaffed] = useState(true);
-  const [showUnassigned, setShowUnassigned] = useState(true);
-
-  const term = query.trim().toLowerCase();
-  const visible = routes
-    .map((route, index) => ({ ...route, color: routeColor(index) }))
-    .filter(
-      (route) =>
-        !term ||
-        route.technician.name.toLowerCase().includes(term) ||
-        route.technician.zone.toLowerCase().includes(term),
-    )
-    .sort((a, b) => {
-      if (sort === "name")
-        return a.technician.name.localeCompare(b.technician.name);
-      if (sort === "stops") return b.jobs.length - a.jobs.length;
-      return b.bookedMins - a.bookedMins;
-    });
-
-  const totalStops = routes.reduce((sum, r) => sum + r.jobs.length, 0);
-  const doneStops = routes.reduce(
-    (sum, r) => sum + r.jobs.filter((j) => j.status === "completed").length,
-    0,
-  );
-
-  const toggle = (list: string[], id: string) =>
-    list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
-
   return (
-    <aside
-      className={cn(
-        "border-border bg-background flex w-88 shrink-0 flex-col border-l",
-        className,
-      )}
-    >
-      <header className="border-border space-y-3 border-b p-3">
-        <div className="flex items-baseline justify-between gap-2">
-          <h2 className="text-sm font-semibold">
-            {routes.length} {routes.length === 1 ? "route" : "routes"}
-          </h2>
-          <span className="text-muted-foreground font-mono text-xs tabular-nums">
-            {doneStops}/{totalStops} stops
-          </span>
+    <aside className="border-border bg-background flex w-96 shrink-0 flex-col border-l">
+      {top}
+      <Tabs
+        value={tab}
+        onValueChange={(value) => onTabChange(value as "routes" | "backlog")}
+        className="min-h-0 flex-1 gap-0"
+      >
+        <div className="border-border border-b px-3 py-2">
+          <TabsList className="w-full">
+            <TabsTrigger value="routes">
+              Routes
+              <Badge variant="neutral" className="h-4 px-1.5 tabular-nums">
+                {plans.length}
+              </Badge>
+            </TabsTrigger>
+            <TabsTrigger value="backlog">
+              Backlog
+              <Badge
+                variant={backlog.length > 0 ? "warning" : "neutral"}
+                className="h-4 px-1.5 tabular-nums"
+              >
+                {backlog.length}
+              </Badge>
+            </TabsTrigger>
+          </TabsList>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            size="sm"
-            onClick={() => toast.success("Route created — prototype only")}
-          >
-            <Plus data-icon="inline-start" />
-            Create route
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() =>
-              toast("Auto-plan is a placeholder", {
-                description: "It would balance the queue across the crew.",
-              })
-            }
-          >
-            <Wand2 data-icon="inline-start" />
-            Auto-plan
-          </Button>
-        </div>
-
-        <span className="relative flex">
-          <Search
-            className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
-            aria-hidden
-          />
-          <Input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search routes or technicians…"
-            aria-label="Search routes or technicians"
-            className="h-8 ps-9 text-sm"
-          />
-        </span>
-
-        <div className="flex items-center justify-between gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={<Button variant="outline" size="xs" />}
-            >
-              <ArrowUpDown data-icon="inline-start" />
-              {sort === "load" ? "Load" : sort === "name" ? "Name" : "Stops"}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem onClick={() => setSort("load")}>
-                Load
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSort("stops")}>
-                Stops
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSort("name")}>
-                Name
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <span className="flex items-center gap-1">
-            <IconButton
-              label="Collapse all"
-              icon={ChevronRight}
-              onClick={() => setExpanded([])}
+        <TabsContent value="routes" className="min-h-0 overflow-y-auto">
+          {plans.length === 0 ? (
+            <EmptyState
+              icon={CalendarX2}
+              title="No routes on this day"
+              description="Routes are generated from the service schedule. Pick another day to plan."
+              className="px-6"
             />
-            <IconButton
-              label="Expand all"
-              icon={ChevronDown}
-              onClick={() => setExpanded(routes.map((r) => r.technician.id))}
-            />
-          </span>
-        </div>
-      </header>
-
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <SectionHeader
-          label="Staffed"
-          count={visible.length}
-          open={showStaffed}
-          onToggle={() => setShowStaffed(!showStaffed)}
-        />
-
-        {showStaffed ? (
-          <ul>
-            {visible.map((route) => (
-              <li key={route.technician.id}>
-                <RouteRow
-                  route={route}
-                  color={route.color}
-                  selected={selectedRouteId === route.technician.id}
-                  expanded={expanded.includes(route.technician.id)}
-                  starred={starred.includes(route.technician.id)}
-                  onToggleExpand={() =>
-                    setExpanded(toggle(expanded, route.technician.id))
-                  }
-                  onToggleStar={() =>
-                    setStarred(toggle(starred, route.technician.id))
-                  }
-                  onSelect={() =>
-                    onSelectRoute(
-                      selectedRouteId === route.technician.id
-                        ? null
-                        : route.technician.id,
-                    )
-                  }
-                  onSelectJob={onSelectJob}
-                />
-              </li>
-            ))}
-            {visible.length === 0 ? (
-              <p className="text-muted-foreground px-3 py-6 text-center text-xs">
-                No routes match “{query.trim()}”.
-              </p>
-            ) : null}
-          </ul>
-        ) : null}
-
-        <SectionHeader
-          label="Unassigned"
-          count={unassigned.length}
-          open={showUnassigned}
-          onToggle={() => setShowUnassigned(!showUnassigned)}
-        />
-
-        {showUnassigned ? (
-          unassigned.length === 0 ? (
-            <p className="text-muted-foreground px-3 py-6 text-center text-xs">
-              No unassigned jobs found
-            </p>
           ) : (
-            <ul className="divide-border/60 divide-y">
-              {unassigned.map((job) => (
-                <li key={job.id}>
-                  <StopRow job={job} onClick={() => onSelectJob?.(job.id)} />
+            <ul className="flex flex-col gap-2 p-3">
+              {plans.map((plan) => (
+                <li key={plan.route.id}>
+                  <RouteCard
+                    plan={plan}
+                    plans={plans}
+                    selected={selectedRouteId === plan.route.id}
+                    onSelect={() =>
+                      onSelectRoute(
+                        selectedRouteId === plan.route.id
+                          ? null
+                          : plan.route.id,
+                      )
+                    }
+                    actions={actions}
+                  />
                 </li>
               ))}
             </ul>
-          )
-        ) : null}
-      </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="backlog" className="min-h-0 overflow-y-auto">
+          {backlog.length === 0 ? (
+            <EmptyState
+              icon={Inbox}
+              title="Backlog is clear"
+              description="Every appointment on this day is on a route."
+              className="px-6 py-10"
+            />
+          ) : (
+            <ul className="divide-border/60 divide-y">
+              {backlog.map((apt) => (
+                <li key={apt.id}>
+                  <BacklogRow
+                    appointment={apt}
+                    plans={plans}
+                    onSelect={() => onSelectAppointment(apt.id)}
+                    onAssign={(routeId) => actions.assign(apt.id, routeId)}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {overdue.length > 0 ? (
+            <section className="border-border mt-2 border-t">
+              <h3 className="bg-muted/50 text-muted-foreground flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold tracking-wide uppercase">
+                <AlertTriangle className="size-3.5" aria-hidden />
+                Overdue
+                <span className="ml-auto font-mono tabular-nums">
+                  {overdue.length}
+                </span>
+              </h3>
+              <ul className="divide-border/60 divide-y opacity-75">
+                {overdue.map((apt) => (
+                  <li key={apt.id}>
+                    <BacklogRow
+                      appointment={apt}
+                      plans={plans}
+                      showDate
+                      onSelect={() => onSelectAppointment(apt.id)}
+                      onAssign={(routeId) => actions.assign(apt.id, routeId)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+        </TabsContent>
+      </Tabs>
     </aside>
   );
 }
 
-function RouteRow({
-  route,
-  color,
+function RouteCard({
+  plan,
+  plans,
   selected,
-  expanded,
-  starred,
-  onToggleExpand,
-  onToggleStar,
   onSelect,
-  onSelectJob,
+  actions,
 }: {
-  route: Route;
-  color: string;
+  plan: RoutePlan;
+  plans: RoutePlan[];
   selected: boolean;
-  expanded: boolean;
-  starred: boolean;
-  onToggleExpand: () => void;
-  onToggleStar: () => void;
   onSelect: () => void;
-  onSelectJob?: (jobId: string) => void;
+  actions: BoardActions;
 }) {
-  const { technician, jobs, bookedMins } = route;
-  const done = jobs.filter((j) => j.status === "completed").length;
-  const blocked = jobs.some((j) => j.status === "blocked");
+  const { route, pro, crew, vehicle, colors, locked } = plan;
+  const vehicles = useVehicles();
+  const technicians = useTechnicians();
+  const { shiftOf } = useShifts();
+  // Everyone on the route needs a working shift that day (Shift board).
+  const offShift = [
+    { id: route.primaryServiceProId, name: pro?.name },
+    ...crew.map((c) => ({ id: c.pro.id, name: c.pro.name })),
+  ].filter((p) => !isWorkingShift(shiftOf(p.id, route.date)));
+
+  // Same class only, so a swap never strands the stops already on the route.
+  const swapVehicles = (vehicles.data ?? []).filter(
+    (v) =>
+      v.status === "in-service" &&
+      v.id !== route.vehicleId &&
+      (!vehicle || v.vehicleClass === vehicle.vehicleClass),
+  );
+  const drivers = (technicians.data ?? []).filter(
+    (t) => t.role === "driver" && t.id !== route.primaryServiceProId,
+  );
+  const busyWith = (check: (p: RoutePlan) => boolean) =>
+    plans.find((p) => p.route.id !== route.id && check(p))?.route.name;
+  const openStops = plan.stops.filter(isMovable).length;
 
   return (
     <div
       className={cn(
-        "border-border/60 relative border-b",
-        selected && "bg-accent/50",
+        "border-border bg-card relative overflow-hidden rounded-lg border p-3 pl-4 transition-shadow hover:shadow-sm",
+        selected && "ring-primary ring-2",
       )}
     >
+      {/* Stretched over the card so the whole card selects the route; the
+          content sits above it and lets clicks through, bar the menu. */}
+      <button
+        type="button"
+        onClick={onSelect}
+        aria-pressed={selected}
+        aria-label={`Select ${route.name}`}
+        className="focus-visible:ring-ring/50 absolute inset-0 rounded-lg outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+      />
       <span
-        className={cn("absolute inset-y-0 left-0 w-1", color)}
         aria-hidden
+        className={cn("absolute inset-y-0 left-0 w-1", colors.bar)}
       />
 
-      <div className="flex items-center gap-1.5 py-2 pr-2 pl-3">
-        <button
-          type="button"
-          onClick={onToggleExpand}
-          aria-label={expanded ? "Collapse route" : "Expand route"}
-          aria-expanded={expanded}
-          className="text-muted-foreground hover:text-foreground flex size-5 shrink-0 items-center justify-center"
-        >
-          {expanded ? (
-            <ChevronDown className="size-4" aria-hidden />
-          ) : (
-            <ChevronRight className="size-4" aria-hidden />
-          )}
-        </button>
-
-        <button
-          type="button"
-          onClick={onSelect}
-          aria-pressed={selected}
-          className="flex min-w-0 flex-1 items-center gap-2 text-left"
-        >
-          <Avatar size="sm" className="size-8 shrink-0">
-            <AvatarFallback className="text-[11px] font-semibold">
-              {technician.initials}
-            </AvatarFallback>
-          </Avatar>
-          <span className="min-w-0 leading-tight">
-            <span className="flex items-center gap-1.5">
-              <span className="truncate text-[13px] font-medium">
-                {technician.name} Route
-              </span>
-              {blocked ? (
-                <AlertTriangle
-                  className="text-warning size-3.5 shrink-0"
-                  aria-label="Has a blocked stop"
-                />
-              ) : null}
-            </span>
-            <span className="text-muted-foreground flex items-center gap-1.5 text-[11px]">
-              {technician.zone}
-              <span className="inline-flex items-center gap-0.5">
-                <Clock className="size-3" aria-hidden />
-                {formatDuration(bookedMins)}
-              </span>
-            </span>
-          </span>
-        </button>
-
-        <button
-          type="button"
-          onClick={onToggleStar}
-          aria-label={starred ? "Unstar route" : "Star route"}
-          aria-pressed={starred}
-          className={cn(
-            "flex size-6 shrink-0 items-center justify-center rounded-md transition-colors",
-            starred
-              ? "text-warning"
-              : "text-muted-foreground/60 hover:text-foreground",
-          )}
-        >
-          <Star
-            className={cn("size-3.5", starred && "fill-current")}
-            aria-hidden
-          />
-        </button>
-
-        <span className="text-muted-foreground shrink-0 font-mono text-[11px] tabular-nums">
-          {done}/{jobs.length}
-        </span>
+      <div className="pointer-events-none relative flex items-start gap-2">
+        <span
+          aria-hidden
+          className={cn("mt-1.5 size-2 shrink-0 rounded-full", colors.bar)}
+        />
+        <div className="min-w-0 flex-1">
+          <p className="flex items-center gap-1.5 text-sm font-semibold">
+            <span className="truncate">{route.name}</span>
+            {locked ? (
+              <Lock
+                className="text-muted-foreground size-3.5 shrink-0"
+                aria-label="Locked"
+              />
+            ) : null}
+          </p>
+          <p className="text-muted-foreground text-xs tabular-nums">
+            {route.startTime}–{route.endTime} · {route.estimatedKm} km ·{" "}
+            {formatDuration(route.estimatedDriveMins)} drive
+          </p>
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger
-            aria-label={`Actions for ${technician.name}`}
-            className="text-muted-foreground hover:bg-muted hover:text-foreground flex size-6 shrink-0 items-center justify-center rounded-md transition-colors"
+            render={
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                className="pointer-events-auto"
+              />
+            }
+            aria-label={`Actions for ${route.name}`}
           >
-            <MoreVertical className="size-3.5" aria-hidden />
+            <MoreVertical aria-hidden />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-60">
             <DropdownMenuItem
-              onClick={() => toast("Optimise route — prototype only")}
+              onClick={() => actions.setLocked(route.id, !locked)}
             >
-              Optimise order
+              {locked ? <LockOpen aria-hidden /> : <Lock aria-hidden />}
+              {locked ? "Unlock route" : "Lock route"}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => toast("Locked — prototype only")}>
-              Lock route
-            </DropdownMenuItem>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger disabled={locked}>
+                <Truck aria-hidden />
+                Change vehicle
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="w-60">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>
+                    {vehicle
+                      ? `${VEHICLE_CLASS[vehicle.vehicleClass]}s in service`
+                      : "Vehicles in service"}
+                  </DropdownMenuLabel>
+                  {swapVehicles.length === 0 ? (
+                    <DropdownMenuItem disabled>
+                      No other vehicle of this class
+                    </DropdownMenuItem>
+                  ) : (
+                    swapVehicles.map((v) => {
+                      const busy = busyWith((p) => p.route.vehicleId === v.id);
+                      return (
+                        <DropdownMenuItem
+                          key={v.id}
+                          onClick={() => actions.setVehicle(route.id, v.id)}
+                        >
+                          <span className="font-mono text-xs">{v.plate}</span>
+                          <span className="text-muted-foreground ml-auto truncate text-xs">
+                            {busy ? `On ${busy}` : formatKg(v.capacityKg)}
+                          </span>
+                        </DropdownMenuItem>
+                      );
+                    })
+                  )}
+                </DropdownMenuGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger disabled={locked}>
+                <UserRound aria-hidden />
+                Change primary pro
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="w-60">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Drivers</DropdownMenuLabel>
+                  {drivers.map((driver) => {
+                    const busy = busyWith(
+                      (p) => p.route.primaryServiceProId === driver.id,
+                    );
+                    return (
+                      <DropdownMenuItem
+                        key={driver.id}
+                        onClick={() => actions.setPrimary(route.id, driver.id)}
+                      >
+                        <span className="truncate">{driver.name}</span>
+                        {busy ? (
+                          <span className="text-muted-foreground ml-auto truncate text-xs">
+                            On {busy}
+                          </span>
+                        ) : null}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => toast("Cleared — prototype only")}>
-              Clear stops
+            <DropdownMenuItem
+              variant="destructive"
+              disabled={locked || openStops === 0}
+              onClick={() => actions.clearRoute(route.id)}
+            >
+              <Undo2 aria-hidden />
+              Send open stops to backlog
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      {expanded ? (
-        jobs.length === 0 ? (
-          <p className="text-muted-foreground px-3 pb-3 pl-10 text-xs">
-            No stops on this route.
-          </p>
+      <div className="pointer-events-none relative mt-3 flex flex-wrap items-center gap-1.5">
+        {pro ? (
+          <span className="flex min-w-0 items-center gap-1.5">
+            <Avatar size="sm" className="size-6">
+              <AvatarFallback className="text-[10px] font-semibold">
+                {pro.initials}
+              </AvatarFallback>
+            </Avatar>
+            <span className="truncate text-xs font-medium">{pro.name}</span>
+          </span>
         ) : (
-          <ul className="divide-border/60 divide-y border-t border-dashed">
-            {jobs.map((job, index) => (
-              <li key={job.id}>
-                <StopRow
-                  job={job}
-                  index={index + 1}
-                  onClick={() => onSelectJob?.(job.id)}
-                />
-              </li>
-            ))}
-          </ul>
-        )
+          <span className="text-muted-foreground text-xs">No primary pro</span>
+        )}
+        {crew.map((member) => (
+          <Badge
+            key={member.pro.id}
+            variant="outline"
+            title={`${member.pro.name} · ${CREW_ROLE_LABEL[member.role]}`}
+          >
+            {member.pro.initials}
+            <span className="text-muted-foreground">
+              {CREW_ROLE_LABEL[member.role]}
+            </span>
+          </Badge>
+        ))}
+      </div>
+
+      <p className="text-muted-foreground pointer-events-none relative mt-2 flex items-center gap-1.5 text-xs">
+        <Truck className="size-3.5" aria-hidden />
+        {vehicle ? (
+          <>
+            <span className="text-foreground font-mono">{vehicle.plate}</span>·{" "}
+            {VEHICLE_CLASS[vehicle.vehicleClass]}
+          </>
+        ) : (
+          "No vehicle assigned"
+        )}
+      </p>
+
+      <div className="pointer-events-none relative mt-3 grid grid-cols-2 gap-3">
+        <CapacityBar
+          label="Stops"
+          value={plan.activeStops}
+          max={route.maxStops}
+          display={`${plan.activeStops}/${route.maxStops}`}
+        />
+        <CapacityBar
+          label="Load"
+          value={plan.loadKg}
+          max={vehicle?.capacityKg ?? 0}
+          display={
+            vehicle
+              ? `${formatKg(plan.loadKg)} / ${formatKg(vehicle.capacityKg)}`
+              : formatKg(plan.loadKg)
+          }
+        />
+      </div>
+
+      {offShift.length ? (
+        <p className="text-destructive pointer-events-none relative mt-2 flex items-center gap-1.5 text-xs font-medium">
+          <AlertTriangle className="size-3.5" aria-hidden />
+          {offShift.map((p) => p.name).join(", ")}{" "}
+          {offShift.length === 1 ? "has" : "have"} no shift this day
+        </p>
+      ) : null}
+      {plan.mismatches > 0 ? (
+        <p className="text-warning pointer-events-none relative mt-2 flex items-center gap-1.5 text-xs font-medium">
+          <AlertTriangle className="size-3.5" aria-hidden />
+          {plan.mismatches}{" "}
+          {plan.mismatches === 1 ? "stop needs" : "stops need"} a different
+          vehicle
+        </p>
       ) : null}
     </div>
   );
 }
 
-function StopRow({
-  job,
-  index,
-  onClick,
+/** Thin meter that warns from 90% and turns destructive over capacity. */
+function CapacityBar({
+  label,
+  value,
+  max,
+  display,
 }: {
-  job: Job;
-  index?: number;
-  onClick?: () => void;
+  label: string;
+  value: number;
+  max: number;
+  display: string;
 }) {
-  const status = JOB_STATUS[job.status];
-  const StatusIcon = status.icon;
-
+  const ratio = max > 0 ? value / max : 0;
+  const tone =
+    ratio > 1 ? "bg-destructive" : ratio >= 0.9 ? "bg-warning" : "bg-primary";
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="hover:bg-muted/60 flex w-full items-center gap-2 py-2 pr-2 pl-10 text-left transition-colors"
-    >
-      <span className="text-muted-foreground w-4 shrink-0 font-mono text-[11px] tabular-nums">
-        {index ?? "—"}
-      </span>
-      <span className="min-w-0 flex-1 leading-tight">
-        <span className="block truncate text-[13px] font-medium">
-          {job.customer}
+    <div className="min-w-0">
+      <p className="flex items-baseline justify-between gap-2 text-[11px]">
+        <span className="text-muted-foreground">{label}</span>
+        <span
+          className={cn(
+            "truncate font-mono tabular-nums",
+            ratio > 1 && "text-destructive",
+            ratio >= 0.9 && ratio <= 1 && "text-warning",
+          )}
+        >
+          {display}
         </span>
-        <span className="text-muted-foreground block truncate text-[11px]">
-          {job.ref} · {job.site}
-        </span>
+      </p>
+      <span className="bg-muted mt-1 block h-1.5 overflow-hidden rounded-full">
+        <span
+          className={cn("block h-full rounded-full transition-all", tone)}
+          style={{ width: `${Math.min(100, ratio * 100)}%` }}
+        />
       </span>
-      <Badge variant="neutral" className="shrink-0 font-mono text-[10px]">
-        {formatTime(job.scheduledFor)}
-      </Badge>
-      <StatusIcon
-        className="text-muted-foreground size-3.5 shrink-0"
-        aria-label={status.label}
-      />
-    </button>
+    </div>
   );
 }
 
-function SectionHeader({
-  label,
-  count,
-  open,
-  onToggle,
+function BacklogRow({
+  appointment,
+  plans,
+  showDate = false,
+  onSelect,
+  onAssign,
 }: {
-  label: string;
-  count: number;
-  open: boolean;
-  onToggle: () => void;
+  appointment: Appointment;
+  plans: RoutePlan[];
+  showDate?: boolean;
+  onSelect: () => void;
+  onAssign: (routeId: string) => void;
 }) {
+  const directory = useDirectory();
+  const customer = directory.customer(appointment.customerId);
+  const servicePoint = directory.servicePoint(appointment.servicePointId);
+  const [first, ...rest] = appointment.workOrders;
+
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-expanded={open}
-      className="bg-muted/50 hover:bg-muted text-muted-foreground sticky top-0 z-10 flex w-full items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold tracking-wide uppercase transition-colors"
-    >
-      {open ? (
-        <ChevronDown className="size-3.5" aria-hidden />
-      ) : (
-        <ChevronRight className="size-3.5" aria-hidden />
-      )}
-      {label}
-      <span className="ml-auto font-mono tabular-nums">{count}</span>
-    </button>
+    <div className="hover:bg-muted/50 flex items-start gap-2 px-3 py-2.5 transition-colors">
+      <button
+        type="button"
+        onClick={onSelect}
+        className="min-w-0 flex-1 text-left"
+      >
+        <span className="block truncate text-sm font-medium">
+          {customer?.name ?? appointment.ref}
+        </span>
+        <span className="text-muted-foreground block truncate text-xs">
+          {servicePoint?.location ?? servicePoint?.name}
+        </span>
+        <span className="text-muted-foreground mt-1 block text-xs tabular-nums">
+          {showDate ? `${formatDate(appointment.windowStart)} · ` : null}
+          {WINDOW_LABEL[appointment.window]}{" "}
+          {formatWindowRange(appointment.windowStart, appointment.windowEnd)}
+        </span>
+        <span className="mt-1.5 flex min-w-0 items-center gap-1.5">
+          <StreamTag stream={appointment.stream} className="h-5 text-[11px]" />
+          {first ? (
+            <span className="truncate text-xs">
+              {first.itemName}
+              {rest.length > 0 ? (
+                <span className="text-muted-foreground">
+                  {" "}
+                  +{rest.length} more
+                </span>
+              ) : null}
+            </span>
+          ) : null}
+        </span>
+      </button>
+
+      <AssignRouteMenu
+        appointment={appointment}
+        plans={plans}
+        onAssign={onAssign}
+        trigger={<Button variant="outline" size="xs" />}
+      >
+        <RouteIcon data-icon="inline-start" />
+        Assign
+      </AssignRouteMenu>
+    </div>
   );
 }
 
-function IconButton({
-  label,
-  icon: Icon,
-  onClick,
+/**
+ * The day's routes to put an appointment on. Routes whose truck can carry the
+ * work come first; the rest carry a mismatch hint. Locked routes can't change.
+ */
+export function AssignRouteMenu({
+  appointment,
+  plans,
+  onAssign,
+  trigger,
+  children,
+  label = "Assign to route",
 }: {
-  label: string;
-  icon: typeof ChevronDown;
-  onClick: () => void;
+  appointment: Appointment;
+  plans: RoutePlan[];
+  onAssign: (routeId: string) => void;
+  trigger: ReactElement;
+  children: ReactNode;
+  label?: string;
 }) {
+  const candidates = plans
+    .filter((p) => p.route.id !== appointment.routeId)
+    .map((p) => ({
+      plan: p,
+      fits: fitsVehicle(appointment, p.vehicle?.vehicleClass),
+    }))
+    .sort((a, b) => Number(b.fits) - Number(a.fits));
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      title={label}
-      className="text-muted-foreground hover:bg-muted hover:text-foreground flex size-7 items-center justify-center rounded-md transition-colors"
-    >
-      <Icon className="size-3.5" aria-hidden />
-    </button>
+    <DropdownMenu>
+      <DropdownMenuTrigger render={trigger}>{children}</DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-72">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{label}</DropdownMenuLabel>
+          {candidates.length === 0 ? (
+            <DropdownMenuItem disabled>
+              No other routes on this day
+            </DropdownMenuItem>
+          ) : (
+            candidates.map(({ plan, fits }) => (
+              <DropdownMenuItem
+                key={plan.route.id}
+                disabled={plan.locked}
+                onClick={() => onAssign(plan.route.id)}
+                className="items-start"
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    "mt-1.5 size-2 shrink-0 rounded-full",
+                    plan.colors.bar,
+                  )}
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate">{plan.route.name}</span>
+                  <span className="text-muted-foreground block text-xs">
+                    {plan.locked
+                      ? "Locked"
+                      : `${plan.activeStops}/${plan.route.maxStops} stops`}
+                    {!fits ? (
+                      <span className="text-warning"> · Vehicle mismatch</span>
+                    ) : null}
+                  </span>
+                </span>
+                {plan.locked ? <Lock className="mt-1" aria-hidden /> : null}
+                {!plan.locked && !fits ? (
+                  <AlertTriangle className="text-warning mt-1" aria-hidden />
+                ) : null}
+              </DropdownMenuItem>
+            ))
+          )}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

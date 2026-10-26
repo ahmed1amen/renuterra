@@ -5,22 +5,26 @@ import type {
   Container,
   ContainerType,
   Customer,
+  Route,
   ServiceItem,
   ServicePoint,
   Technician,
+  Vehicle,
 } from "@/mocks";
+import { useRoutes } from "../route-store";
 import {
   useContainers,
   useContainerTypes,
   useServiceItems,
 } from "./use-catalog";
 import { useCustomers } from "./use-customers";
+import { useVehicles } from "./use-routes-query";
 import { useServicePoints } from "./use-service-points";
 import { useTechnicians } from "./use-technicians";
 
 /**
  * Id lookups for the records appointments point at — customers, service
- * points, service pros, service items and containers — so list rows can
+ * points, service pros, routes, vehicles, service items and containers — so list rows can
  * resolve names without a query each.
  */
 export function useDirectory() {
@@ -30,6 +34,8 @@ export function useDirectory() {
   const items = useServiceItems();
   const containerTypes = useContainerTypes();
   const containers = useContainers();
+  const routes = useRoutes();
+  const vehicles = useVehicles();
 
   return useMemo(
     () => ({
@@ -39,13 +45,17 @@ export function useDirectory() {
       serviceItem: byId<ServiceItem>(items.data),
       containerType: byId<ContainerType>(containerTypes.data),
       container: byId<Container>(containers.data),
+      route: byId<Route>(routes.data),
+      vehicle: byId<Vehicle>(vehicles.data),
       isPending:
         customers.isPending ||
         servicePoints.isPending ||
         pros.isPending ||
         items.isPending ||
         containerTypes.isPending ||
-        containers.isPending,
+        containers.isPending ||
+        routes.isPending ||
+        vehicles.isPending,
     }),
     [
       customers.data,
@@ -54,12 +64,16 @@ export function useDirectory() {
       items.data,
       containerTypes.data,
       containers.data,
+      routes.data,
+      vehicles.data,
       customers.isPending,
       servicePoints.isPending,
       pros.isPending,
       items.isPending,
       containerTypes.isPending,
       containers.isPending,
+      routes.isPending,
+      vehicles.isPending,
     ],
   );
 }

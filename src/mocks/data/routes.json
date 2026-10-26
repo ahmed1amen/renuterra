@@ -1,0 +1,1587 @@
+[
+  {
+    "id": "route_20260831_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-08-31",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20410", "apt_20406", "apt_20503", "apt_20471"],
+    "tippingTrips": [
+      {
+        "id": "route_20260831_compactor-day_tip1",
+        "afterAppointmentId": "apt_20471",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T10:56:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 52.0,
+    "estimatedDriveMins": 114,
+    "lockedAt": "2026-08-30T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260831_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-08-31",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20420"],
+    "tippingTrips": [
+      {
+        "id": "route_20260831_compactor-night_tip1",
+        "afterAppointmentId": "apt_20420",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T19:23:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": "2026-08-30T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260831_hook-day",
+    "name": "Compactors & RORO day — Hook loader",
+    "date": "2026-08-31",
+    "primaryServiceProId": "tech_3",
+    "crew": [],
+    "vehicleId": "veh_3",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20508", "apt_20462", "apt_20483"],
+    "tippingTrips": [
+      {
+        "id": "route_20260831_hook-day_tip1",
+        "afterAppointmentId": "apt_20508",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T04:33:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260831_hook-day_tip2",
+        "afterAppointmentId": "apt_20462",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T05:30:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260831_hook-day_tip3",
+        "afterAppointmentId": "apt_20483",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T11:37:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 73.5,
+    "estimatedDriveMins": 162,
+    "lockedAt": "2026-08-30T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260831_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-08-31",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20451", "apt_20441"],
+    "tippingTrips": [
+      {
+        "id": "route_20260831_hook-night_tip1",
+        "afterAppointmentId": "apt_20451",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T18:26:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260831_hook-night_tip2",
+        "afterAppointmentId": "apt_20441",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T19:23:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": "2026-08-30T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260831_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-08-31",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20430"],
+    "tippingTrips": [
+      {
+        "id": "route_20260831_medical_tip1",
+        "afterAppointmentId": "apt_20430",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-08-31T06:05:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": "2026-08-30T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260831_skip",
+    "name": "Skips & deliveries — Skip loader",
+    "date": "2026-08-31",
+    "primaryServiceProId": "tech_5",
+    "crew": [],
+    "vehicleId": "veh_5",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 8,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20523"],
+    "tippingTrips": [
+      {
+        "id": "route_20260831_skip_tip1",
+        "afterAppointmentId": "apt_20523",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-08-31T13:55:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": "2026-08-30T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260901_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-01",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": [
+      "apt_20468",
+      "apt_20515",
+      "apt_20500",
+      "apt_20435",
+      "apt_20492",
+      "apt_20489"
+    ],
+    "tippingTrips": [
+      {
+        "id": "route_20260901_compactor-day_tip1",
+        "afterAppointmentId": "apt_20489",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-01T13:30:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 65.0,
+    "estimatedDriveMins": 143,
+    "lockedAt": "2026-08-31T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260901_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-01",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20455", "apt_20425"],
+    "tippingTrips": [
+      {
+        "id": "route_20260901_compactor-night_tip1",
+        "afterAppointmentId": "apt_20425",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-01T19:23:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": "2026-08-31T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260901_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-01",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20415", "apt_20442"],
+    "tippingTrips": [
+      {
+        "id": "route_20260901_hook-night_tip1",
+        "afterAppointmentId": "apt_20415",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-01T18:23:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260901_hook-night_tip2",
+        "afterAppointmentId": "apt_20442",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-01T19:19:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": "2026-08-31T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260901_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-09-01",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20438"],
+    "tippingTrips": [
+      {
+        "id": "route_20260901_medical_tip1",
+        "afterAppointmentId": "apt_20438",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-09-01T03:29:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": "2026-08-31T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260902_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-02",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": [
+      "apt_20411",
+      "apt_20400",
+      "apt_20493",
+      "apt_20504",
+      "apt_20472"
+    ],
+    "tippingTrips": [
+      {
+        "id": "route_20260902_compactor-day_tip1",
+        "afterAppointmentId": "apt_20472",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-02T13:41:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 58.5,
+    "estimatedDriveMins": 129,
+    "lockedAt": "2026-09-01T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260902_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-02",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20418", "apt_20456", "apt_20421", "apt_20459"],
+    "tippingTrips": [
+      {
+        "id": "route_20260902_compactor-night_tip1",
+        "afterAppointmentId": "apt_20459",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-02T19:20:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 45.5,
+    "estimatedDriveMins": 100,
+    "lockedAt": "2026-09-01T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260902_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-02",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20443"],
+    "tippingTrips": [
+      {
+        "id": "route_20260902_hook-night_tip1",
+        "afterAppointmentId": "apt_20443",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-02T19:32:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": "2026-09-01T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260902_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-09-02",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20431", "apt_20467"],
+    "tippingTrips": [
+      {
+        "id": "route_20260902_medical_tip1",
+        "afterAppointmentId": "apt_20467",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-09-02T06:04:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": "2026-09-01T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260902_skip",
+    "name": "Skips & deliveries — Skip loader",
+    "date": "2026-09-02",
+    "primaryServiceProId": "tech_5",
+    "crew": [],
+    "vehicleId": "veh_5",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 8,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20520", "apt_20512", "apt_20487"],
+    "tippingTrips": [
+      {
+        "id": "route_20260902_skip_tip1",
+        "afterAppointmentId": "apt_20520",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-02T03:31:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260902_skip_tip2",
+        "afterAppointmentId": "apt_20512",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-02T05:05:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260902_skip_tip3",
+        "afterAppointmentId": "apt_20487",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-02T13:11:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 73.5,
+    "estimatedDriveMins": 162,
+    "lockedAt": "2026-09-01T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260903_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-03",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_10",
+        "role": "trainee"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20407", "apt_20476"],
+    "tippingTrips": [
+      {
+        "id": "route_20260903_compactor-day_tip1",
+        "afterAppointmentId": "apt_20476",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T12:07:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": "2026-09-02T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260903_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-03",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20426", "apt_20457"],
+    "tippingTrips": [
+      {
+        "id": "route_20260903_compactor-night_tip1",
+        "afterAppointmentId": "apt_20457",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T19:16:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": "2026-09-02T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260903_hook-day",
+    "name": "Compactors & RORO day — Hook loader",
+    "date": "2026-09-03",
+    "primaryServiceProId": "tech_3",
+    "crew": [],
+    "vehicleId": "veh_3",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20509", "apt_20478", "apt_20463", "apt_20484"],
+    "tippingTrips": [
+      {
+        "id": "route_20260903_hook-day_tip1",
+        "afterAppointmentId": "apt_20509",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T03:56:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260903_hook-day_tip2",
+        "afterAppointmentId": "apt_20478",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T05:02:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260903_hook-day_tip3",
+        "afterAppointmentId": "apt_20463",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T05:46:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260903_hook-day_tip4",
+        "afterAppointmentId": "apt_20484",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T13:26:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 94.0,
+    "estimatedDriveMins": 207,
+    "lockedAt": "2026-09-02T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260903_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-03",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20452", "apt_20444"],
+    "tippingTrips": [
+      {
+        "id": "route_20260903_hook-night_tip1",
+        "afterAppointmentId": "apt_20452",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T17:34:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260903_hook-night_tip2",
+        "afterAppointmentId": "apt_20444",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T18:18:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": "2026-09-02T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260903_tanker",
+    "name": "Oil & sludge — Tanker",
+    "date": "2026-09-03",
+    "primaryServiceProId": "tech_4",
+    "crew": [],
+    "vehicleId": "veh_7",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "maxStops": 4,
+    "colorIndex": 6,
+    "appointmentIds": ["apt_20518"],
+    "tippingTrips": [
+      {
+        "id": "route_20260903_tanker_tip1",
+        "afterAppointmentId": "apt_20518",
+        "facility": "Jebel Ali Waste Oil Treatment Plant",
+        "plannedStart": "2026-09-03T05:19:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": "2026-09-02T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260904_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-04",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_10",
+        "role": "trainee"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": [
+      "apt_20501",
+      "apt_20412",
+      "apt_20505",
+      "apt_20494",
+      "apt_20516",
+      "apt_20469",
+      "apt_20526",
+      "apt_20473"
+    ],
+    "tippingTrips": [
+      {
+        "id": "route_20260904_compactor-day_tip1",
+        "afterAppointmentId": "apt_20473",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T10:43:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 78.0,
+    "estimatedDriveMins": 172,
+    "lockedAt": "2026-09-03T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260904_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-04",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20422"],
+    "tippingTrips": [
+      {
+        "id": "route_20260904_compactor-night_tip1",
+        "afterAppointmentId": "apt_20422",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T19:03:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260904_hook-day",
+    "name": "Compactors & RORO day — Hook loader",
+    "date": "2026-09-04",
+    "primaryServiceProId": "tech_3",
+    "crew": [],
+    "vehicleId": "veh_3",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20479", "apt_20525"],
+    "tippingTrips": [
+      {
+        "id": "route_20260904_hook-day_tip1",
+        "afterAppointmentId": "apt_20479",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T06:05:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260904_hook-day_tip2",
+        "afterAppointmentId": "apt_20525",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T09:00:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260904_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-04",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20445"],
+    "tippingTrips": [
+      {
+        "id": "route_20260904_hook-night_tip1",
+        "afterAppointmentId": "apt_20445",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T18:45:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260904_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-09-04",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20432", "apt_20439"],
+    "tippingTrips": [
+      {
+        "id": "route_20260904_medical_tip1",
+        "afterAppointmentId": "apt_20439",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-09-04T05:54:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": "2026-09-03T17:00:00.000Z",
+    "lockedBy": "usr_1"
+  },
+  {
+    "id": "route_20260905_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-05",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20436", "apt_20495", "apt_20401", "apt_20490"],
+    "tippingTrips": [
+      {
+        "id": "route_20260905_compactor-day_tip1",
+        "afterAppointmentId": "apt_20490",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-05T13:03:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 52.0,
+    "estimatedDriveMins": 114,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260905_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-05",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20460"],
+    "tippingTrips": [
+      {
+        "id": "route_20260905_compactor-night_tip1",
+        "afterAppointmentId": "apt_20460",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-05T19:29:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260905_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-05",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20446"],
+    "tippingTrips": [
+      {
+        "id": "route_20260905_hook-night_tip1",
+        "afterAppointmentId": "apt_20446",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-05T18:10:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260905_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-09-05",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20522"],
+    "tippingTrips": [
+      {
+        "id": "route_20260905_medical_tip1",
+        "afterAppointmentId": "apt_20522",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-09-05T06:22:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260905_skip",
+    "name": "Skips & deliveries — Skip loader",
+    "date": "2026-09-05",
+    "primaryServiceProId": "tech_5",
+    "crew": [],
+    "vehicleId": "veh_5",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 8,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20466", "apt_20513"],
+    "tippingTrips": [
+      {
+        "id": "route_20260905_skip_tip1",
+        "afterAppointmentId": "apt_20466",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-05T03:20:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260905_skip_tip2",
+        "afterAppointmentId": "apt_20513",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-05T04:47:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260906_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-06",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20496", "apt_20402"],
+    "tippingTrips": [
+      {
+        "id": "route_20260906_compactor-day_tip1",
+        "afterAppointmentId": "apt_20402",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-06T04:52:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260906_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-06",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20447"],
+    "tippingTrips": [
+      {
+        "id": "route_20260906_hook-night_tip1",
+        "afterAppointmentId": "apt_20447",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-06T20:29:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260907_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-07",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_10",
+        "role": "trainee"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20403", "apt_20506", "apt_20408", "apt_20474"],
+    "tippingTrips": [
+      {
+        "id": "route_20260907_compactor-day_tip1",
+        "afterAppointmentId": "apt_20474",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-07T13:47:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 52.0,
+    "estimatedDriveMins": 114,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260907_hook-day",
+    "name": "Compactors & RORO day — Hook loader",
+    "date": "2026-09-07",
+    "primaryServiceProId": "tech_3",
+    "crew": [],
+    "vehicleId": "veh_3",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20510", "apt_20480", "apt_20485"],
+    "tippingTrips": [
+      {
+        "id": "route_20260907_hook-day_tip1",
+        "afterAppointmentId": "apt_20510",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-07T03:24:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260907_hook-day_tip2",
+        "afterAppointmentId": "apt_20480",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-07T04:01:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260907_hook-day_tip3",
+        "afterAppointmentId": "apt_20485",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-07T13:32:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 73.5,
+    "estimatedDriveMins": 162,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260907_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-07",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20448"],
+    "tippingTrips": [
+      {
+        "id": "route_20260907_hook-night_tip1",
+        "afterAppointmentId": "apt_20448",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-07T20:44:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260907_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-09-07",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20433"],
+    "tippingTrips": [
+      {
+        "id": "route_20260907_medical_tip1",
+        "afterAppointmentId": "apt_20433",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-09-07T03:52:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260908_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-08",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": [
+      "apt_20502",
+      "apt_20437",
+      "apt_20470",
+      "apt_20498",
+      "apt_20491"
+    ],
+    "tippingTrips": [
+      {
+        "id": "route_20260908_compactor-day_tip1",
+        "afterAppointmentId": "apt_20491",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-08T11:46:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 58.5,
+    "estimatedDriveMins": 129,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260908_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-08",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20428"],
+    "tippingTrips": [
+      {
+        "id": "route_20260908_compactor-night_tip1",
+        "afterAppointmentId": "apt_20428",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-08T18:29:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260908_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-08",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20449", "apt_20417"],
+    "tippingTrips": [
+      {
+        "id": "route_20260908_hook-night_tip1",
+        "afterAppointmentId": "apt_20449",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-08T18:13:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260908_hook-night_tip2",
+        "afterAppointmentId": "apt_20417",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-08T19:13:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260908_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-09-08",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20440"],
+    "tippingTrips": [
+      {
+        "id": "route_20260908_medical_tip1",
+        "afterAppointmentId": "apt_20440",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-09-08T04:14:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260908_skip",
+    "name": "Skips & deliveries — Skip loader",
+    "date": "2026-09-08",
+    "primaryServiceProId": "tech_5",
+    "crew": [],
+    "vehicleId": "veh_5",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 8,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20521"],
+    "tippingTrips": [
+      {
+        "id": "route_20260908_skip_tip1",
+        "afterAppointmentId": "apt_20521",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-08T05:04:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260909_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-09",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20405", "apt_20414", "apt_20507", "apt_20475"],
+    "tippingTrips": [
+      {
+        "id": "route_20260909_compactor-day_tip1",
+        "afterAppointmentId": "apt_20475",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-09T13:38:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 52.0,
+    "estimatedDriveMins": 114,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260909_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-09",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20424", "apt_20461", "apt_20419"],
+    "tippingTrips": [
+      {
+        "id": "route_20260909_compactor-night_tip1",
+        "afterAppointmentId": "apt_20419",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-09T20:12:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 45.5,
+    "estimatedDriveMins": 100,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260909_hook-day",
+    "name": "Compactors & RORO day — Hook loader",
+    "date": "2026-09-09",
+    "primaryServiceProId": "tech_3",
+    "crew": [],
+    "vehicleId": "veh_3",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20481"],
+    "tippingTrips": [
+      {
+        "id": "route_20260909_hook-day_tip1",
+        "afterAppointmentId": "apt_20481",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-09T03:38:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260909_medical",
+    "name": "Medical & hazardous — Box truck",
+    "date": "2026-09-09",
+    "primaryServiceProId": "tech_6",
+    "crew": [],
+    "vehicleId": "veh_6",
+    "startTime": "06:00",
+    "endTime": "16:00",
+    "maxStops": 15,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20434"],
+    "tippingTrips": [
+      {
+        "id": "route_20260909_medical_tip1",
+        "afterAppointmentId": "apt_20434",
+        "facility": "Al Qusais Medical Waste Treatment Plant",
+        "plannedStart": "2026-09-09T03:45:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260909_skip",
+    "name": "Skips & deliveries — Skip loader",
+    "date": "2026-09-09",
+    "primaryServiceProId": "tech_5",
+    "crew": [],
+    "vehicleId": "veh_5",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 8,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20514", "apt_20524"],
+    "tippingTrips": [
+      {
+        "id": "route_20260909_skip_tip1",
+        "afterAppointmentId": "apt_20514",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-09T03:23:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260909_skip_tip2",
+        "afterAppointmentId": "apt_20524",
+        "facility": "Al Lusaily C&D Landfill",
+        "plannedStart": "2026-09-09T13:14:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260910_compactor-day",
+    "name": "Bins day — Compactor",
+    "date": "2026-09-10",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20409"],
+    "tippingTrips": [
+      {
+        "id": "route_20260910_compactor-day_tip1",
+        "afterAppointmentId": "apt_20409",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-10T04:31:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260910_compactor-night",
+    "name": "Bins night — Compactor",
+    "date": "2026-09-10",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 20,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20429", "apt_20458"],
+    "tippingTrips": [
+      {
+        "id": "route_20260910_compactor-night_tip1",
+        "afterAppointmentId": "apt_20458",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-10T19:10:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 39.0,
+    "estimatedDriveMins": 86,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260910_hook-day",
+    "name": "Compactors & RORO day — Hook loader",
+    "date": "2026-09-10",
+    "primaryServiceProId": "tech_3",
+    "crew": [],
+    "vehicleId": "veh_3",
+    "startTime": "06:00",
+    "endTime": "18:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20465"],
+    "tippingTrips": [
+      {
+        "id": "route_20260910_hook-day_tip1",
+        "afterAppointmentId": "apt_20465",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-10T04:02:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260910_hook-night",
+    "name": "Mall compactors night — Hook loader",
+    "date": "2026-09-10",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "startTime": "20:00",
+    "endTime": "24:00",
+    "maxStops": 6,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20450", "apt_20454"],
+    "tippingTrips": [
+      {
+        "id": "route_20260910_hook-night_tip1",
+        "afterAppointmentId": "apt_20450",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-10T18:08:00.000Z",
+        "durationMins": 45
+      },
+      {
+        "id": "route_20260910_hook-night_tip2",
+        "afterAppointmentId": "apt_20454",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-10T18:50:00.000Z",
+        "durationMins": 45
+      }
+    ],
+    "estimatedKm": 53.0,
+    "estimatedDriveMins": 117,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "route_20260910_tanker",
+    "name": "Oil & sludge — Tanker",
+    "date": "2026-09-10",
+    "primaryServiceProId": "tech_4",
+    "crew": [],
+    "vehicleId": "veh_7",
+    "startTime": "06:00",
+    "endTime": "14:00",
+    "maxStops": 4,
+    "colorIndex": 6,
+    "appointmentIds": ["apt_20519"],
+    "tippingTrips": [
+      {
+        "id": "route_20260910_tanker_tip1",
+        "afterAppointmentId": "apt_20519",
+        "facility": "Jebel Ali Waste Oil Treatment Plant",
+        "plannedStart": "2026-09-10T04:28:00.000Z",
+        "durationMins": 30
+      }
+    ],
+    "estimatedKm": 32.5,
+    "estimatedDriveMins": 72,
+    "lockedAt": null,
+    "lockedBy": null
+  }
+]

@@ -25,7 +25,8 @@ export type BookingInput = {
   window: ArrivalWindow;
   windowStart: string;
   windowEnd: string;
-  serviceProId: string | null;
+  /** `null` leaves it in the backlog for dispatch to route. */
+  routeId: string | null;
   notes?: string;
   originalAppointmentId?: string;
 };
@@ -57,8 +58,7 @@ function toAppointment(input: BookingInput): Appointment {
       10,
       Math.round(5 + item.minutesPerUnit * line.quantity),
     ),
-    serviceProId: input.serviceProId,
-    vehiclePlate: null,
+    routeId: input.routeId,
     workOrders: [workOrder],
     startedAt: null,
     completedAt: null,

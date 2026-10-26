@@ -1,0 +1,58 @@
+[
+  {
+    "id": "veh_1",
+    "plate": "DXB P 48213",
+    "vehicleClass": "compactor",
+    "capacityKg": 10000,
+    "status": "in-service"
+  },
+  {
+    "id": "veh_2",
+    "plate": "DXB K 21907",
+    "vehicleClass": "compactor",
+    "capacityKg": 10000,
+    "status": "in-service"
+  },
+  {
+    "id": "veh_3",
+    "plate": "DXB R 66042",
+    "vehicleClass": "hook-loader",
+    "capacityKg": 16000,
+    "status": "in-service"
+  },
+  {
+    "id": "veh_4",
+    "plate": "DXB H 52044",
+    "vehicleClass": "hook-loader",
+    "capacityKg": 16000,
+    "status": "in-service"
+  },
+  {
+    "id": "veh_5",
+    "plate": "DXB T 39021",
+    "vehicleClass": "skip-loader",
+    "capacityKg": 8000,
+    "status": "in-service"
+  },
+  {
+    "id": "veh_6",
+    "plate": "DXB M 70318",
+    "vehicleClass": "box-truck",
+    "capacityKg": 2500,
+    "status": "in-service"
+  },
+  {
+    "id": "veh_7",
+    "plate": "DXB L 15530",
+    "vehicleClass": "tanker",
+    "capacityKg": 9000,
+    "status": "in-service"
+  },
+  {
+    "id": "veh_8",
+    "plate": "DXB P 48990",
+    "vehicleClass": "compactor",
+    "capacityKg": 10000,
+    "status": "maintenance"
+  }
+]

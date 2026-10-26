@@ -15,6 +15,7 @@ export { DEAL_STAGES, DEALS } from "./deals";
 export { JOBS } from "./jobs";
 export { LEADS } from "./leads";
 export { MOCK_NOW, mockFetch } from "./mock-fetch";
+export { ROUTES } from "./routes";
 export {
   DEFAULT_MOCK_SCENARIO,
   isMockScenario,
@@ -24,6 +25,8 @@ export {
 } from "./scenario";
 export { findServiceItem, SERVICE_ITEMS } from "./service-items";
 export { findServicePoint, SERVICE_POINTS } from "./service-points";
+export { SHIFT_TEMPLATES, SHIFTS } from "./shifts";
 export { findTechnician, TECHNICIANS } from "./technicians";
 export type * from "./types";
 export { findUser, USERS } from "./users";
+export { VEHICLES } from "./vehicles";

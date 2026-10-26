@@ -89,7 +89,7 @@ export default function Appointments() {
         (a) => a.status === "failed" && toDubaiDayKey(a.windowStart) >= weekAgo,
       ).length,
       unassigned: all.filter(
-        (a) => !a.serviceProId && !CLOSED_STATUSES.includes(a.status),
+        (a) => !a.routeId && !CLOSED_STATUSES.includes(a.status),
       ).length,
     };
   }, [all]);
@@ -173,11 +173,11 @@ export default function Appointments() {
           hint="Last 7 days"
         />
         <KpiCard
-          label="Unassigned"
+          label="In backlog"
           value={
             appointments.isSuccess ? formatCount(stats.unassigned) : undefined
           }
-          hint="Waiting for dispatch"
+          hint="Not on a route yet"
         />
       </div>
 

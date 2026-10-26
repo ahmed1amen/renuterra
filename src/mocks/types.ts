@@ -102,7 +102,15 @@ export type Technician = {
   shift: string;
   status: TechnicianStatus;
   skills: string[];
+  /** Drivers can be a route's primary; loaders and trainees ride along as crew. */
+  role?: "driver" | "loader";
+  /** Shift template id per weekday — what Autofill generates shifts from. */
+  defaultSchedule?: Partial<Record<DayOfWeek, string>>;
+  licences?: { type: LicenceType; expiresOn: string }[];
+  teamId?: string | null;
 };
+
+export type LicenceType = "heavy_vehicle" | "hazmat" | "medical_waste";
 
 export type JobStatus =
   | "unassigned"
@@ -487,9 +495,11 @@ export type Appointment = {
   /** Planned arrival inside the window. */
   plannedStart: string;
   durationMins: number;
-  /** A `Technician` id — shown as the service pro. */
-  serviceProId: string | null;
-  vehiclePlate: string | null;
+  /**
+   * The route this visit is on; its service pro is the route's primary.
+   * `null` = not routed yet (backlog).
+   */
+  routeId: string | null;
   workOrders: WorkOrder[];
   startedAt: string | null;
   completedAt: string | null;
@@ -501,4 +511,89 @@ export type Appointment = {
   createdAt: string;
   /** A `User` id, or "system" for recurring generation. */
   bookedBy: string;
+};
+
+export type VehicleStatus = "in-service" | "maintenance" | "out-of-service";
+
+/** A truck. Its class decides which service items it can carry. */
+export type Vehicle = {
+  id: string;
+  plate: string;
+  vehicleClass: VehicleClass;
+  /** Payload. */
+  capacityKg: number;
+  status: VehicleStatus;
+};
+
+export type RouteCrewRole = "secondary" | "trainee";
+
+/** A trip to a disposal facility to empty the truck mid-route. */
+export type TippingTrip = {
+  id: string;
+  /** The stop after which the truck goes to tip. */
+  afterAppointmentId: string;
+  facility: string;
+  plannedStart: string;
+  durationMins: number;
+};
+
+/**
+ * One day's run: a name and a primary service pro who works through its
+ * appointments in order, plus optional crew, the truck and tipping trips.
+ */
+export type Route = {
+  id: string;
+  name: string;
+  /** Dubai calendar day, `2026-09-04`. */
+  date: string;
+  /** A `Technician` id — owns the route and every appointment on it. */
+  primaryServiceProId: string;
+  crew: { serviceProId: string; role: RouteCrewRole }[];
+  vehicleId: string | null;
+  /** Local `HH:mm`; `24:00` for a run that ends at midnight. */
+  startTime: string;
+  endTime: string;
+  maxStops: number;
+  /** Index into the route colour palette. */
+  colorIndex: number;
+  /** Stops in the order they're driven. */
+  appointmentIds: string[];
+  tippingTrips: TippingTrip[];
+  estimatedKm: number;
+  estimatedDriveMins: number;
+  lockedAt: string | null;
+  lockedBy: string | null;
+};
+
+/** What kind of availability a shift gives. Leave = not available that day. */
+export type ShiftType = "day" | "night" | "on-call" | "training" | "leave";
+
+/** A reusable daily window, e.g. "Night 20:00–04:00". */
+export type ShiftTemplate = {
+  id: string;
+  name: string;
+  type: ShiftType;
+  /** Local `HH:mm`. An end before the start runs past midnight. */
+  startTime: string;
+  endTime: string;
+  active: boolean;
+};
+
+/**
+ * A service pro's availability on one day. Only pros with a working shift
+ * that day can be on a route.
+ */
+export type Shift = {
+  id: string;
+  serviceProId: string;
+  /** Dubai calendar day the shift starts on, `2026-09-04`. */
+  date: string;
+  type: ShiftType;
+  /** `null` for leave. An end before the start runs past midnight. */
+  startTime: string | null;
+  endTime: string | null;
+  templateId: string | null;
+  /** Supervising pro on a training shift. */
+  trainerId: string | null;
+  note?: string;
 };

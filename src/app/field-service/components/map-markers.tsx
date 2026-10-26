@@ -1,66 +1,67 @@
 "use client";
 
 import { Truck } from "lucide-react";
+import type { StatusTone } from "@/components/shared";
 import { cn } from "@/lib/utils";
-import type { Job, JobStatus, Technician } from "@/mocks";
+import type { AppointmentStatus } from "@/mocks";
+import { APPOINTMENT_STATUS } from "./appointment-meta";
 
 /**
  * Status shows as a small dot on the pin's shoulder — the pin body itself
  * carries the route colour, so the map answers "whose run is this?" first.
- * Fixed colours rather than theme tokens: a marker has to hold its meaning
- * against the basemap in both themes, like the waste streams do.
+ * Not-started stops get no dot, so the live ones stand out.
  */
-const STATUS_DOT: Record<JobStatus, string | null> = {
-  unassigned: null,
-  scheduled: null,
-  "en-route": "bg-sky-500",
-  "on-site": "bg-sky-600",
-  completed: "bg-emerald-500",
-  blocked: "bg-orange-500",
+const STATUS_DOT: Record<StatusTone, string | null> = {
+  neutral: null,
+  info: "bg-info",
+  success: "bg-success",
+  warning: "bg-warning",
+  destructive: "bg-destructive",
 };
 
-/** Anything not on a route — the pin that should catch the dispatcher's eye. */
-const UNASSIGNED_FILL = "fill-red-600";
+/** Anything in the backlog — the pin that should catch the dispatcher's eye. */
+const BACKLOG_FILL = "fill-destructive";
+
+const PIN_PATH =
+  "M13 33.5C13 33.5 25 20.6 25 13A12 12 0 1 0 1 13c0 7.6 12 20.5 12 20.5Z";
 
 /**
  * A teardrop pin anchored at its tip, so the point sits exactly on the
  * coordinate however the map is zoomed.
  */
-export function JobPin({
-  job,
+export function StopPin({
   stop,
   fill,
+  status,
+  label,
   selected = false,
   onClick,
 }: {
-  job: Job;
   /**
-   * Position in the service pro's run. Omitted when the job is not on a
-   * route — those pins show an alert glyph instead of an order.
+   * Position in the route's run. Omitted for a backlog appointment — those
+   * pins show an alert glyph instead of an order.
    */
   stop?: number;
-  /** Route colour for the pin body; unassigned pins ignore it. */
+  /** Route colour (`fill-*`) for the pin body; backlog pins ignore it. */
   fill?: string;
+  status: AppointmentStatus;
+  /** "APT-20412 · Customer · Service point" — the tooltip and accessible name. */
+  label: string;
   selected?: boolean;
   onClick?: () => void;
 }) {
   const routed = stop !== undefined;
-  const dot = STATUS_DOT[job.status];
+  const meta = APPOINTMENT_STATUS[status];
+  const dot = STATUS_DOT[meta.tone];
+  const title = routed ? `Stop ${stop} · ${label}` : `Backlog · ${label}`;
 
   return (
     <button
       type="button"
       onClick={onClick}
-      title={
-        routed
-          ? `Stop ${stop} · ${job.ref} · ${job.customer}`
-          : `Unassigned · ${job.ref} · ${job.customer}`
-      }
-      aria-label={
-        routed
-          ? `Stop ${stop}, ${job.ref}, ${job.customer}, ${job.site}`
-          : `Unassigned, ${job.ref}, ${job.customer}, ${job.site}`
-      }
+      title={`${title} · ${meta.label}`}
+      aria-label={`${title}, ${meta.label}`}
+      aria-pressed={selected}
       className={cn(
         "group absolute -translate-x-1/2 -translate-y-full outline-none",
         selected ? "z-20" : routed ? "z-10" : "z-[15]",
@@ -74,17 +75,18 @@ export function JobPin({
         className={cn(
           "drop-shadow-sm transition-transform",
           "group-hover:-translate-y-0.5 group-focus-visible:-translate-y-0.5",
-          selected && "-translate-y-0.5",
+          selected && "-translate-y-1 scale-115",
         )}
       >
-        <title>{job.ref}</title>
+        <title>{title}</title>
         <path
-          d="M13 33.5C13 33.5 25 20.6 25 13A12 12 0 1 0 1 13c0 7.6 12 20.5 12 20.5Z"
+          d={PIN_PATH}
           className={cn(
-            routed ? (fill ?? "fill-slate-500") : UNASSIGNED_FILL,
-            "stroke-white/90",
+            routed ? (fill ?? "fill-muted-foreground") : BACKLOG_FILL,
+            selected ? "stroke-foreground" : "stroke-white/90",
           )}
           strokeWidth={selected ? 2.5 : 1.5}
+          strokeDasharray={routed ? undefined : "3 2"}
         />
         <text
           x="13"
@@ -100,7 +102,6 @@ export function JobPin({
       {dot ? (
         <span
           aria-hidden
-          title={job.status}
           className={cn(
             "absolute top-0 right-0 size-2.5 rounded-full ring-2 ring-white",
             dot,
@@ -111,66 +112,72 @@ export function JobPin({
   );
 }
 
-/** The technician's vehicle — a circular badge, centred on the coordinate. */
+/** A route's truck — a circular badge in the route colour, centred on the coordinate. */
 export function VehicleMarker({
-  technician,
+  label,
+  className,
+  selected = false,
   onClick,
 }: {
-  technician: Technician;
+  /** "Route name · plate" — tooltip and accessible name. */
+  label: string;
+  /** Route colour (`bg-*`). */
+  className?: string;
+  selected?: boolean;
   onClick?: () => void;
 }) {
-  const off = technician.status === "off-shift";
   return (
     <button
       type="button"
       onClick={onClick}
-      title={`${technician.name} · ${technician.zone}`}
-      aria-label={`${technician.name}, ${technician.status}`}
+      title={label}
+      aria-label={label}
+      aria-pressed={selected}
       className="group absolute z-30 -translate-x-1/2 -translate-y-1/2 outline-none"
     >
       <span
         className={cn(
-          "flex size-8 items-center justify-center rounded-full text-white shadow-md ring-2 ring-white transition-transform",
+          "flex size-8 items-center justify-center rounded-full text-white shadow-md ring-2 transition-transform",
           "group-hover:scale-110 group-focus-visible:scale-110",
-          off ? "bg-slate-400" : "bg-navy-700",
+          selected ? "ring-foreground scale-110" : "ring-white",
+          className ?? "bg-navy-700",
         )}
       >
         <Truck className="size-4" aria-hidden />
       </span>
-      <span
-        aria-hidden
-        className={cn(
-          "absolute -right-0.5 -bottom-0.5 size-3 rounded-full ring-2 ring-white",
-          off ? "bg-slate-400" : "bg-emerald-500",
-        )}
-      />
     </button>
   );
 }
 
-/** How to read the pins: order on a route, or an alert when on none. */
+/** How to read the pins: order on a route, the backlog, trucks and status. */
 export function MapLegend({ className }: { className?: string }) {
   const dots: { label: string; className: string }[] = [
-    { label: "En route / on site", className: "bg-sky-500" },
-    { label: "Completed", className: "bg-emerald-500" },
-    { label: "Blocked", className: "bg-orange-500" },
+    { label: "En route / in progress", className: "bg-info" },
+    { label: "Completed", className: "bg-success" },
+    { label: "Failed visit", className: "bg-destructive" },
   ];
 
   return (
     <div
       className={cn(
-        "border-border bg-card/90 w-46 rounded-lg border p-2.5 shadow-sm backdrop-blur",
+        "border-border bg-card/90 w-48 rounded-lg border p-2.5 shadow-sm backdrop-blur",
         className,
       )}
     >
       <ul className="flex flex-col gap-1.5 text-xs">
         <li className="flex items-center gap-2">
-          <PinGlyph className="fill-slate-500" glyph="1" />
+          <PinGlyph className="fill-muted-foreground" glyph="1" />
           Stop order on a route
         </li>
         <li className="flex items-center gap-2">
-          <PinGlyph className={UNASSIGNED_FILL} glyph="!" />
-          Not on a route
+          <PinGlyph className={BACKLOG_FILL} glyph="!" />
+          Backlog
+        </li>
+        <li className="flex items-center gap-2">
+          <span className="bg-navy-700 flex size-3.5 items-center justify-center rounded-full text-white">
+            <Truck className="size-2" aria-hidden />
+          </span>
+          Route vehicle
         </li>
       </ul>
 
@@ -196,10 +203,7 @@ function PinGlyph({ className, glyph }: { className: string; glyph: string }) {
   return (
     <svg width="11" height="14" viewBox="0 0 26 34" aria-hidden>
       <title>{glyph}</title>
-      <path
-        d="M13 33.5C13 33.5 25 20.6 25 13A12 12 0 1 0 1 13c0 7.6 12 20.5 12 20.5Z"
-        className={className}
-      />
+      <path d={PIN_PATH} className={className} />
       <text
         x="13"
         y="18"

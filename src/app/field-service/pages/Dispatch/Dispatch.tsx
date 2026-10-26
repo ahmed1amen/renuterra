@@ -1,200 +1,171 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { useDispatchBoard } from "@/features/field-service";
-import { cn } from "@/lib/utils";
-import { MOCK_NOW } from "@/mocks";
+import { CalendarX2, Plus } from "lucide-react";
+import { useCallback, useState } from "react";
+import { toast } from "sonner";
+import { EmptyState, ErrorState } from "@/components/shared";
+import { Button } from "@/components/ui/button";
+import type { Appointment, WasteStreamId } from "@/mocks";
+import { RouteSidebar, RouteTimeline } from "../../components";
+import { TODAY, toDayKey } from "../../utils";
 import {
-  DateStrip,
-  JobPin,
-  MapLegend,
-  OsmMap,
-  type Route,
-  type RouteLine,
-  RouteLines,
-  RouteSidebar,
-  RouteTimeline,
-  routeColors,
-  VehicleMarker,
-} from "../../components";
-import { isSameDay } from "../../utils";
-
-/** Dubai — where the service points in the fixtures are. */
-const MAP_CENTER = { lat: 25.14, lng: 55.23 };
+  BoardSkeleton,
+  DispatchHeader,
+  DispatchMap,
+  NewRouteDialog,
+  SelectedAppointmentCard,
+} from "./components";
+import { useBoardActions, useDispatchDay } from "./hooks";
 
 export default function Dispatch() {
-  const [date, setDate] = useState(() => new Date(MOCK_NOW));
-  const [selectedJob, setSelectedJob] = useState<string | null>(null);
-  const [selectedRoute, setSelectedRoute] = useState<string | null>(null);
-  const { jobs, technicians, isPending } = useDispatchBoard();
+  const [date, setDate] = useState(TODAY);
+  const [stream, setStream] = useState<WasteStreamId | null>(null);
+  const [selectedAppointmentId, setSelectedAppointment] = useState<
+    string | null
+  >(null);
+  const [selectedRouteId, setSelectedRoute] = useState<string | null>(null);
+  const [tab, setTab] = useState<"routes" | "backlog">("routes");
+  const [creatingRoute, setCreatingRoute] = useState(false);
 
-  const dayJobs = useMemo(
-    () => jobs.filter((job) => isSameDay(new Date(job.scheduledFor), date)),
-    [jobs, date],
+  const day = useDispatchDay(toDayKey(date));
+  const { plans, backlog, overdue } = day;
+  const { autoPlan, ...actions } = useBoardActions(plans, backlog);
+
+  const matches = useCallback(
+    (apt: Appointment) => stream === null || apt.stream === stream,
+    [stream],
   );
 
-  /** One route per technician: their stops for the selected day, in order. */
-  const routes = useMemo<Route[]>(
-    () =>
-      technicians.map((technician) => {
-        const laneJobs = dayJobs.filter(
-          (job) => job.technicianId === technician.id,
-        );
-        return {
-          technician,
-          jobs: laneJobs,
-          bookedMins: laneJobs
-            .filter((job) => job.status !== "completed")
-            .reduce((sum, job) => sum + job.durationMins, 0),
-        };
-      }),
-    [technicians, dayJobs],
+  const changeDate = (next: Date) => {
+    setDate(next);
+    setSelectedAppointment(null);
+    setSelectedRoute(null);
+  };
+
+  const selectedPlan = plans.find((p) =>
+    p.stops.some((a) => a.id === selectedAppointmentId),
   );
-
-  const unassigned = useMemo(
-    () => dayJobs.filter((job) => job.technicianId === null),
-    [dayJobs],
-  );
-
-  /**
-   * Stop order and route colour, per job. Only jobs on a route get an entry —
-   * the rest are drawn as alerts, since nobody is scheduled to drive to them.
-   */
-  const stops = useMemo(() => {
-    const map = new Map<string, { stop: number; fill: string }>();
-    routes.forEach((route, routeIndex) => {
-      const { fill } = routeColors(routeIndex);
-      route.jobs.forEach((job, index) => {
-        map.set(job.id, { stop: index + 1, fill });
-      });
-    });
-    return map;
-  }, [routes]);
-
-  /** A selected route dims everything that is not on it. */
-  const isDimmed = (technicianId: string | null) =>
-    selectedRoute !== null && technicianId !== selectedRoute;
+  const selected =
+    selectedPlan?.stops.find((a) => a.id === selectedAppointmentId) ??
+    [...backlog, ...overdue].find((a) => a.id === selectedAppointmentId);
 
   return (
     // The topbar is 56px; the board takes the rest of the viewport.
     <div className="flex h-[calc(100dvh-3.5rem)] flex-col">
-      <header className="border-border bg-background flex shrink-0 items-center justify-center border-b px-4 py-2">
-        <DateStrip value={date} onChange={setDate} />
-      </header>
-
-      <div className="flex min-h-0 flex-1">
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-          <OsmMap center={MAP_CENTER} zoom={10} className="min-h-0 flex-1">
-            {({ toScreen }) => (
-              <>
-                {/* The planned run for each route, drawn beneath the pins. */}
-                <RouteLines
-                  lines={routes
-                    .filter((route) => route.jobs.length > 0)
-                    .map<RouteLine>((route, index) => {
-                      const nextStop = route.jobs.find(
-                        (job) => job.status !== "completed",
-                      );
-                      return {
-                        id: route.technician.id,
-                        stroke: routeColors(index).stroke,
-                        points: route.jobs.map((job) => toScreen(job)),
-                        from: nextStop ? toScreen(route.technician) : undefined,
-                        dimmed: isDimmed(route.technician.id),
-                      };
-                    })}
-                />
-
-                {technicians.map((technician) => {
-                  const at = toScreen(technician);
-                  return (
-                    <span
-                      key={technician.id}
-                      className={cn(
-                        "pointer-events-none absolute transition-opacity",
-                        isDimmed(technician.id) && "opacity-30",
-                      )}
-                      style={{ left: at.x, top: at.y }}
-                    >
-                      <span className="pointer-events-auto">
-                        <VehicleMarker
-                          technician={technician}
-                          onClick={() =>
-                            setSelectedRoute(
-                              selectedRoute === technician.id
-                                ? null
-                                : technician.id,
-                            )
-                          }
-                        />
-                      </span>
-                    </span>
-                  );
-                })}
-
-                {dayJobs.map((job) => {
-                  const at = toScreen(job);
-                  return (
-                    <span
-                      key={job.id}
-                      className={cn(
-                        "pointer-events-none absolute transition-opacity",
-                        isDimmed(job.technicianId) && "opacity-30",
-                      )}
-                      style={{ left: at.x, top: at.y }}
-                    >
-                      <span className="pointer-events-auto">
-                        <JobPin
-                          job={job}
-                          stop={stops.get(job.id)?.stop}
-                          fill={stops.get(job.id)?.fill}
-                          selected={selectedJob === job.id}
-                          onClick={() =>
-                            setSelectedJob(
-                              selectedJob === job.id ? null : job.id,
-                            )
-                          }
-                        />
-                      </span>
-                    </span>
-                  );
-                })}
-
-                <div className="pointer-events-none absolute top-3 left-3 flex flex-col gap-2">
-                  <Badge
-                    variant="neutral"
-                    className="bg-card/90 pointer-events-auto backdrop-blur"
-                  >
-                    {isPending
-                      ? "Loading jobs…"
-                      : `${dayJobs.length} ${dayJobs.length === 1 ? "job" : "jobs"}`}
-                  </Badge>
-                  <MapLegend className="pointer-events-auto" />
-                </div>
-              </>
-            )}
-          </OsmMap>
-
-          <RouteTimeline
-            routes={routes}
-            unassigned={unassigned}
-            date={date}
-            selectedRouteId={selectedRoute}
-            selectedJobId={selectedJob}
-            onSelectRoute={setSelectedRoute}
-            onSelectJob={setSelectedJob}
+      {day.isPending ? (
+        <BoardSkeleton />
+      ) : day.error ? (
+        <div className="flex flex-1 items-center justify-center">
+          <ErrorState
+            title="Couldn't load the dispatch board"
+            error={day.error}
+            onRetry={day.refetch}
           />
         </div>
+      ) : (
+        <>
+          <DispatchHeader
+            date={date}
+            onDateChange={changeDate}
+            stream={stream}
+            onStreamChange={setStream}
+            routes={plans.length}
+            stops={plans.reduce((sum, p) => sum + p.activeStops, 0)}
+            backlog={backlog.length}
+            onAutoPlan={autoPlan}
+            onNewRoute={() => setCreatingRoute(true)}
+            onOptimizeAll={() =>
+              toast.success(
+                `Optimized ${plans.filter((p) => !p.locked).length} unlocked routes`,
+                {
+                  description:
+                    "Prototype only — the stop order would be re-sequenced for the shortest drive.",
+                },
+              )
+            }
+          />
 
-        <RouteSidebar
-          routes={routes}
-          unassigned={unassigned}
-          selectedRouteId={selectedRoute}
-          onSelectRoute={setSelectedRoute}
-          onSelectJob={setSelectedJob}
-        />
-      </div>
+          <div className="flex min-h-0 flex-1">
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+              <DispatchMap
+                plans={plans}
+                backlog={backlog}
+                matches={matches}
+                isToday={day.isToday}
+                selectedRouteId={selectedRouteId}
+                selectedAppointmentId={selectedAppointmentId}
+                onSelectRoute={setSelectedRoute}
+                onSelectAppointment={setSelectedAppointment}
+              />
+
+              <RouteTimeline
+                plans={plans}
+                backlog={backlog}
+                isToday={day.isToday}
+                matches={matches}
+                selectedRouteId={selectedRouteId}
+                selectedAppointmentId={selectedAppointmentId}
+                onSelectRoute={setSelectedRoute}
+                onSelectAppointment={setSelectedAppointment}
+                onMove={actions.assign}
+                empty={
+                  <EmptyState
+                    icon={CalendarX2}
+                    title="No routes on this day"
+                    description={
+                      backlog.length > 0
+                        ? `${backlog.length} backlog ${backlog.length === 1 ? "appointment is" : "appointments are"} waiting, but there is no route to put them on.`
+                        : "Nothing is scheduled. Pick another day on the date strip."
+                    }
+                    className="py-8"
+                    action={
+                      <Button size="sm" onClick={() => setCreatingRoute(true)}>
+                        <Plus data-icon="inline-start" />
+                        New route
+                      </Button>
+                    }
+                  />
+                }
+              />
+            </div>
+
+            <RouteSidebar
+              plans={plans}
+              backlog={backlog}
+              overdue={overdue}
+              selectedRouteId={selectedRouteId}
+              tab={tab}
+              onTabChange={setTab}
+              onSelectRoute={setSelectedRoute}
+              onSelectAppointment={setSelectedAppointment}
+              actions={actions}
+              top={
+                selected ? (
+                  <SelectedAppointmentCard
+                    appointment={selected}
+                    plan={selectedPlan}
+                    plans={plans}
+                    onAssign={(routeId) => actions.assign(selected.id, routeId)}
+                    onClose={() => setSelectedAppointment(null)}
+                  />
+                ) : null
+              }
+            />
+          </div>
+
+          <NewRouteDialog
+            open={creatingRoute}
+            onOpenChange={setCreatingRoute}
+            day={toDayKey(date)}
+            plans={plans}
+            onCreated={(route) => {
+              setCreatingRoute(false);
+              setTab("routes");
+              setSelectedRoute(route.id);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }
