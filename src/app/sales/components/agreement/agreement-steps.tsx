@@ -4,12 +4,9 @@ import { Plus, Trash2 } from "lucide-react";
 import { useId } from "react";
 import { StatusPill, StreamTag, WASTE_STREAMS } from "@/components/shared";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type { Lead } from "@/mocks";
@@ -31,6 +28,41 @@ import {
   TERM_OPTIONS,
   WEEKDAYS,
 } from "./agreement";
+
+const ZONE_OPTIONS: ComboboxOption[] = SERVICE_ZONES.map((zone) => ({
+  value: zone,
+  label: zone,
+}));
+
+const STREAM_OPTIONS: ComboboxOption[] = WASTE_STREAMS.map((stream) => ({
+  value: stream.id,
+  label: stream.label,
+}));
+
+const CONTAINER_OPTIONS: ComboboxOption[] = CONTAINERS.map((container) => ({
+  value: container.id,
+  label: container.label,
+}));
+
+const FREQUENCY_OPTIONS: ComboboxOption[] = FREQUENCIES.map((frequency) => ({
+  value: frequency.id,
+  label: frequency.label,
+}));
+
+const WEEKDAY_OPTIONS: ComboboxOption[] = WEEKDAYS.map((day, index) => ({
+  value: String(index),
+  label: day,
+}));
+
+const WINDOW_OPTIONS: ComboboxOption[] = COLLECTION_WINDOWS.map((window) => ({
+  value: window,
+  label: window,
+}));
+
+const BILLING_OPTIONS: ComboboxOption[] = BILLING_CYCLES.map((cycle) => ({
+  value: cycle.id,
+  label: cycle.label,
+}));
 
 type StepProps = {
   draft: AgreementDraft;
@@ -161,19 +193,12 @@ export function SiteStep({ draft, update }: StepProps) {
         />
       </Field>
       <Field label="Service zone" htmlFor={`${id}-zone`}>
-        <NativeSelect
+        <Combobox
           id={`${id}-zone`}
+          options={ZONE_OPTIONS}
           value={draft.site.zone}
-          onChange={(e) =>
-            update({ site: { ...draft.site, zone: e.target.value } })
-          }
-        >
-          {SERVICE_ZONES.map((zone) => (
-            <NativeSelectOption key={zone} value={zone}>
-              {zone}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
+          onValueChange={(v) => update({ site: { ...draft.site, zone: v } })}
+        />
       </Field>
       <Field
         label="Address"
@@ -257,37 +282,23 @@ export function ServicesStep({ draft, update }: StepProps) {
 
             <div className="grid gap-2 sm:grid-cols-4">
               <LineField label="Stream">
-                <NativeSelect
+                <Combobox
+                  options={STREAM_OPTIONS}
                   value={line.stream}
                   aria-label="Waste stream"
-                  onChange={(e) =>
-                    setLine(line.id, {
-                      stream: e.target.value as typeof line.stream,
-                    })
+                  onValueChange={(v) =>
+                    setLine(line.id, { stream: v as typeof line.stream })
                   }
-                >
-                  {WASTE_STREAMS.map((stream) => (
-                    <NativeSelectOption key={stream.id} value={stream.id}>
-                      {stream.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                />
               </LineField>
 
               <LineField label="Container">
-                <NativeSelect
+                <Combobox
+                  options={CONTAINER_OPTIONS}
                   value={line.containerId}
                   aria-label="Container"
-                  onChange={(e) =>
-                    setLine(line.id, { containerId: e.target.value })
-                  }
-                >
-                  {CONTAINERS.map((container) => (
-                    <NativeSelectOption key={container.id} value={container.id}>
-                      {container.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                  onValueChange={(v) => setLine(line.id, { containerId: v })}
+                />
               </LineField>
 
               <LineField label="Qty">
@@ -306,19 +317,12 @@ export function ServicesStep({ draft, update }: StepProps) {
               </LineField>
 
               <LineField label="Frequency">
-                <NativeSelect
+                <Combobox
+                  options={FREQUENCY_OPTIONS}
                   value={line.frequencyId}
                   aria-label="Collection frequency"
-                  onChange={(e) =>
-                    setLine(line.id, { frequencyId: e.target.value })
-                  }
-                >
-                  {FREQUENCIES.map((frequency) => (
-                    <NativeSelectOption key={frequency.id} value={frequency.id}>
-                      {frequency.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                  onValueChange={(v) => setLine(line.id, { frequencyId: v })}
+                />
               </LineField>
             </div>
 
@@ -370,24 +374,16 @@ export function ScheduleStep({ draft, update }: StepProps) {
         />
       </Field>
       <Field label="Preferred day" htmlFor={`${id}-day`}>
-        <NativeSelect
+        <Combobox
           id={`${id}-day`}
+          options={WEEKDAY_OPTIONS}
           value={String(draft.schedule.preferredDay)}
-          onChange={(e) =>
+          onValueChange={(v) =>
             update({
-              schedule: {
-                ...draft.schedule,
-                preferredDay: Number(e.target.value),
-              },
+              schedule: { ...draft.schedule, preferredDay: Number(v) },
             })
           }
-        >
-          {WEEKDAYS.map((day, index) => (
-            <NativeSelectOption key={day} value={String(index)}>
-              {day}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
+        />
       </Field>
       <Field
         label="Arrival window"
@@ -395,19 +391,14 @@ export function ScheduleStep({ draft, update }: StepProps) {
         className="sm:col-span-2"
         hint="What the customer is told to expect; dispatch can still move it."
       >
-        <NativeSelect
+        <Combobox
           id={`${id}-window`}
+          options={WINDOW_OPTIONS}
           value={draft.schedule.window}
-          onChange={(e) =>
-            update({ schedule: { ...draft.schedule, window: e.target.value } })
+          onValueChange={(v) =>
+            update({ schedule: { ...draft.schedule, window: v } })
           }
-        >
-          {COLLECTION_WINDOWS.map((window) => (
-            <NativeSelectOption key={window} value={window}>
-              {window}
-            </NativeSelectOption>
-          ))}
-        </NativeSelect>
+        />
       </Field>
     </div>
   );
@@ -447,24 +438,19 @@ export function TermsStep({ draft, update }: StepProps) {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label="Billing cycle" htmlFor={`${id}-billing`}>
-          <NativeSelect
+          <Combobox
             id={`${id}-billing`}
+            options={BILLING_OPTIONS}
             value={draft.terms.billing}
-            onChange={(e) =>
+            onValueChange={(v) =>
               update({
                 terms: {
                   ...draft.terms,
-                  billing: e.target.value as typeof draft.terms.billing,
+                  billing: v as typeof draft.terms.billing,
                 },
               })
             }
-          >
-            {BILLING_CYCLES.map((cycle) => (
-              <NativeSelectOption key={cycle.id} value={cycle.id}>
-                {cycle.label}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+          />
         </Field>
         <Field label="PO number" htmlFor={`${id}-po`} hint="Optional.">
           <Input

@@ -12,11 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Combobox } from "@/components/ui/combobox";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import {
   type DefaultSchedule,
   shiftFromTemplate,
@@ -135,22 +132,22 @@ export function DefaultScheduleCard({
                 <Label htmlFor={`${id}-${day.id}`} className="font-normal">
                   {day.label}
                 </Label>
-                <NativeSelect
+                <Combobox
                   id={`${id}-${day.id}`}
                   size="sm"
-                  className="w-full"
+                  options={[
+                    { value: OFF, label: "Off" },
+                    ...templates
+                      .filter((t) => t.active || t.id === selected?.id)
+                      .map((t) => ({
+                        value: t.id,
+                        label: t.name,
+                        description: formatShiftWindow(t),
+                      })),
+                  ]}
                   value={value}
-                  onChange={(e) => change(day.id, e.target.value)}
-                >
-                  <NativeSelectOption value={OFF}>Off</NativeSelectOption>
-                  {templates
-                    .filter((t) => t.active || t.id === selected?.id)
-                    .map((t) => (
-                      <NativeSelectOption key={t.id} value={t.id}>
-                        {t.name} · {formatShiftWindow(t)}
-                      </NativeSelectOption>
-                    ))}
-                </NativeSelect>
+                  onValueChange={(v) => change(day.id, v)}
+                />
               </li>
             );
           })}

@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -13,16 +14,20 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import type { ContainerKind, VehicleClass } from "@/mocks";
 import { CONTAINER_KIND, Field, VEHICLE_CLASS } from "../../../components";
 
 /** Kinds that are normally consumables rather than tagged assets. */
 const CONSUMABLE_KINDS: ContainerKind[] = ["bag", "sharps-box", "drum"];
+
+const KIND_OPTIONS: ComboboxOption[] = (
+  Object.keys(CONTAINER_KIND) as ContainerKind[]
+).map((k) => ({ value: k, label: CONTAINER_KIND[k] }));
+
+const VEHICLE_OPTIONS: ComboboxOption[] = (
+  Object.keys(VEHICLE_CLASS) as VehicleClass[]
+).map((v) => ({ value: v, label: VEHICLE_CLASS[v] }));
 
 /**
  * Add a container type. Prototype-grade: nothing is stored, saving only
@@ -75,18 +80,12 @@ export function ContainerTypeDialog({
           </Field>
           <div className="grid grid-cols-2 gap-3">
             <Field label="Kind" htmlFor={`${id}-kind`}>
-              <NativeSelect
+              <Combobox
                 id={`${id}-kind`}
-                className="w-full"
+                options={KIND_OPTIONS}
                 value={kind}
-                onChange={(e) => changeKind(e.target.value as ContainerKind)}
-              >
-                {(Object.keys(CONTAINER_KIND) as ContainerKind[]).map((k) => (
-                  <NativeSelectOption key={k} value={k}>
-                    {CONTAINER_KIND[k]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={(v) => changeKind(v as ContainerKind)}
+              />
             </Field>
             <Field label="Capacity (litres)" htmlFor={`${id}-capacity`}>
               <Input
@@ -100,18 +99,12 @@ export function ContainerTypeDialog({
             </Field>
           </div>
           <Field label="Vehicle" htmlFor={`${id}-vehicle`}>
-            <NativeSelect
+            <Combobox
               id={`${id}-vehicle`}
-              className="w-full"
+              options={VEHICLE_OPTIONS}
               value={vehicle}
-              onChange={(e) => setVehicle(e.target.value as VehicleClass)}
-            >
-              {(Object.keys(VEHICLE_CLASS) as VehicleClass[]).map((v) => (
-                <NativeSelectOption key={v} value={v}>
-                  {VEHICLE_CLASS[v]}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={(v) => setVehicle(v as VehicleClass)}
+            />
           </Field>
           <div className="flex items-center justify-between gap-4 rounded-lg border px-3 py-2.5">
             <div>

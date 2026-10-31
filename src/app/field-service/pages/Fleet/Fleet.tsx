@@ -12,11 +12,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -52,6 +49,14 @@ import {
 const SKELETON_ROWS = [0, 1, 2, 3, 4, 5];
 /** Entity filter value for trucks registered to no entity. */
 const POOL = "pool";
+
+const STATUS_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All statuses" },
+  ...(Object.keys(VEHICLE_STATUS) as VehicleStatus[]).map((s) => ({
+    value: s,
+    label: VEHICLE_STATUS[s].label,
+  })),
+];
 
 export default function Fleet() {
   const vehicles = useVehicles();
@@ -107,6 +112,31 @@ export default function Fleet() {
     overrides,
     today,
   ]);
+
+  const truckTypeOptions = useMemo<ComboboxOption[]>(
+    () => [
+      { value: "all", label: "All truck types" },
+      ...(masters.data?.truckTypes ?? []).map((t) => ({
+        value: t.id,
+        label: t.name,
+        description: t.id,
+      })),
+    ],
+    [masters.data],
+  );
+
+  const entityOptions = useMemo<ComboboxOption[]>(
+    () => [
+      { value: "all", label: "All entities" },
+      ...(masters.data?.entities ?? []).map((e) => ({
+        value: e.code,
+        label: e.code,
+        description: e.name,
+      })),
+      { value: POOL, label: "Shared pool" },
+    ],
+    [masters.data],
+  );
 
   const visible = useMemo(() => {
     const term = query.trim().toLowerCase().replace(/\s+/g, "");
@@ -200,51 +230,34 @@ export default function Fleet() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search plate…"
                 aria-label="Search by plate"
-                className="h-8 ps-9"
+                size="sm"
+                className="ps-9"
               />
             </span>
-            <NativeSelect
+            <Combobox
+              size="sm"
+              options={truckTypeOptions}
               value={truckType}
-              onChange={(e) => setTruckType(e.target.value)}
+              onValueChange={setTruckType}
               aria-label="Truck type"
               className="w-48"
-            >
-              <NativeSelectOption value="all">
-                All truck types
-              </NativeSelectOption>
-              {masters.data?.truckTypes.map((t) => (
-                <NativeSelectOption key={t.id} value={t.id}>
-                  {t.name} ({t.id})
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
-            <NativeSelect
+            />
+            <Combobox
+              size="sm"
+              options={entityOptions}
               value={entity}
-              onChange={(e) => setEntity(e.target.value)}
+              onValueChange={setEntity}
               aria-label="Entity"
               className="w-44"
-            >
-              <NativeSelectOption value="all">All entities</NativeSelectOption>
-              {masters.data?.entities.map((e) => (
-                <NativeSelectOption key={e.code} value={e.code}>
-                  {e.code} · {e.name}
-                </NativeSelectOption>
-              ))}
-              <NativeSelectOption value={POOL}>Shared pool</NativeSelectOption>
-            </NativeSelect>
-            <NativeSelect
+            />
+            <Combobox
+              size="sm"
+              options={STATUS_OPTIONS}
               value={status}
-              onChange={(e) => setStatus(e.target.value as typeof status)}
+              onValueChange={(v) => setStatus(v as typeof status)}
               aria-label="Status"
               className="w-40"
-            >
-              <NativeSelectOption value="all">All statuses</NativeSelectOption>
-              {(Object.keys(VEHICLE_STATUS) as VehicleStatus[]).map((s) => (
-                <NativeSelectOption key={s} value={s}>
-                  {VEHICLE_STATUS[s].label}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            />
             {filtered ? (
               <Button variant="ghost" size="sm" onClick={clearFilters}>
                 Clear

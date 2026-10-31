@@ -16,6 +16,7 @@ import {
   GenerateDialog,
   HORIZON,
   SelectedAppointmentCard,
+  SidebarActions,
 } from "./components";
 import {
   type GenerationResult,
@@ -90,6 +91,10 @@ function Board() {
     setSelectedRoute(null);
   };
 
+  const ready = plans.filter(
+    (p) => p.plannable && !p.locked && p.blockers.length === 0,
+  ).length;
+
   const selectedPlan = plans.find((p) =>
     p.stops.some((a) => a.id === selectedAppointmentId),
   );
@@ -154,25 +159,13 @@ function Board() {
           <DispatchHeader
             date={date}
             onDateChange={changeDate}
-            stream={stream}
-            onStreamChange={setStream}
             routes={plans.length}
             stops={plans.reduce((sum, p) => sum + p.activeStops, 0)}
-            backlog={backlog.length}
             unstaffed={plans.filter((p) => p.openSlots.length > 0).length}
-            ready={
-              plans.filter(
-                (p) => p.plannable && !p.locked && p.blockers.length === 0,
-              ).length
-            }
             onGenerate={() => {
               setResult(null);
               setGenerating(true);
             }}
-            onConfirmAllReady={confirmAllReady}
-            onPlaceBacklog={placeBacklog}
-            optimizable={plans.filter(canOptimize).length}
-            onOptimizeAll={optimizeAll}
           />
 
           <div className="flex min-h-0 flex-1">
@@ -180,6 +173,9 @@ function Board() {
               <DispatchMap
                 plans={plans}
                 backlog={backlog}
+                stream={stream}
+                onStreamChange={setStream}
+                onShowBacklog={() => setTab("backlog")}
                 matches={matches}
                 isToday={day.isToday}
                 selectedRouteId={selectedRouteId}
@@ -215,15 +211,28 @@ function Board() {
               defaultRoutes={defaultRoutes}
               routesEmpty={emptyDay}
               top={
-                selected ? (
-                  <SelectedAppointmentCard
-                    appointment={selected}
-                    plan={selectedPlan}
-                    plans={plans}
-                    onAssign={(routeId) => actions.assign(selected.id, routeId)}
-                    onClose={() => setSelectedAppointment(null)}
+                <>
+                  <SidebarActions
+                    routes={plans.length}
+                    ready={ready}
+                    backlog={backlog.length}
+                    optimizable={plans.filter(canOptimize).length}
+                    onPlaceBacklog={placeBacklog}
+                    onOptimizeAll={optimizeAll}
+                    onConfirmAllReady={confirmAllReady}
                   />
-                ) : null
+                  {selected ? (
+                    <SelectedAppointmentCard
+                      appointment={selected}
+                      plan={selectedPlan}
+                      plans={plans}
+                      onAssign={(routeId) =>
+                        actions.assign(selected.id, routeId)
+                      }
+                      onClose={() => setSelectedAppointment(null)}
+                    />
+                  ) : null}
+                </>
               }
             />
           </div>

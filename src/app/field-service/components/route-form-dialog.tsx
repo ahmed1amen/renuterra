@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -16,10 +17,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import {
   activationChecks,
@@ -72,7 +69,14 @@ const STEPS = [
 ] as const;
 type Step = (typeof STEPS)[number]["id"];
 
-const PATTERNS = Object.keys(SCHEDULE_PATTERN) as SchedulePattern[];
+const PATTERN_OPTIONS: ComboboxOption[] = (
+  Object.keys(SCHEDULE_PATTERN) as SchedulePattern[]
+).map((p) => ({ value: p, label: SCHEDULE_PATTERN[p] }));
+
+const OWNER_OPTIONS: ComboboxOption[] = USERS.map((u) => ({
+  value: u.id,
+  label: u.name,
+}));
 
 function defaultSkills(
   masters: OpsMasters,
@@ -345,26 +349,30 @@ export function RouteFormDialog({
             <>
               <div className="grid grid-cols-3 gap-3">
                 <Field label="Entity" htmlFor={`${id}-entity`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-entity`}
+                    options={m.entities.map((e) => ({
+                      value: e.code,
+                      label: e.code,
+                      description: e.name,
+                    }))}
                     value={form.entity}
-                    onChange={(e) =>
-                      setMatching({ entity: e.target.value as EntityCode })
+                    onValueChange={(v) =>
+                      setMatching({ entity: v as EntityCode })
                     }
-                  >
-                    {m.entities.map((e) => (
-                      <NativeSelectOption key={e.code} value={e.code}>
-                        {e.code} · {e.name}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                  />
                 </Field>
                 <Field label="Service type" htmlFor={`${id}-st`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-st`}
+                    options={m.serviceTypes.map((s) => ({
+                      value: s.code,
+                      label: s.code,
+                      description: s.name,
+                    }))}
                     value={form.serviceType}
-                    onChange={(e) => {
-                      const st = e.target.value as ServiceTypeCode;
+                    onValueChange={(v) => {
+                      const st = v as ServiceTypeCode;
                       const def = m.serviceTypes.find((s) => s.code === st);
                       const truck = defaultTruckType(ctx, st);
                       setMatching({
@@ -373,24 +381,22 @@ export function RouteFormDialog({
                         helpers: def?.defaultHelpers ?? form.helpers,
                       });
                     }}
-                  >
-                    {m.serviceTypes.map((s) => (
-                      <NativeSelectOption key={s.code} value={s.code}>
-                        {s.code} · {s.name}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                  />
                 </Field>
                 <Field
                   label="City"
                   htmlFor={`${id}-city`}
                   hint="One city per route."
                 >
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-city`}
+                    options={m.cities.map((c) => ({
+                      value: c.code,
+                      label: c.name,
+                    }))}
                     value={form.city}
-                    onChange={(e) => {
-                      const city = e.target.value as CityCode;
+                    onValueChange={(v) => {
+                      const city = v as CityCode;
                       setMatching({
                         city,
                         depotId:
@@ -398,13 +404,7 @@ export function RouteFormDialog({
                         disposalSiteIds: [],
                       });
                     }}
-                  >
-                    {m.cities.map((c) => (
-                      <NativeSelectOption key={c.code} value={c.code}>
-                        {c.name}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                  />
                 </Field>
               </div>
               <div className="grid grid-cols-[1fr_14rem] gap-3">
@@ -462,17 +462,12 @@ export function RouteFormDialog({
                   ) : null}
                 </Field>
                 <Field label="Owner" htmlFor={`${id}-owner`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-owner`}
+                    options={OWNER_OPTIONS}
                     value={form.ownerId}
-                    onChange={(e) => set("ownerId", e.target.value)}
-                  >
-                    {USERS.map((u) => (
-                      <NativeSelectOption key={u.id} value={u.id}>
-                        {u.name}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                    onValueChange={(v) => set("ownerId", v)}
+                  />
                 </Field>
                 <div className="grid grid-cols-2 gap-2">
                   <Field label="Valid from" htmlFor={`${id}-from`}>
@@ -503,26 +498,23 @@ export function RouteFormDialog({
                 hint="The first is required; the rest are allowed alternates. Only types that do this service type are listed."
               >
                 <div className="grid grid-cols-[14rem_1fr] items-start gap-3">
-                  <NativeSelect
+                  <Combobox
                     aria-label="Required truck type"
+                    options={truckOptions.map((t) => ({
+                      value: t.id,
+                      label: t.id,
+                      description: t.name,
+                    }))}
                     value={form.truckTypeIds[0] ?? ""}
-                    onChange={(e) =>
+                    onValueChange={(v) =>
                       setMatching({
                         truckTypeIds: [
-                          e.target.value,
-                          ...form.truckTypeIds
-                            .slice(1)
-                            .filter((t) => t !== e.target.value),
+                          v,
+                          ...form.truckTypeIds.slice(1).filter((t) => t !== v),
                         ],
                       })
                     }
-                  >
-                    {truckOptions.map((t) => (
-                      <NativeSelectOption key={t.id} value={t.id}>
-                        {t.id} · {t.name}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                  />
                   {truckOptions.length > 1 ? (
                     <CodeChips
                       label="Alternate truck types"
@@ -598,13 +590,16 @@ export function RouteFormDialog({
 
               <div className="grid grid-cols-3 gap-3">
                 <Field label="Shift" htmlFor={`${id}-shift`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-shift`}
+                    options={m.shifts.map((s) => ({
+                      value: s.id,
+                      label: s.name,
+                      description: `${s.startTime}–${s.endTime}`,
+                    }))}
                     value={form.shiftId}
-                    onChange={(e) => {
-                      const shift = m.shifts.find(
-                        (s) => s.id === e.target.value,
-                      );
+                    onValueChange={(v) => {
+                      const shift = m.shifts.find((s) => s.id === v);
                       if (!shift) return;
                       setMatching({
                         shiftId: shift.id,
@@ -612,13 +607,7 @@ export function RouteFormDialog({
                         endTime: shift.id === "NIGHT" ? "02:00" : "13:00",
                       });
                     }}
-                  >
-                    {m.shifts.map((s) => (
-                      <NativeSelectOption key={s.id} value={s.id}>
-                        {s.name} · {s.startTime}–{s.endTime}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                  />
                 </Field>
                 <Field label="Planned start" htmlFor={`${id}-start`}>
                   <Input
@@ -647,22 +636,17 @@ export function RouteFormDialog({
             <>
               <div className="grid grid-cols-[14rem_1fr] items-start gap-3">
                 <Field label="Schedule pattern" htmlFor={`${id}-pattern`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-pattern`}
+                    options={PATTERN_OPTIONS}
                     value={form.schedule.pattern}
-                    onChange={(e) =>
+                    onValueChange={(v) =>
                       set("schedule", {
                         ...form.schedule,
-                        pattern: e.target.value as SchedulePattern,
+                        pattern: v as SchedulePattern,
                       })
                     }
-                  >
-                    {PATTERNS.map((p) => (
-                      <NativeSelectOption key={p} value={p}>
-                        {SCHEDULE_PATTERN[p]}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                  />
                 </Field>
                 {form.schedule.pattern === "weekly" ||
                 form.schedule.pattern === "custom" ? (
@@ -705,22 +689,21 @@ export function RouteFormDialog({
 
               <div className="grid grid-cols-[14rem_1fr] items-start gap-3">
                 <Field label="Start depot" htmlFor={`${id}-depot`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-depot`}
+                    options={depots.map((d) => ({
+                      value: d.id,
+                      label: d.name,
+                    }))}
                     value={form.depotId}
-                    onChange={(e) => set("depotId", e.target.value)}
-                  >
-                    {depots.length === 0 ? (
-                      <NativeSelectOption value="">
-                        No depot in this city
-                      </NativeSelectOption>
-                    ) : null}
-                    {depots.map((d) => (
-                      <NativeSelectOption key={d.id} value={d.id}>
-                        {d.name}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                    onValueChange={(v) => set("depotId", v)}
+                    placeholder={
+                      depots.length === 0
+                        ? "No depot in this city"
+                        : "Select a depot…"
+                    }
+                    disabled={depots.length === 0}
+                  />
                 </Field>
                 <Field
                   label="Disposal sites"

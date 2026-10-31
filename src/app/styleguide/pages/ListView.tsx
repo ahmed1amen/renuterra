@@ -21,6 +21,7 @@ import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { EmptyState, StatusPill, type StatusTone } from "@/components/shared";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogClose,
@@ -42,10 +43,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -124,6 +121,11 @@ const OWNER_OPTIONS = [
 ];
 
 const PAGE_SIZES = [10, 25, 50];
+
+const PAGE_SIZE_OPTIONS: ComboboxOption[] = PAGE_SIZES.map((size) => ({
+  value: String(size),
+  label: String(size),
+}));
 
 /** Stable keys so skeleton rows never use an array index. */
 const SKELETON_KEYS = Array.from(
@@ -508,39 +510,27 @@ export default function ListViewPage() {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="filter-source">Source</Label>
-              <NativeSelect
+              <Combobox
                 id="filter-source"
-                className="w-full"
+                options={SOURCE_OPTIONS}
                 value={source}
-                onChange={(e) => {
-                  setSource(e.target.value);
+                onValueChange={(v) => {
+                  setSource(v);
                   setPage(1);
                 }}
-              >
-                {SOURCE_OPTIONS.map((o) => (
-                  <NativeSelectOption key={o.value} value={o.value}>
-                    {o.label}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="filter-owner">Owner</Label>
-              <NativeSelect
+              <Combobox
                 id="filter-owner"
-                className="w-full"
+                options={OWNER_OPTIONS}
                 value={owner}
-                onChange={(e) => {
-                  setOwner(e.target.value);
+                onValueChange={(v) => {
+                  setOwner(v);
                   setPage(1);
                 }}
-              >
-                {OWNER_OPTIONS.map((o) => (
-                  <NativeSelectOption key={o.value} value={o.value}>
-                    {o.label}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              />
             </div>
           </div>
         ) : null}
@@ -702,21 +692,17 @@ export default function ListViewPage() {
         <div className="border-border text-muted-foreground flex flex-wrap items-center justify-between gap-3 border-t px-4 py-3 text-[13px]">
           <div className="flex items-center gap-2">
             <span>Rows per page</span>
-            <NativeSelect
+            <Combobox
               size="sm"
+              className="w-20"
               aria-label="Rows per page"
-              value={pageSize}
-              onChange={(e) => {
-                setPageSize(Number(e.target.value));
+              options={PAGE_SIZE_OPTIONS}
+              value={String(pageSize)}
+              onValueChange={(v) => {
+                setPageSize(Number(v));
                 setPage(1);
               }}
-            >
-              {PAGE_SIZES.map((size) => (
-                <NativeSelectOption key={size} value={size}>
-                  {size}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            />
           </div>
           <div className="flex items-center gap-3">
             <span>

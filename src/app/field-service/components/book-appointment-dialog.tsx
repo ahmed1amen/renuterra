@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { StreamTag } from "@/components/shared";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -16,10 +17,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   useAppointmentStore,
@@ -149,6 +146,41 @@ function BookingForm({
   const ready =
     Boolean(customer && servicePoint && line && item && day) && !blocked;
 
+  const customerOptions = useMemo<ComboboxOption[]>(
+    () =>
+      (customers.data ?? [])
+        .filter((c) => c.status === "active")
+        .map((c) => ({ value: c.id, label: c.name })),
+    [customers.data],
+  );
+  const servicePointOptions = useMemo<ComboboxOption[]>(
+    () =>
+      servicePointsForCustomer.map((sp) => ({
+        value: sp.id,
+        label: sp.location,
+        description: sp.area,
+      })),
+    [servicePointsForCustomer],
+  );
+  const lineOptions: ComboboxOption[] = (servicePoint?.serviceLines ?? []).map(
+    (l) => ({
+      value: l.id,
+      label: itemOf(l.serviceItemId)?.name ?? l.serviceItemId,
+      description: FREQUENCY_LABEL[l.frequency],
+    }),
+  );
+  const routeOptions: ComboboxOption[] = [
+    { value: "", label: "Leave in backlog" },
+    ...dayRoutes.map((r) => ({
+      value: r.id,
+      label: r.name,
+      description: `${directory.servicePro(r.primaryServiceProId)?.name ?? ""}${
+        r.lockedAt ? " (locked)" : ""
+      }${r.id === defaultInstance?.id ? " · default route" : ""}`,
+      disabled: Boolean(r.lockedAt),
+    })),
+  ];
+
   function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!customer || !servicePoint || !line || !item) return;
@@ -198,28 +230,18 @@ function BookingForm({
 
         <div className="grid max-h-[65vh] gap-4 overflow-y-auto pr-1">
           <Field label="Customer" htmlFor={`${id}-customer`}>
-            <NativeSelect
+            <Combobox
               id={`${id}-customer`}
-              className="w-full"
+              options={customerOptions}
               value={customerId}
+              placeholder="Select a customer…"
               disabled={Boolean(preset.customerId)}
-              onChange={(e) => {
-                setCustomerId(e.target.value);
+              onValueChange={(v) => {
+                setCustomerId(v);
                 setServicePointId("");
                 setServiceLineId("");
               }}
-            >
-              <NativeSelectOption value="">
-                Select a customer…
-              </NativeSelectOption>
-              {(customers.data ?? [])
-                .filter((c) => c.status === "active")
-                .map((c) => (
-                  <NativeSelectOption key={c.id} value={c.id}>
-                    {c.name}
-                  </NativeSelectOption>
-                ))}
-            </NativeSelect>
+            />
           </Field>
 
           {blocked ? (
@@ -242,53 +264,33 @@ function BookingForm({
                 : undefined
             }
           >
-            <NativeSelect
+            <Combobox
               id={`${id}-sp`}
-              className="w-full"
+              options={servicePointOptions}
               value={servicePointId}
+              placeholder="Select a service point…"
               disabled={!customer}
-              onChange={(e) => {
-                setServicePointId(e.target.value);
+              onValueChange={(v) => {
+                setServicePointId(v);
                 setServiceLineId("");
                 setRouteChoice(null);
               }}
-            >
-              <NativeSelectOption value="">
-                Select a service point…
-              </NativeSelectOption>
-              {servicePointsForCustomer.map((sp) => (
-                <NativeSelectOption key={sp.id} value={sp.id}>
-                  {sp.location} — {sp.area}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+            />
           </Field>
 
           <Field label="Service" htmlFor={`${id}-line`}>
-            <NativeSelect
+            <Combobox
               id={`${id}-line`}
-              className="w-full"
+              options={lineOptions}
               value={serviceLineId}
+              placeholder="Select a service…"
               disabled={!servicePoint}
-              onChange={(e) => {
-                setServiceLineId(e.target.value);
+              onValueChange={(v) => {
+                setServiceLineId(v);
                 setArrivalWindow(null);
                 setRouteChoice(null);
               }}
-            >
-              <NativeSelectOption value="">
-                Select a service…
-              </NativeSelectOption>
-              {servicePoint?.serviceLines.map((l) => {
-                const lineItem = itemOf(l.serviceItemId);
-                return (
-                  <NativeSelectOption key={l.id} value={l.id}>
-                    {lineItem?.name ?? l.serviceItemId} ·{" "}
-                    {FREQUENCY_LABEL[l.frequency]}
-                  </NativeSelectOption>
-                );
-              })}
-            </NativeSelect>
+            />
             {line && item ? (
               <p className="text-muted-foreground mt-2 flex flex-wrap items-center gap-2 text-xs">
                 <StreamTag stream={item.stream} />
@@ -345,25 +347,13 @@ function BookingForm({
                       : "No routes that day yet — it goes to the backlog."
             }
           >
-            <NativeSelect
+            <Combobox
               id={`${id}-route`}
-              className="w-full"
+              options={routeOptions}
               value={routeId}
-              onChange={(e) => setRouteChoice(e.target.value)}
-            >
-              <NativeSelectOption value="">Leave in backlog</NativeSelectOption>
-              {dayRoutes.map((r) => (
-                <NativeSelectOption
-                  key={r.id}
-                  value={r.id}
-                  disabled={Boolean(r.lockedAt)}
-                >
-                  {r.name} — {directory.servicePro(r.primaryServiceProId)?.name}
-                  {r.lockedAt ? " (locked)" : ""}
-                  {r.id === defaultInstance?.id ? " · default route" : ""}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              placeholder="Leave in backlog"
+              onValueChange={setRouteChoice}
+            />
           </Field>
 
           <Field label="Notes for the service pro" htmlFor={`${id}-notes`}>

@@ -6,11 +6,8 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { EmptyState, StreamTag, WASTE_STREAMS } from "@/components/shared";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import {
   Table,
   TableBody,
@@ -39,6 +36,27 @@ import {
 import { formatDate, formatKg } from "../../../utils";
 
 const PAGE_SIZE = 25;
+
+const STATUS_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All statuses" },
+  ...WORK_ORDER_STATUS_ORDER.map((s) => ({
+    value: s,
+    label: WORK_ORDER_STATUS[s].label,
+  })),
+];
+
+const METHOD_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All methods" },
+  ...HANDLING_METHOD_ORDER.map((m) => ({
+    value: m,
+    label: HANDLING_METHOD[m].label,
+  })),
+];
+
+const STREAM_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All streams" },
+  ...WASTE_STREAMS.map((s) => ({ value: s.id, label: s.label })),
+];
 
 /**
  * Every work order across the given appointments — what was planned, done and
@@ -109,49 +127,30 @@ export function WorkOrdersList({
           partial or not done
         </p>
         <div className="flex flex-wrap items-center gap-2">
-          <NativeSelect
+          <Combobox
             size="sm"
+            className="w-40"
             aria-label="Filter by work order status"
+            options={STATUS_OPTIONS}
             value={status}
-            onChange={(e) =>
-              setStatus(e.target.value as WorkOrderStatus | "all")
-            }
-          >
-            <NativeSelectOption value="all">All statuses</NativeSelectOption>
-            {WORK_ORDER_STATUS_ORDER.map((s) => (
-              <NativeSelectOption key={s} value={s}>
-                {WORK_ORDER_STATUS[s].label}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
-          <NativeSelect
+            onValueChange={(v) => setStatus(v as WorkOrderStatus | "all")}
+          />
+          <Combobox
             size="sm"
+            className="w-44"
             aria-label="Filter by handling method"
+            options={METHOD_OPTIONS}
             value={method}
-            onChange={(e) =>
-              setMethod(e.target.value as HandlingMethod | "all")
-            }
-          >
-            <NativeSelectOption value="all">All methods</NativeSelectOption>
-            {HANDLING_METHOD_ORDER.map((m) => (
-              <NativeSelectOption key={m} value={m}>
-                {HANDLING_METHOD[m].label}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
-          <NativeSelect
+            onValueChange={(v) => setMethod(v as HandlingMethod | "all")}
+          />
+          <Combobox
             size="sm"
+            className="w-40"
             aria-label="Filter by waste stream"
+            options={STREAM_OPTIONS}
             value={stream}
-            onChange={(e) => setStream(e.target.value as WasteStreamId | "all")}
-          >
-            <NativeSelectOption value="all">All streams</NativeSelectOption>
-            {WASTE_STREAMS.map((s) => (
-              <NativeSelectOption key={s.id} value={s.id}>
-                {s.label}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+            onValueChange={(v) => setStream(v as WasteStreamId | "all")}
+          />
           <span className="relative flex w-56">
             <Search
               className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
@@ -163,7 +162,8 @@ export function WorkOrdersList({
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search work orders…"
               aria-label="Search work orders"
-              className="h-8 ps-9"
+              size="sm"
+              className="ps-9"
             />
           </span>
         </div>

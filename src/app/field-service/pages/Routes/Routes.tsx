@@ -21,11 +21,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -126,6 +123,40 @@ export default function Routes() {
       };
     });
   }, [ctx, scoring]);
+
+  const entityOptions = useMemo<ComboboxOption[]>(
+    () => [
+      { value: "all", label: "All entities" },
+      ...(ctx?.masters.entities ?? []).map((e) => ({
+        value: e.code,
+        label: e.code,
+        description: e.name,
+      })),
+    ],
+    [ctx],
+  );
+
+  const cityOptions = useMemo<ComboboxOption[]>(
+    () => [
+      { value: "all", label: "All cities" },
+      ...(ctx?.masters.cities ?? []).map((c) => ({
+        value: c.code,
+        label: c.name,
+      })),
+    ],
+    [ctx],
+  );
+
+  const serviceTypeOptions = useMemo<ComboboxOption[]>(
+    () => [
+      { value: "all", label: "All service types" },
+      ...(ctx?.masters.serviceTypes ?? []).map((s) => ({
+        value: s.code,
+        label: `${s.code} · ${s.name}`,
+      })),
+    ],
+    [ctx],
+  );
 
   const counts = useMemo(() => {
     const map = new Map<StatusFilter, number>([["all", rows.length]]);
@@ -280,53 +311,32 @@ export default function Routes() {
             </ul>
 
             <div className="flex flex-wrap items-center gap-2">
-              <NativeSelect
+              <Combobox
                 size="sm"
+                className="w-36"
                 aria-label="Filter by entity"
+                options={entityOptions}
                 value={entity}
-                onChange={(e) =>
-                  setEntity(e.target.value as EntityCode | "all")
-                }
-              >
-                <NativeSelectOption value="all">
-                  All entities
-                </NativeSelectOption>
-                {ctx?.masters.entities.map((e) => (
-                  <NativeSelectOption key={e.code} value={e.code}>
-                    {e.code}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <NativeSelect
+                onValueChange={(v) => setEntity(v as EntityCode | "all")}
+              />
+              <Combobox
                 size="sm"
+                className="w-40"
                 aria-label="Filter by city"
+                options={cityOptions}
                 value={city}
-                onChange={(e) => setCity(e.target.value as CityCode | "all")}
-              >
-                <NativeSelectOption value="all">All cities</NativeSelectOption>
-                {ctx?.masters.cities.map((c) => (
-                  <NativeSelectOption key={c.code} value={c.code}>
-                    {c.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <NativeSelect
+                onValueChange={(v) => setCity(v as CityCode | "all")}
+              />
+              <Combobox
                 size="sm"
+                className="w-56"
                 aria-label="Filter by service type"
+                options={serviceTypeOptions}
                 value={serviceType}
-                onChange={(e) =>
-                  setServiceType(e.target.value as ServiceTypeCode | "all")
+                onValueChange={(v) =>
+                  setServiceType(v as ServiceTypeCode | "all")
                 }
-              >
-                <NativeSelectOption value="all">
-                  All service types
-                </NativeSelectOption>
-                {ctx?.masters.serviceTypes.map((s) => (
-                  <NativeSelectOption key={s.code} value={s.code}>
-                    {s.code} · {s.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              />
               <span className="relative flex w-64">
                 <Search
                   className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
@@ -338,7 +348,8 @@ export default function Routes() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search code or name…"
                   aria-label="Search routes"
-                  className="h-8 ps-9"
+                  size="sm"
+                  className="ps-9"
                 />
               </span>
             </div>

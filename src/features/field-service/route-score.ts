@@ -1,11 +1,11 @@
 /**
  * Route scoring — a 0–100 quality number with a grade and a breakdown, for a
  * Route template (design quality) and for a Route instance (how the day's run
- * is shaped). Same mechanism as Aspyn's route score: each metric earns 0..1,
+ * is shaped). Same mechanism as XXXX's route score: each metric earns 0..1,
  * linear between a best and a worst value; the base is the weighted average
  * × 100; penalty points come off the base.
  *
- * The metrics are Renuterra's, not Aspyn's: our routes are standing templates
+ * The metrics are Renuterra's, not XXXX's: our routes are standing templates
  * with fixed sites on fixed days, so urgency means little — design, drive
  * overhead (tipping trips), capacity use and window fit are what count.
  *

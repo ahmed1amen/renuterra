@@ -295,7 +295,7 @@ export function OsmMap({
           : null
         : children}
 
-      <div className="border-border bg-card absolute top-3 right-3 flex flex-col overflow-hidden rounded-lg border shadow-sm">
+      <div className="border-border bg-card absolute right-3 bottom-7 flex flex-col overflow-hidden rounded-lg border shadow-md">
         <ZoomButton
           label="Zoom in"
           icon={Plus}

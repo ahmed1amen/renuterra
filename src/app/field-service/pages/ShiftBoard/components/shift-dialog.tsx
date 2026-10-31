@@ -5,6 +5,7 @@ import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +15,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { useShiftStore } from "@/features/field-service";
 import type { Shift, ShiftTemplate, ShiftType, Technician } from "@/mocks";
@@ -197,19 +194,20 @@ function ShiftForm({
                 : "Custom — the type and times below are set by hand."
             }
           >
-            <NativeSelect
+            <Combobox
               id={`${id}-template`}
-              className="w-full"
+              options={[
+                { value: CUSTOM, label: "Custom" },
+                ...templates.map((t) => ({
+                  value: t.id,
+                  label: t.name,
+                  description: formatShiftWindow(t),
+                })),
+              ]}
               value={templateId}
-              onChange={(e) => applyTemplate(e.target.value)}
-            >
-              <NativeSelectOption value={CUSTOM}>Custom</NativeSelectOption>
-              {templates.map((t) => (
-                <NativeSelectOption key={t.id} value={t.id}>
-                  {t.name} · {formatShiftWindow(t)}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={applyTemplate}
+              placeholder="Custom"
+            />
           </Field>
 
           <Field label="Shift type">
@@ -259,19 +257,20 @@ function ShiftForm({
               htmlFor={`${id}-trainer`}
               hint="The driver supervising this training shift."
             >
-              <NativeSelect
+              <Combobox
                 id={`${id}-trainer`}
-                className="w-full"
+                options={[
+                  { value: "", label: "No trainer yet" },
+                  ...otherTrainers.map((t) => ({
+                    value: t.id,
+                    label: t.name,
+                    description: t.skills.join(", "),
+                  })),
+                ]}
                 value={trainerId}
-                onChange={(e) => setTrainerId(e.target.value)}
-              >
-                <NativeSelectOption value="">No trainer yet</NativeSelectOption>
-                {otherTrainers.map((t) => (
-                  <NativeSelectOption key={t.id} value={t.id}>
-                    {t.name} — {t.skills.join(", ")}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={setTrainerId}
+                placeholder="No trainer yet"
+              />
             </Field>
           ) : null}
 

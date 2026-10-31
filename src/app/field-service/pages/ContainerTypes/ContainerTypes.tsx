@@ -194,7 +194,8 @@ export default function ContainerTypes() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search name or kind…"
                   aria-label="Search container types"
-                  className="h-8 ps-9"
+                  size="sm"
+                  className="ps-9"
                 />
               </span>
             </div>

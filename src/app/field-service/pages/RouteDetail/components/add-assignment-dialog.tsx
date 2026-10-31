@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +13,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOptGroup,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import {
   assignmentChecks,
   type RouteContext,
@@ -107,7 +103,8 @@ export function AddAssignmentDialog({
           .filter((v) => !taken.has(v.id))
           .map((v) => ({
             id: v.id,
-            label: `${v.plate} · ${v.truckTypeId} · ${v.entity ?? "Pool"}`,
+            label: v.plate,
+            description: `${v.truckTypeId} · ${v.entity ?? "Pool"}`,
             match: route.truckTypeIds.includes(v.truckTypeId),
           }))
       : ctx.pros
@@ -115,7 +112,8 @@ export function AddAssignmentDialog({
           .filter((p) => assetType === "helper" || p.role !== "loader")
           .map((p) => ({
             id: p.id,
-            label: `${p.name}${p.employeeId ? ` · ${p.employeeId}` : ""}`,
+            label: p.name,
+            description: p.employeeId,
             match:
               assetType === "helper"
                 ? p.role === "loader"
@@ -123,8 +121,21 @@ export function AddAssignmentDialog({
                     p.skillCodes?.some((c) => c.code === s),
                   ),
           }));
-  const matching = options.filter((o) => o.match);
-  const others = options.filter((o) => !o.match);
+  const matchGroup =
+    assetType === "truck"
+      ? `Matches ${route.truckTypeIds.join(" / ")}`
+      : assetType === "driver"
+        ? "Holds the required skills"
+        : "Loaders";
+  const assetOptions: ComboboxOption[] = [
+    ...options.filter((o) => o.match),
+    ...options.filter((o) => !o.match),
+  ].map((o) => ({
+    value: o.id,
+    label: o.label,
+    description: o.description,
+    group: o.match ? matchGroup : "Others",
+  }));
 
   const checks = assetId
     ? assignmentChecks(route, assetType, assetId, role, days, ctx)
@@ -210,41 +221,13 @@ export function AddAssignmentDialog({
 
           <div className="grid grid-cols-[1fr_7rem] gap-3">
             <Field label={ASSET_TYPE_LABEL[assetType]} htmlFor={`${id}-asset`}>
-              <NativeSelect
+              <Combobox
                 id={`${id}-asset`}
+                options={assetOptions}
                 value={assetId}
-                onChange={(e) => setAssetId(e.target.value)}
-              >
-                <NativeSelectOption value="">
-                  Choose {assetType === "truck" ? "a truck" : `a ${assetType}`}…
-                </NativeSelectOption>
-                {matching.length ? (
-                  <NativeSelectOptGroup
-                    label={
-                      assetType === "truck"
-                        ? `Matches ${route.truckTypeIds.join(" / ")}`
-                        : assetType === "driver"
-                          ? "Holds the required skills"
-                          : "Loaders"
-                    }
-                  >
-                    {matching.map((o) => (
-                      <NativeSelectOption key={o.id} value={o.id}>
-                        {o.label}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelectOptGroup>
-                ) : null}
-                {others.length ? (
-                  <NativeSelectOptGroup label="Others">
-                    {others.map((o) => (
-                      <NativeSelectOption key={o.id} value={o.id}>
-                        {o.label}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelectOptGroup>
-                ) : null}
-              </NativeSelect>
+                placeholder={`Choose ${assetType === "truck" ? "a truck" : `a ${assetType}`}…`}
+                onValueChange={setAssetId}
+              />
             </Field>
             <Field
               label="Rank"

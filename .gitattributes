@@ -1,0 +1,10 @@
+# Mac/Linux only: keep LF everywhere, regardless of local git config.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary

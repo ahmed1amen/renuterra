@@ -14,11 +14,8 @@ import {
 } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -55,6 +52,14 @@ import {
 import { formatCount, formatDate, toDubaiDayKey } from "../../utils";
 
 const SKELETON_ROWS = [0, 1, 2, 3, 4, 5];
+
+const TIER_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All tiers" },
+  ...(Object.keys(TIER_LABEL) as CustomerTier[]).map((t) => ({
+    value: t,
+    label: TIER_LABEL[t],
+  })),
+];
 
 type StatusFilter = CustomerStatus | "all";
 
@@ -239,21 +244,14 @@ export default function Customers() {
             </ul>
 
             <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-              <NativeSelect
+              <Combobox
                 size="sm"
+                className="w-full sm:w-40"
                 aria-label="Filter by tier"
+                options={TIER_OPTIONS}
                 value={tier}
-                onChange={(e) =>
-                  setTier(e.target.value as CustomerTier | "all")
-                }
-              >
-                <NativeSelectOption value="all">All tiers</NativeSelectOption>
-                {(Object.keys(TIER_LABEL) as CustomerTier[]).map((t) => (
-                  <NativeSelectOption key={t} value={t}>
-                    {TIER_LABEL[t]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={(v) => setTier(v as CustomerTier | "all")}
+              />
               <span className="relative flex w-full sm:w-64">
                 <Search
                   className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
@@ -265,7 +263,8 @@ export default function Customers() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search name, code, industry…"
                   aria-label="Search customers"
-                  className="h-8 ps-9"
+                  size="sm"
+                  className="ps-9"
                 />
               </span>
             </div>

@@ -156,7 +156,8 @@ export function AttachLineDialog({
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Customer, site, item or waste code…"
                 aria-label="Search service lines"
-                className="h-8 ps-9"
+                size="sm"
+                className="ps-9"
               />
             </span>
             {visible.length === 0 ? (

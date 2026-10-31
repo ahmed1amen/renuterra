@@ -1,24 +1,80 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useId } from "react";
+import { useId, useState } from "react";
 import { WASTE_STREAMS } from "@/components/shared";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Combobox,
+  type ComboboxOption,
+  MultiCombobox,
+} from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Code, Demo, SectionHeader } from "../components";
 
+const STREAM_OPTIONS: ComboboxOption[] = WASTE_STREAMS.map((s) => ({
+  value: s.id,
+  label: s.label,
+  icon: <span className={`size-2.5 rounded-full ${s.swatchClass}`} />,
+}));
+
+const SITE_OPTIONS: ComboboxOption[] = [
+  {
+    value: "s1",
+    label: "Al Noor Mall",
+    description: "Dubai Marina · 6 bins",
+    group: "Retail",
+  },
+  {
+    value: "s2",
+    label: "Mirdif City Centre",
+    description: "Mirdif · 14 bins",
+    group: "Retail",
+  },
+  {
+    value: "s3",
+    label: "Gulf Medical Clinic",
+    description: "Al Barsha · 3 bins",
+    group: "Healthcare",
+  },
+  {
+    value: "s4",
+    label: "City Hospital",
+    description: "Healthcare City · 22 bins",
+    group: "Healthcare",
+  },
+  {
+    value: "s5",
+    label: "Harbour View Hotel",
+    description: "JBR · 9 bins",
+    group: "Hospitality",
+  },
+  {
+    value: "s6",
+    label: "Palm Residences",
+    description: "Palm Jumeirah · 11 bins",
+    group: "Hospitality",
+  },
+  {
+    value: "s7",
+    label: "Creek Logistics Hub",
+    description: "Al Jaddaf · 4 bins",
+    group: "Industrial",
+    disabled: true,
+  },
+];
+
 export default function FormsPage() {
   const id = useId();
   const f = (name: string) => `${id}-${name}`;
+  const [stream, setStream] = useState("recyclable");
+  const [site, setSite] = useState("");
+  const [streams, setStreams] = useState<string[]>(["recyclable", "food"]);
 
   return (
     <div className="space-y-5">
@@ -27,9 +83,9 @@ export default function FormsPage() {
         title="Inputs & forms"
         description={
           <>
-            Height 32px (40px on mobile screens), 1px <Code>--input</Code>{" "}
-            border, transparent fill; focus swaps the border to{" "}
-            <Code>--ring</Code> with a 3px 50% ring.
+            Height 40px (36px compact), 1px <Code>--input</Code> border, card
+            fill with a hairline shadow; focus swaps the border to{" "}
+            <Code>--ring</Code> with a 2px 25% ring.
           </>
         }
       />
@@ -86,13 +142,38 @@ export default function FormsPage() {
           <Label htmlFor={f("stream")} className="text-[13px]">
             Waste stream
           </Label>
-          <NativeSelect id={f("stream")} defaultValue="recyclable">
-            {WASTE_STREAMS.map((s) => (
-              <NativeSelectOption key={s.id} value={s.id}>
-                {s.label}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+          <Combobox
+            id={f("stream")}
+            options={STREAM_OPTIONS}
+            value={stream}
+            onValueChange={setStream}
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor={f("site")} className="text-[13px]">
+            Service site (searchable, grouped)
+          </Label>
+          <Combobox
+            id={f("site")}
+            options={SITE_OPTIONS}
+            value={site}
+            onValueChange={setSite}
+            placeholder="Choose a site…"
+            searchPlaceholder="Search sites…"
+            clearable
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor={f("streams")} className="text-[13px]">
+            Accepted streams (multi)
+          </Label>
+          <MultiCombobox
+            id={f("streams")}
+            options={STREAM_OPTIONS}
+            value={streams}
+            onValueChange={setStreams}
+            placeholder="Add streams…"
+          />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor={f("disabled")} className="text-[13px]">

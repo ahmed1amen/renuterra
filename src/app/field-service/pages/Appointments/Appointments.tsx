@@ -11,11 +11,8 @@ import {
 } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -43,6 +40,19 @@ import { ScheduledByRoutes, WorkOrdersList } from "./components";
 
 const SKELETON_ROWS = [0, 1, 2, 3, 4, 5];
 const PAGE_SIZE = 25;
+
+const STATUS_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All statuses" },
+  ...APPOINTMENT_STATUS_ORDER.map((s) => ({
+    value: s,
+    label: APPOINTMENT_STATUS[s].label,
+  })),
+];
+
+const STREAM_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All streams" },
+  ...WASTE_STREAMS.map((s) => ({ value: s.id, label: s.label })),
+];
 
 type Period = "today" | "upcoming" | "past" | "all";
 type View = "appointments" | "work-orders";
@@ -263,40 +273,24 @@ export default function Appointments() {
 
             {view === "appointments" ? (
               <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-                <NativeSelect
+                <Combobox
                   size="sm"
+                  className="w-40"
                   aria-label="Filter by status"
+                  options={STATUS_OPTIONS}
                   value={status}
-                  onChange={(e) =>
-                    setStatus(e.target.value as AppointmentStatus | "all")
+                  onValueChange={(v) =>
+                    setStatus(v as AppointmentStatus | "all")
                   }
-                >
-                  <NativeSelectOption value="all">
-                    All statuses
-                  </NativeSelectOption>
-                  {APPOINTMENT_STATUS_ORDER.map((s) => (
-                    <NativeSelectOption key={s} value={s}>
-                      {APPOINTMENT_STATUS[s].label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-                <NativeSelect
+                />
+                <Combobox
                   size="sm"
+                  className="w-40"
                   aria-label="Filter by waste stream"
+                  options={STREAM_OPTIONS}
                   value={stream}
-                  onChange={(e) =>
-                    setStream(e.target.value as WasteStreamId | "all")
-                  }
-                >
-                  <NativeSelectOption value="all">
-                    All streams
-                  </NativeSelectOption>
-                  {WASTE_STREAMS.map((s) => (
-                    <NativeSelectOption key={s.id} value={s.id}>
-                      {s.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
+                  onValueChange={(v) => setStream(v as WasteStreamId | "all")}
+                />
                 <span className="relative flex w-full sm:w-56">
                   <Search
                     className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
@@ -308,7 +302,8 @@ export default function Appointments() {
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search appointments…"
                     aria-label="Search appointments"
-                    className="h-8 ps-9"
+                    size="sm"
+                    className="ps-9"
                   />
                 </span>
               </div>

@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -13,10 +14,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import {
   NEW_TEMPLATE_PREFIX,
@@ -32,7 +29,9 @@ import {
 } from "../../../components";
 
 /** Leave isn't a working window, so it has no template. */
-const TEMPLATE_TYPES = SHIFT_TYPE_ORDER.filter((t) => t !== "leave");
+const TEMPLATE_TYPE_OPTIONS: ComboboxOption[] = SHIFT_TYPE_ORDER.filter(
+  (t) => t !== "leave",
+).map((t) => ({ value: t, label: SHIFT_TYPE[t].label }));
 
 /**
  * Add or edit a shift template. Saves into the page's session store only.
@@ -100,18 +99,12 @@ export function ShiftTemplateDialog({
             />
           </Field>
           <Field label="Type" htmlFor={`${id}-type`}>
-            <NativeSelect
+            <Combobox
               id={`${id}-type`}
-              className="w-full"
+              options={TEMPLATE_TYPE_OPTIONS}
               value={type}
-              onChange={(e) => setType(e.target.value as ShiftType)}
-            >
-              {TEMPLATE_TYPES.map((t) => (
-                <NativeSelectOption key={t} value={t}>
-                  {SHIFT_TYPE[t].label}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={(v) => setType(v as ShiftType)}
+            />
           </Field>
           <div className="space-y-1.5">
             <div className="grid grid-cols-2 gap-3">

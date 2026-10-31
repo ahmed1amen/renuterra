@@ -13,12 +13,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -43,6 +40,11 @@ import { formatKg } from "../../utils";
 import { ServiceItemDialog } from "./components/service-item-dialog";
 
 const SKELETON_ROWS = [0, 1, 2, 3, 4, 5, 6, 7];
+
+const STREAM_OPTIONS: ComboboxOption[] = [
+  { value: "all", label: "All streams" },
+  ...WASTE_STREAMS.map((s) => ({ value: s.id, label: s.label })),
+];
 
 type MethodFilter = HandlingMethod | "all";
 
@@ -151,21 +153,14 @@ export default function ServiceItems() {
           </ul>
 
           <div className="flex flex-wrap items-center gap-2">
-            <NativeSelect
+            <Combobox
               size="sm"
+              className="w-40"
               aria-label="Filter by stream"
+              options={STREAM_OPTIONS}
               value={stream}
-              onChange={(e) =>
-                setStream(e.target.value as WasteStreamId | "all")
-              }
-            >
-              <NativeSelectOption value="all">All streams</NativeSelectOption>
-              {WASTE_STREAMS.map((s) => (
-                <NativeSelectOption key={s.id} value={s.id}>
-                  {s.label}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={(v) => setStream(v as WasteStreamId | "all")}
+            />
             <span className="relative flex w-64">
               <Search
                 className="text-muted-foreground pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2"
@@ -177,7 +172,8 @@ export default function ServiceItems() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search code or name…"
                 aria-label="Search service items"
-                className="h-8 ps-9"
+                size="sm"
+                className="ps-9"
               />
             </span>
             <span className="ms-auto flex items-center gap-2">

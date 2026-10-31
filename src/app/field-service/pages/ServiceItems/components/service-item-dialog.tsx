@@ -1,9 +1,10 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { WASTE_STREAMS } from "@/components/shared";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import {
   type ServiceItemInput,
@@ -50,6 +47,33 @@ const COUNT_UNITS: CountUnit[] = [
   "litre",
   "container",
   "kg",
+];
+
+const STREAM_OPTIONS: ComboboxOption[] = WASTE_STREAMS.map((s) => ({
+  value: s.id,
+  label: s.label,
+}));
+
+const METHOD_OPTIONS: ComboboxOption[] = HANDLING_METHOD_ORDER.map((m) => ({
+  value: m,
+  label: HANDLING_METHOD[m].label,
+}));
+
+const UNIT_OPTIONS: ComboboxOption[] = COUNT_UNITS.map((u) => ({
+  value: u,
+  label: unitLabel(u),
+}));
+
+const VEHICLE_OPTIONS: ComboboxOption[] = (
+  Object.keys(VEHICLE_CLASS) as VehicleClass[]
+).map((v) => ({ value: v, label: VEHICLE_CLASS[v] }));
+
+const WEIGHT_OPTIONS: ComboboxOption[] = [
+  { value: "", label: "Not weighed" },
+  ...(Object.keys(WEIGHT_SOURCE) as WeightSource[]).map((w) => ({
+    value: w,
+    label: WEIGHT_SOURCE[w].label,
+  })),
 ];
 
 const BLANK: ServiceItemInput = {
@@ -90,6 +114,16 @@ export function ServiceItemDialog({
   const containerTypes = useContainerTypes();
   const add = useCatalogStore((s) => s.add);
   const update = useCatalogStore((s) => s.update);
+  const containerOptions = useMemo<ComboboxOption[]>(
+    () => [
+      { value: "", label: "No container" },
+      ...(containerTypes.data ?? []).map((ct) => ({
+        value: ct.id,
+        label: ct.name,
+      })),
+    ],
+    [containerTypes.data],
+  );
 
   const initial = item ?? BLANK;
   const [form, setForm] = useState<ServiceItemInput>(initial);
@@ -164,50 +198,32 @@ export function ServiceItemDialog({
 
           <div className="grid grid-cols-2 gap-3">
             <Field label="Stream" htmlFor={`${id}-stream`}>
-              <NativeSelect
+              <Combobox
                 id={`${id}-stream`}
-                className="w-full"
+                options={STREAM_OPTIONS}
                 value={form.stream}
-                onChange={(e) => set("stream", e.target.value as WasteStreamId)}
-              >
-                {WASTE_STREAMS.map((s) => (
-                  <NativeSelectOption key={s.id} value={s.id}>
-                    {s.label}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={(v) => set("stream", v as WasteStreamId)}
+              />
             </Field>
             <Field label="Container type" htmlFor={`${id}-container`}>
-              <NativeSelect
+              <Combobox
                 id={`${id}-container`}
-                className="w-full"
+                options={containerOptions}
                 value={form.containerTypeId ?? ""}
+                placeholder="No container"
                 disabled={containerTypes.isPending}
-                onChange={(e) => set("containerTypeId", e.target.value || null)}
-              >
-                <NativeSelectOption value="">No container</NativeSelectOption>
-                {(containerTypes.data ?? []).map((ct) => (
-                  <NativeSelectOption key={ct.id} value={ct.id}>
-                    {ct.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={(v) => set("containerTypeId", v || null)}
+              />
             </Field>
           </div>
 
           <Field label="Handling method" htmlFor={`${id}-method`}>
-            <NativeSelect
+            <Combobox
               id={`${id}-method`}
-              className="w-full"
+              options={METHOD_OPTIONS}
               value={form.method}
-              onChange={(e) => set("method", e.target.value as HandlingMethod)}
-            >
-              {HANDLING_METHOD_ORDER.map((m) => (
-                <NativeSelectOption key={m} value={m}>
-                  {HANDLING_METHOD[m].label}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={(v) => set("method", v as HandlingMethod)}
+            />
             <p className="bg-muted text-muted-foreground flex items-start gap-2 rounded-md p-2.5 text-xs">
               <method.icon className="mt-px size-3.5 shrink-0" aria-hidden />
               {method.description}
@@ -216,18 +232,12 @@ export function ServiceItemDialog({
 
           <div className="grid grid-cols-3 gap-3">
             <Field label="Counted in" htmlFor={`${id}-unit`}>
-              <NativeSelect
+              <Combobox
                 id={`${id}-unit`}
-                className="w-full"
+                options={UNIT_OPTIONS}
                 value={form.countUnit}
-                onChange={(e) => set("countUnit", e.target.value as CountUnit)}
-              >
-                {COUNT_UNITS.map((u) => (
-                  <NativeSelectOption key={u} value={u}>
-                    {unitLabel(u)}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={(v) => set("countUnit", v as CountUnit)}
+              />
             </Field>
             <Field
               label="Est. kg per unit"
@@ -263,20 +273,12 @@ export function ServiceItemDialog({
 
           <div className="grid grid-cols-2 gap-3">
             <Field label="Vehicle" htmlFor={`${id}-vehicle`}>
-              <NativeSelect
+              <Combobox
                 id={`${id}-vehicle`}
-                className="w-full"
+                options={VEHICLE_OPTIONS}
                 value={form.vehicleClass}
-                onChange={(e) =>
-                  set("vehicleClass", e.target.value as VehicleClass)
-                }
-              >
-                {(Object.keys(VEHICLE_CLASS) as VehicleClass[]).map((v) => (
-                  <NativeSelectOption key={v} value={v}>
-                    {VEHICLE_CLASS[v]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                onValueChange={(v) => set("vehicleClass", v as VehicleClass)}
+              />
             </Field>
             <Field
               label="Weight from"
@@ -287,24 +289,15 @@ export function ServiceItemDialog({
                   : "Nothing is weighed, e.g. container logistics."
               }
             >
-              <NativeSelect
+              <Combobox
                 id={`${id}-weight`}
-                className="w-full"
+                options={WEIGHT_OPTIONS}
                 value={form.weightSource ?? ""}
-                onChange={(e) =>
-                  set(
-                    "weightSource",
-                    (e.target.value || null) as WeightSource | null,
-                  )
+                placeholder="Not weighed"
+                onValueChange={(v) =>
+                  set("weightSource", (v || null) as WeightSource | null)
                 }
-              >
-                <NativeSelectOption value="">Not weighed</NativeSelectOption>
-                {(Object.keys(WEIGHT_SOURCE) as WeightSource[]).map((w) => (
-                  <NativeSelectOption key={w} value={w}>
-                    {WEIGHT_SOURCE[w].label}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+              />
             </Field>
           </div>
 

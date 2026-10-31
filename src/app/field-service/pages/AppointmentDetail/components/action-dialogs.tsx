@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -11,10 +12,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import type { Appointment, ArrivalWindow } from "@/mocks";
 import { ChoiceChips, Field, WINDOW_LABEL } from "../../../components";
@@ -65,19 +62,16 @@ export function ReasonDialog<R extends string>({
         </DialogHeader>
         <div className="grid gap-4">
           <Field label="Reason" htmlFor={`${id}-reason`}>
-            <NativeSelect
+            <Combobox
               id={`${id}-reason`}
-              className="w-full"
+              options={(Object.keys(reasons) as R[]).map((r) => ({
+                value: r,
+                label: reasons[r],
+              }))}
               value={reason}
-              onChange={(e) => setReason(e.target.value as R)}
-            >
-              <NativeSelectOption value="">Select a reason…</NativeSelectOption>
-              {(Object.keys(reasons) as R[]).map((r) => (
-                <NativeSelectOption key={r} value={r}>
-                  {reasons[r]}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={(v) => setReason(v as R)}
+              placeholder="Select a reason…"
+            />
           </Field>
           <Field
             label="Note"

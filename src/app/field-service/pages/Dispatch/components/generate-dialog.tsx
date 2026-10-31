@@ -4,6 +4,7 @@ import { ArrowRight, CalendarClock, Sparkles } from "lucide-react";
 import { useId, useMemo, useState } from "react";
 import { StatusPill } from "@/components/shared";
 import { Button } from "@/components/ui/button";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -12,10 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import {
   GRADE_LABEL,
   gradeOf,
@@ -45,6 +42,12 @@ const dayLabel = new Intl.DateTimeFormat("en-GB", {
 export function formatDayKey(day: string) {
   return dayLabel.format(new Date(`${day}T00:00:00Z`));
 }
+
+const HORIZON_OPTIONS: ComboboxOption[] = HORIZON.map((day, i) => ({
+  value: day,
+  label: formatDayKey(day),
+  description: i === 0 ? "Tomorrow" : undefined,
+}));
 
 /**
  * Pick the days to generate, run the engine, then read its summary. Stands in
@@ -141,40 +144,28 @@ function PickDays({
 
       <div className="grid grid-cols-2 gap-3">
         <Field label="From" htmlFor={fromId}>
-          <NativeSelect
+          <Combobox
             id={fromId}
+            options={HORIZON_OPTIONS}
             value={from}
-            onChange={(e) => {
-              setFrom(e.target.value);
-              if (e.target.value > to) setTo(e.target.value);
+            searchable={false}
+            onValueChange={(v) => {
+              setFrom(v);
+              if (v > to) setTo(v);
             }}
-            className="w-full"
-          >
-            {HORIZON.map((day, i) => (
-              <NativeSelectOption key={day} value={day}>
-                {formatDayKey(day)}
-                {i === 0 ? " (tomorrow)" : ""}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+          />
         </Field>
         <Field label="Through" htmlFor={toId}>
-          <NativeSelect
+          <Combobox
             id={toId}
+            options={HORIZON_OPTIONS}
             value={to}
-            onChange={(e) => {
-              setTo(e.target.value);
-              if (e.target.value < from) setFrom(e.target.value);
+            searchable={false}
+            onValueChange={(v) => {
+              setTo(v);
+              if (v < from) setFrom(v);
             }}
-            className="w-full"
-          >
-            {HORIZON.map((day, i) => (
-              <NativeSelectOption key={day} value={day}>
-                {formatDayKey(day)}
-                {i === 0 ? " (tomorrow)" : ""}
-              </NativeSelectOption>
-            ))}
-          </NativeSelect>
+          />
         </Field>
       </div>
 

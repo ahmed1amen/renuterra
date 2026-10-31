@@ -201,7 +201,8 @@ export default function ServicePros() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search name, zone, skill…"
                 aria-label="Search service pros"
-                className="h-8 ps-9"
+                size="sm"
+                className="ps-9"
               />
             </span>
           </div>

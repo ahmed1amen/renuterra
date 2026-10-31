@@ -25,7 +25,7 @@ export function AppLayout({
         <main
           className={cn(
             "flex w-full flex-1 flex-col",
-            fullWidth ? "min-h-0" : "mx-auto max-w-6xl px-6 py-8",
+            fullWidth ? "min-h-0" : "mx-auto max-w-7xl px-6 py-8 lg:px-8",
           )}
         >
           <CommentSurface>{children}</CommentSurface>

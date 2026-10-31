@@ -5,6 +5,7 @@ import { useId, useState } from "react";
 import { StreamTag } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Dialog,
   DialogContent,
@@ -15,10 +16,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { outcomeFor, useDirectory } from "@/features/field-service";
@@ -55,6 +52,15 @@ const FILL_LEVELS = [
   { id: "120", label: "Overflowing" },
 ] as const;
 type FillLevel = (typeof FILL_LEVELS)[number]["id"];
+
+const FACILITY_OPTIONS: ComboboxOption[] = DISPOSAL_FACILITIES.map((f) => ({
+  value: f,
+  label: f,
+}));
+
+const REASON_OPTIONS: ComboboxOption[] = (
+  Object.keys(SHORTFALL_REASON) as ShortfallReason[]
+).map((r) => ({ value: r, label: SHORTFALL_REASON[r] }));
 
 let fakeSeq = 9100;
 const nextNumber = () => fakeSeq++;
@@ -261,18 +267,15 @@ export function RecordWorkOrderDialog({
             <>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="Container taken" htmlFor={`${id}-out`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-out`}
-                    className="w-full"
+                    options={containers.map((c) => ({
+                      value: c.tag,
+                      label: c.tag,
+                    }))}
                     value={containerOut}
-                    onChange={(e) => setContainerOut(e.target.value)}
-                  >
-                    {containers.map((c) => (
-                      <NativeSelectOption key={c.id} value={c.tag}>
-                        {c.tag}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                    onValueChange={setContainerOut}
+                  />
                 </Field>
                 <Field label="Same container returned" htmlFor={`${id}-ret`}>
                   <Switch
@@ -284,18 +287,12 @@ export function RecordWorkOrderDialog({
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="Facility" htmlFor={`${id}-facility`}>
-                  <NativeSelect
+                  <Combobox
                     id={`${id}-facility`}
-                    className="w-full"
+                    options={FACILITY_OPTIONS}
                     value={facility}
-                    onChange={(e) => setFacility(e.target.value)}
-                  >
-                    {DISPOSAL_FACILITIES.map((f) => (
-                      <NativeSelectOption key={f} value={f}>
-                        {f}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
+                    onValueChange={setFacility}
+                  />
                 </Field>
                 <Field label="Weighbridge ticket" htmlFor={`${id}-ticket`}>
                   <Input
@@ -396,23 +393,13 @@ export function RecordWorkOrderDialog({
               label={outcome === "partial" ? "Why not all of it?" : "Why not?"}
               htmlFor={`${id}-reason`}
             >
-              <NativeSelect
+              <Combobox
                 id={`${id}-reason`}
-                className="w-full"
+                options={REASON_OPTIONS}
                 value={reason}
-                onChange={(e) => setReason(e.target.value as ShortfallReason)}
-              >
-                <NativeSelectOption value="">
-                  Select a reason…
-                </NativeSelectOption>
-                {(Object.keys(SHORTFALL_REASON) as ShortfallReason[]).map(
-                  (r) => (
-                    <NativeSelectOption key={r} value={r}>
-                      {SHORTFALL_REASON[r]}
-                    </NativeSelectOption>
-                  ),
-                )}
-              </NativeSelect>
+                onValueChange={(v) => setReason(v as ShortfallReason)}
+                placeholder="Select a reason…"
+              />
             </Field>
           ) : null}
 
@@ -472,21 +459,17 @@ export function AddWorkOrderDialog({
         </DialogHeader>
         <div className="grid gap-4">
           <Field label="Service item" htmlFor={`${id}-item`}>
-            <NativeSelect
+            <Combobox
               id={`${id}-item`}
-              className="w-full"
+              options={items.map((i) => ({
+                value: i.id,
+                label: i.name,
+                description: i.code,
+              }))}
               value={itemId}
-              onChange={(e) => setItemId(e.target.value)}
-            >
-              <NativeSelectOption value="">
-                Select a service item…
-              </NativeSelectOption>
-              {items.map((i) => (
-                <NativeSelectOption key={i.id} value={i.id}>
-                  {i.code} — {i.name}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              onValueChange={setItemId}
+              placeholder="Select a service item…"
+            />
           </Field>
           {item ? (
             <Field
