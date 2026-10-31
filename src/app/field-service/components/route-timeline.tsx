@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AlertTriangle,
   ChevronDown,
   ChevronUp,
   Factory,
@@ -30,9 +31,13 @@ import {
 } from "@/mocks";
 import { formatDuration, formatHour, formatTime, minutesOfDay } from "../utils";
 import { APPOINTMENT_STATUS } from "./appointment-meta";
-import { isMovable, type RoutePlan } from "./dispatch-meta";
+import { isMovable, type RoutePlan, SHIFT_LABEL } from "./dispatch-meta";
+import { flagChips } from "./instance-flags";
+import { InstanceStatusPill } from "./route-meta";
+import { RouteScoreBadge } from "./route-score-badge";
+import { RouteCode } from "./route-sidebar";
 
-const LANE_WIDTH = 248;
+const LANE_WIDTH = 288;
 const MIN_HOUR_WIDTH = 48;
 const MAX_HOUR_WIDTH = 220;
 const DEFAULT_HOUR_WIDTH = 150;
@@ -464,6 +469,10 @@ function Lane({
   onDrop: (e: DragEvent) => void;
 }) {
   const { route, pro, vehicle, colors, locked } = plan;
+  // Substitutes are fine; only what a dispatcher must act on gets the icon.
+  const attention = flagChips(route.flags).filter(
+    (c) => !c.key.startsWith("substitute"),
+  );
 
   return (
     <div
@@ -488,8 +497,12 @@ function Lane({
           type="button"
           onClick={onSelectRoute}
           aria-pressed={selected}
+          aria-label={`Select ${route.name}`}
+          className="absolute inset-0"
+        />
+        <span
           className={cn(
-            "flex min-w-0 flex-1 items-center gap-2 py-2 text-left transition-opacity",
+            "pointer-events-none relative flex min-w-0 flex-1 items-center gap-2 py-1.5 transition-opacity",
             dimmed && "opacity-60",
           )}
         >
@@ -504,21 +517,49 @@ function Lane({
               {locked ? (
                 <Lock
                   className="text-muted-foreground size-3 shrink-0"
-                  aria-label="Locked"
+                  aria-label="Confirmed"
                 />
               ) : null}
             </span>
+            <span className="text-muted-foreground flex text-[11px]">
+              <RouteCode plan={plan} />
+            </span>
             <span className="text-muted-foreground block truncate text-[11px]">
-              {pro?.name ?? "No primary pro"}
+              {SHIFT_LABEL[route.shiftId]} ·{" "}
+              {pro?.name ?? <span className="text-destructive">No driver</span>}
               {vehicle ? (
                 <span className="font-mono"> · {vehicle.plate}</span>
               ) : null}
             </span>
           </span>
-        </button>
+        </span>
 
-        <span className="text-muted-foreground shrink-0 font-mono text-[11px] tabular-nums">
-          {plan.activeStops}/{route.maxStops}
+        <span className="pointer-events-none relative flex shrink-0 flex-col items-end gap-1">
+          <InstanceStatusPill status={route.status} />
+          <span className="text-muted-foreground flex items-center gap-1 font-mono text-[11px] tabular-nums">
+            {attention.length ? (
+              <span
+                className="pointer-events-auto"
+                title={attention.map((c) => c.label).join(" · ")}
+              >
+                <AlertTriangle
+                  className={cn(
+                    "size-3",
+                    attention.some((c) => c.tone === "destructive")
+                      ? "text-destructive"
+                      : "text-warning",
+                  )}
+                  aria-label={attention.map((c) => c.label).join(", ")}
+                />
+              </span>
+            ) : null}
+            {plan.activeStops}/{route.maxStops}
+            <RouteScoreBadge
+              score={plan.score}
+              compact
+              className="pointer-events-auto ml-0.5"
+            />
+          </span>
         </span>
       </div>
 

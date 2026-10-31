@@ -1,116 +1,141 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { create } from "zustand";
-import { MOCK_NOW, type Route } from "@/mocks";
-import { useAppointmentStore } from "./appointment-store";
-import { useRoutesQuery } from "./hooks/use-routes-query";
+import type { Route, RouteAssignment } from "@/mocks";
+import {
+  useRouteAssignmentsQuery,
+  useRoutesQuery,
+} from "./hooks/use-routes-query";
 
 /**
- * Dispatch changes made during this session — stops moved between routes,
- * locks, vehicle and crew swaps. Prototype-grade like the appointment store:
- * fixtures stay untouched and everything resets on reload.
+ * Attributes the spec calls "matching" (R13): changing one on an Active Route
+ * makes a new version; instances already generated keep the old one.
+ */
+const MATCHING: (keyof Route)[] = [
+  "serviceType",
+  "city",
+  "truckTypeIds",
+  "requiredSkills",
+  "wasteCodes",
+  "shiftId",
+];
+
+/**
+ * Route templates and assignments edited this session. Prototype-grade: the
+ * fixtures are never changed and everything resets on reload. Nothing is ever
+ * deleted (R20): routes are retired, assignments suspended.
  */
 type RouteState = {
-  /** Field overrides per route id. */
   patches: Record<string, Partial<Route>>;
-  /** Routes created this session (e.g. "New route" on the board). */
   added: Route[];
-  patch: (id: string, changes: Partial<Route>) => void;
-  add: (route: Route) => void;
+  assignmentPatches: Record<string, Partial<RouteAssignment>>;
+  addedAssignments: RouteAssignment[];
+  addRoute: (route: Route) => void;
+  patchRoute: (id: string, changes: Partial<Route>) => void;
+  addAssignment: (assignment: RouteAssignment) => void;
+  patchAssignment: (id: string, changes: Partial<RouteAssignment>) => void;
 };
 
 export const useRouteStore = create<RouteState>((set) => ({
   patches: {},
   added: [],
-  patch: (id, changes) =>
-    set((state) => ({
-      patches: { ...state.patches, [id]: { ...state.patches[id], ...changes } },
+  assignmentPatches: {},
+  addedAssignments: [],
+  addRoute: (route) => set((s) => ({ added: [...s.added, route] })),
+  patchRoute: (id, changes) =>
+    set((s) => ({
+      patches: { ...s.patches, [id]: { ...s.patches[id], ...changes } },
     })),
-  add: (route) => set((state) => ({ added: [...state.added, route] })),
+  addAssignment: (assignment) =>
+    set((s) => ({ addedAssignments: [...s.addedAssignments, assignment] })),
+  patchAssignment: (id, changes) =>
+    set((s) => ({
+      assignmentPatches: {
+        ...s.assignmentPatches,
+        [id]: { ...s.assignmentPatches[id], ...changes },
+      },
+    })),
 }));
 
-/** Fixtures plus this session's dispatch changes. */
+function merge<T extends { id: string }>(
+  base: T[] | undefined,
+  added: T[],
+  patches: Record<string, Partial<T>>,
+) {
+  if (!base) return undefined;
+  return [...base, ...added].map((row) =>
+    patches[row.id] ? { ...row, ...patches[row.id] } : row,
+  );
+}
+
+/** Route templates: fixtures plus this session's edits. */
 export function useRoutes() {
   const query = useRoutesQuery();
   const patches = useRouteStore((s) => s.patches);
   const added = useRouteStore((s) => s.added);
+  const data = useMemo(
+    () => merge(query.data, added, patches),
+    [query.data, added, patches],
+  );
+  return { ...query, data };
+}
 
-  const data = useMemo(() => {
-    if (!query.data) return undefined;
-    return [...query.data, ...added].map((r) =>
-      patches[r.id] ? { ...r, ...patches[r.id] } : r,
-    );
-  }, [query.data, patches, added]);
-
+export function useRouteAssignments() {
+  const query = useRouteAssignmentsQuery();
+  const patches = useRouteStore((s) => s.assignmentPatches);
+  const added = useRouteStore((s) => s.addedAssignments);
+  const data = useMemo(
+    () => merge(query.data, added, patches),
+    [query.data, added, patches],
+  );
   return { ...query, data };
 }
 
 /**
- * Dispatch actions that keep a route's stop list and its appointments'
- * `routeId` in step. Every action is a fake: it only patches session state.
+ * Apply an edit to a route. On an Active route a change to a matching
+ * attribute bumps the version (R13) — returned so the caller can say so.
  */
-export function useDispatchActions() {
-  const routes = useRoutes();
-  const base = useRoutesQuery().data;
-  const patchRoute = useRouteStore((s) => s.patch);
-  const updateAppointment = useAppointmentStore((s) => s.update);
-
-  /**
-   * Routes as the store holds them right now — not as of the last render — so
-   * several moves in one handler (Auto-plan) build on each other.
-   */
-  const current = useCallback(() => {
-    const { patches, added } = useRouteStore.getState();
-    return [...(base ?? []), ...added].map((r) =>
-      patches[r.id] ? { ...r, ...patches[r.id] } : r,
+export function editRoute(route: Route, changes: Partial<Route>) {
+  const versioned =
+    route.status === "active" &&
+    MATCHING.some(
+      (key) =>
+        key in changes &&
+        JSON.stringify(changes[key]) !== JSON.stringify(route[key]),
     );
-  }, [base]);
+  const next = versioned ? { ...changes, version: route.version + 1 } : changes;
+  // R1: the code is immutable once a route has been active.
+  if (route.status !== "draft") delete next.code;
+  useRouteStore.getState().patchRoute(route.id, next);
+  return { versioned, version: versioned ? route.version + 1 : route.version };
+}
 
-  const routeOf = useCallback(
-    (appointmentId: string) =>
-      current().find((r) => r.appointmentIds.includes(appointmentId)),
-    [current],
-  );
+/**
+ * Move a service line onto a route (R10: one Active route per line — a
+ * transfer takes it off the old one).
+ */
+export function attachServiceLine(
+  routes: Route[],
+  routeId: string,
+  serviceLineId: string,
+) {
+  const { patchRoute } = useRouteStore.getState();
+  for (const r of routes) {
+    if (r.id !== routeId && r.serviceLineIds.includes(serviceLineId))
+      patchRoute(r.id, {
+        serviceLineIds: r.serviceLineIds.filter((id) => id !== serviceLineId),
+      });
+  }
+  const target = routes.find((r) => r.id === routeId);
+  if (target && !target.serviceLineIds.includes(serviceLineId))
+    patchRoute(routeId, {
+      serviceLineIds: [...target.serviceLineIds, serviceLineId],
+    });
+}
 
-  /**
-   * Put an appointment on a route (at `index`, default the end) or back in the
-   * backlog (`toRouteId: null`). Tipping trips after a moved stop are dropped.
-   */
-  const move = useCallback(
-    (appointmentId: string, toRouteId: string | null, index?: number) => {
-      const from = routeOf(appointmentId);
-      if (from) {
-        patchRoute(from.id, {
-          appointmentIds: from.appointmentIds.filter(
-            (id) => id !== appointmentId,
-          ),
-          tippingTrips: from.tippingTrips.filter(
-            (t) => t.afterAppointmentId !== appointmentId,
-          ),
-        });
-      }
-      if (toRouteId) {
-        const to = current().find((r) => r.id === toRouteId);
-        if (to) {
-          const ids = to.appointmentIds.filter((id) => id !== appointmentId);
-          ids.splice(index ?? ids.length, 0, appointmentId);
-          patchRoute(to.id, { appointmentIds: ids });
-        }
-      }
-      updateAppointment(appointmentId, { routeId: toRouteId });
-    },
-    [routeOf, current, patchRoute, updateAppointment],
-  );
-
-  const setLocked = useCallback(
-    (routeId: string, locked: boolean) =>
-      patchRoute(routeId, {
-        lockedAt: locked ? MOCK_NOW : null,
-        lockedBy: locked ? "usr_1" : null,
-      }),
-    [patchRoute],
-  );
-
-  return { move, setLocked, patch: patchRoute, routeOf, routes };
+export function detachServiceLine(route: Route, serviceLineId: string) {
+  useRouteStore.getState().patchRoute(route.id, {
+    serviceLineIds: route.serviceLineIds.filter((id) => id !== serviceLineId),
+  });
 }

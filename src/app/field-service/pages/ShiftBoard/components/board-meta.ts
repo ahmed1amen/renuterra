@@ -1,5 +1,5 @@
 import type { StatusTone } from "@/components/shared";
-import type { Route, RouteCrewRole, Technician } from "@/mocks";
+import type { RouteCrewRole, RouteInstance, Technician } from "@/mocks";
 
 /** Cell tint per shift tone — the badge palette, as a block. */
 export const TONE_BLOCK: Record<StatusTone, string> = {
@@ -15,23 +15,27 @@ export type RoleFilter = "all" | "driver" | "loader";
 export const ROLE_FILTERS: { id: RoleFilter; label: string }[] = [
   { id: "all", label: "All" },
   { id: "driver", label: "Drivers" },
-  { id: "loader", label: "Loaders & trainees" },
+  { id: "loader", label: "Helpers & trainees" },
 ];
 
 /** Drivers can own a route; everyone else rides along as crew. */
 export const isDriver = (pro: Technician) => pro.role !== "loader";
 
-export type RouteSeat = { route: Route; role: RouteCrewRole | "primary" };
+export type RouteSeat = {
+  route: RouteInstance;
+  role: RouteCrewRole | "primary";
+};
 
 /** Every route a pro sits on, keyed by `proId|date`. */
-export function seatsByProDay(routes: Route[]) {
+export function seatsByProDay(routes: RouteInstance[]) {
   const map = new Map<string, RouteSeat[]>();
   const push = (proId: string, seat: RouteSeat) => {
     const key = `${proId}|${seat.route.date}`;
     map.set(key, [...(map.get(key) ?? []), seat]);
   };
   for (const route of routes) {
-    push(route.primaryServiceProId, { route, role: "primary" });
+    if (route.primaryServiceProId)
+      push(route.primaryServiceProId, { route, role: "primary" });
     for (const member of route.crew)
       push(member.serviceProId, { route, role: member.role });
   }

@@ -93,7 +93,7 @@ function ShiftForm({
     shift ? (shift.templateId ?? CUSTOM) : (fallback?.id ?? CUSTOM),
   );
   const [type, setType] = useState<ShiftType>(
-    shift?.type ?? fallback?.type ?? "day",
+    shift?.type ?? fallback?.type ?? "morning",
   );
   const [startTime, setStartTime] = useState(
     shift?.startTime ?? fallback?.startTime ?? "06:00",

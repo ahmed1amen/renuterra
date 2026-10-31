@@ -3,56 +3,180 @@
     "id": "veh_1",
     "plate": "DXB P 48213",
     "vehicleClass": "compactor",
-    "capacityKg": 10000,
-    "status": "in-service"
+    "truckTypeId": "REL-25",
+    "entity": "RWC",
+    "capacityKg": 12000,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
   },
   {
     "id": "veh_2",
     "plate": "DXB K 21907",
     "vehicleClass": "compactor",
-    "capacityKg": 10000,
-    "status": "in-service"
-  },
-  {
-    "id": "veh_3",
-    "plate": "DXB R 66042",
-    "vehicleClass": "hook-loader",
-    "capacityKg": 16000,
-    "status": "in-service"
-  },
-  {
-    "id": "veh_4",
-    "plate": "DXB H 52044",
-    "vehicleClass": "hook-loader",
-    "capacityKg": 16000,
-    "status": "in-service"
-  },
-  {
-    "id": "veh_5",
-    "plate": "DXB T 39021",
-    "vehicleClass": "skip-loader",
-    "capacityKg": 8000,
-    "status": "in-service"
-  },
-  {
-    "id": "veh_6",
-    "plate": "DXB M 70318",
-    "vehicleClass": "box-truck",
-    "capacityKg": 2500,
-    "status": "in-service"
-  },
-  {
-    "id": "veh_7",
-    "plate": "DXB L 15530",
-    "vehicleClass": "tanker",
-    "capacityKg": 9000,
-    "status": "in-service"
+    "truckTypeId": "REL-25",
+    "entity": "RWC",
+    "capacityKg": 12000,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
   },
   {
     "id": "veh_8",
     "plate": "DXB P 48990",
     "vehicleClass": "compactor",
+    "truckTypeId": "REL-25",
+    "entity": "RWC",
+    "capacityKg": 12000,
+    "status": "maintenance",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_9",
+    "plate": "DXB R 10422",
+    "vehicleClass": "compactor",
+    "truckTypeId": "REL-14",
+    "entity": "RWC",
+    "capacityKg": 7500,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_10",
+    "plate": "DXB N 33019",
+    "vehicleClass": "compactor",
+    "truckTypeId": "REL-14",
+    "entity": null,
+    "capacityKg": 7500,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2026-09-21",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_3",
+    "plate": "DXB R 66042",
+    "vehicleClass": "hook-loader",
+    "truckTypeId": "HOOK-STD",
+    "entity": "RWC",
+    "capacityKg": 16000,
+    "status": "maintenance",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_4",
+    "plate": "DXB H 52044",
+    "vehicleClass": "hook-loader",
+    "truckTypeId": "HOOK-STD",
+    "entity": "RWC",
+    "capacityKg": 16000,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_5",
+    "plate": "DXB T 39021",
+    "vehicleClass": "skip-loader",
+    "truckTypeId": "SKP-STD",
+    "entity": "RWC",
+    "capacityKg": 8000,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_6",
+    "plate": "DXB M 70318",
+    "vehicleClass": "box-truck",
+    "truckTypeId": "BOX-MED",
+    "entity": "GGM",
+    "capacityKg": 1200,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_14",
+    "plate": "DXB M 70455",
+    "vehicleClass": "box-truck",
+    "truckTypeId": "BOX-MED",
+    "entity": "GGM",
+    "capacityKg": 1200,
+    "status": "in-service",
+    "permits": ["DXB"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_15",
+    "plate": "DXB G 80211",
+    "vehicleClass": "box-truck",
+    "truckTypeId": "BOX-HAZ",
+    "entity": "GGH",
+    "capacityKg": 3000,
+    "status": "in-service",
+    "permits": ["DXB", "AJM"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_7",
+    "plate": "DXB L 15530",
+    "vehicleClass": "tanker",
+    "truckTypeId": "TNK-VAC",
+    "entity": "GGH",
     "capacityKg": 10000,
-    "status": "maintenance"
+    "status": "in-service",
+    "permits": ["DXB", "AJM"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_13",
+    "plate": "SHJ 1 40517",
+    "vehicleClass": "compactor",
+    "truckTypeId": "REL-14",
+    "entity": "RWC",
+    "capacityKg": 7500,
+    "status": "in-service",
+    "permits": ["SHJ"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_11",
+    "plate": "SHJ 3 21876",
+    "vehicleClass": "hook-loader",
+    "truckTypeId": "HOOK-STD",
+    "entity": "RWC",
+    "capacityKg": 16000,
+    "status": "in-service",
+    "permits": ["SHJ"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
+  },
+  {
+    "id": "veh_12",
+    "plate": "SHJ 2 11905",
+    "vehicleClass": "skip-loader",
+    "truckTypeId": "SKP-STD",
+    "entity": "RWC",
+    "capacityKg": 8000,
+    "status": "in-service",
+    "permits": ["SHJ"],
+    "registrationExpiry": "2027-03-31",
+    "insuranceExpiry": "2027-01-31"
   }
 ]

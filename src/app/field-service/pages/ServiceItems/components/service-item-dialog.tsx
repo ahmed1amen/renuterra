@@ -66,6 +66,7 @@ const BLANK: ServiceItemInput = {
   requiresSeals: false,
   requiresConsignmentNote: false,
   consumable: null,
+  wasteCode: null,
   active: true,
 };
 

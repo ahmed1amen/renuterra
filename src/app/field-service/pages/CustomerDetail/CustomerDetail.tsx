@@ -31,6 +31,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   useAppointments,
   useCustomer,
+  useProjectedVisits,
   useServicePoints,
 } from "@/features/field-service";
 import { cn } from "@/lib/utils";
@@ -43,11 +44,16 @@ import {
   CONTACT_ROLE,
   CustomerFlags,
   CustomerStatusPill,
+  formatDayKey,
+  ProjectedVisitsTable,
   ServicePointMap,
   TIER_LABEL,
 } from "../../components";
-import { formatAed, formatCount, formatDate } from "../../utils";
-import { ServicePointsTab } from "./components";
+import { formatAed, formatCount, formatDate, toDubaiDayKey } from "../../utils";
+import { NextVisits, ServicePointsTab } from "./components";
+
+/** The overview shows a week of projected visits; the tabs show two. */
+const OVERVIEW_DAYS = 7;
 
 type Tab = "overview" | "service-points" | "appointments" | "contacts";
 type Period = "upcoming" | "past";
@@ -87,6 +93,7 @@ export default function CustomerDetail({ id }: { id: string }) {
 function Detail({ customer }: { customer: Customer }) {
   const servicePoints = useServicePoints();
   const appointments = useAppointments();
+  const projected = useProjectedVisits({ customerId: customer.id });
   const openBooking = useBookAppointmentModal((s) => s.openModal);
   const [tab, setTab] = useState<Tab>("overview");
   const [period, setPeriod] = useState<Period>("upcoming");
@@ -110,14 +117,28 @@ function Detail({ customer }: { customer: Customer }) {
     const attempted = past.filter(
       (a) => a.status === "completed" || a.status === "failed",
     ).length;
+    const projections = projected ?? [];
+    const weekEnd = addDayKey(toDubaiDayKey(MOCK_NOW), OVERVIEW_DAYS);
+    const nextDay = [
+      upcoming[0] && toDubaiDayKey(upcoming[0].windowStart),
+      projections[0]?.date,
+    ]
+      .filter(Boolean)
+      .sort()[0];
     return {
       upcoming,
+      nextDay,
+      /** Route-scheduled visits, next 7 days, dispatched or not. */
+      week: projections.filter((v) => v.date < weekEnd),
+      /** Route-scheduled visits with no generated instance yet. */
+      notDispatched: projections.filter((v) => !v.instanceId),
+      adHoc: upcoming.filter((a) => a.source === "customer-request"),
       past: [...past].reverse(),
       failed: past.filter((a) => a.status === "failed").length,
       completionRate: attempted ? Math.round((done / attempted) * 100) : null,
       services: sites.reduce((n, sp) => n + sp.serviceLines.length, 0),
     };
-  }, [visits, sites]);
+  }, [visits, sites, projected]);
 
   const kam = findUser(customer.kamId);
   const onHold = customer.flags.includes("do_not_service");
@@ -182,8 +203,8 @@ function Detail({ customer }: { customer: Customer }) {
           label="Upcoming visits"
           value={loaded ? formatCount(stats.upcoming.length) : undefined}
           hint={
-            loaded && stats.upcoming[0]
-              ? `Next ${formatDate(stats.upcoming[0].windowStart)}`
+            loaded && stats.nextDay
+              ? `Next ${formatDayKey(stats.nextDay)}`
               : "Nothing booked"
           }
         />
@@ -291,7 +312,8 @@ function Detail({ customer }: { customer: Customer }) {
               <CardHeader>
                 <CardTitle>Next visits</CardTitle>
                 <CardDescription>
-                  What's booked across all service points.
+                  The next {OVERVIEW_DAYS} days from route schedules, plus open
+                  ad-hoc appointments.
                 </CardDescription>
                 <CardAction>
                   <Button
@@ -304,20 +326,10 @@ function Detail({ customer }: { customer: Customer }) {
                 </CardAction>
               </CardHeader>
               <CardContent>
-                {appointments.isPending ? (
+                {appointments.isPending || !projected ? (
                   <Skeleton className="h-40 w-full" />
-                ) : stats.upcoming.length ? (
-                  <AppointmentsTable
-                    appointments={stats.upcoming.slice(0, 5)}
-                    showCustomer={false}
-                  />
                 ) : (
-                  <EmptyState
-                    icon={CalendarPlus}
-                    title="Nothing booked"
-                    description="Recurring visits appear here once a contract is active."
-                    className="py-8"
-                  />
+                  <NextVisits projections={stats.week} adHoc={stats.adHoc} />
                 )}
               </CardContent>
             </Card>
@@ -330,6 +342,7 @@ function Detail({ customer }: { customer: Customer }) {
           ) : (
             <ServicePointsTab
               servicePoints={sites}
+              projected={projected ?? []}
               bookable={customer.status === "active" && !onHold}
             />
           )}
@@ -366,11 +379,27 @@ function Detail({ customer }: { customer: Customer }) {
             <CardContent>
               {appointments.isPending ? (
                 <Skeleton className="h-64 w-full" />
-              ) : stats[period].length ? (
-                <AppointmentsTable
-                  appointments={stats[period]}
-                  showCustomer={false}
-                />
+              ) : stats[period].length ||
+                (period === "upcoming" && stats.notDispatched.length) ? (
+                <div className="space-y-4">
+                  {stats[period].length ? (
+                    <AppointmentsTable
+                      appointments={stats[period]}
+                      showCustomer={false}
+                    />
+                  ) : null}
+                  {period === "upcoming" && stats.notDispatched.length ? (
+                    <div>
+                      <p className="text-muted-foreground mb-1 text-xs font-medium">
+                        Scheduled by route · not dispatched yet
+                      </p>
+                      <ProjectedVisitsTable
+                        visits={stats.notDispatched}
+                        showCustomer={false}
+                      />
+                    </div>
+                  ) : null}
+                </div>
               ) : (
                 <EmptyState
                   title={
@@ -458,4 +487,11 @@ function DetailSkeleton() {
       <Skeleton className="h-72 w-full" />
     </output>
   );
+}
+
+/** `2026-09-04` + n days. */
+function addDayKey(day: string, n: number) {
+  return new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000)
+    .toISOString()
+    .slice(0, 10);
 }

@@ -5,20 +5,20 @@ import type {
   Container,
   ContainerType,
   Customer,
-  Route,
+  RouteInstance,
   ServiceItem,
   ServicePoint,
   Technician,
   Vehicle,
 } from "@/mocks";
-import { useRoutes } from "../route-store";
+import { useVehicles } from "../fleet-store";
+import { useRouteInstances } from "../route-instance-store";
 import {
   useContainers,
   useContainerTypes,
   useServiceItems,
 } from "./use-catalog";
 import { useCustomers } from "./use-customers";
-import { useVehicles } from "./use-routes-query";
 import { useServicePoints } from "./use-service-points";
 import { useTechnicians } from "./use-technicians";
 
@@ -34,7 +34,7 @@ export function useDirectory() {
   const items = useServiceItems();
   const containerTypes = useContainerTypes();
   const containers = useContainers();
-  const routes = useRoutes();
+  const routes = useRouteInstances();
   const vehicles = useVehicles();
 
   return useMemo(
@@ -45,7 +45,7 @@ export function useDirectory() {
       serviceItem: byId<ServiceItem>(items.data),
       containerType: byId<ContainerType>(containerTypes.data),
       container: byId<Container>(containers.data),
-      route: byId<Route>(routes.data),
+      routeInstance: byId<RouteInstance>(routes.data),
       vehicle: byId<Vehicle>(vehicles.data),
       isPending:
         customers.isPending ||

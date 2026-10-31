@@ -3,15 +3,20 @@
 import {
   AlertTriangle,
   CalendarX2,
+  CheckCircle2,
+  CornerDownRight,
   Inbox,
   Lock,
   LockOpen,
   MoreVertical,
   Route as RouteIcon,
+  ShieldAlert,
+  Sparkles,
   Truck,
   Undo2,
   UserRound,
 } from "lucide-react";
+import Link from "next/link";
 import type { ReactElement, ReactNode } from "react";
 import { EmptyState, StreamTag } from "@/components/shared";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -31,6 +36,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  formatAmount,
   isWorkingShift,
   useDirectory,
   useShifts,
@@ -38,7 +44,7 @@ import {
   useVehicles,
 } from "@/features/field-service";
 import { cn } from "@/lib/utils";
-import type { Appointment } from "@/mocks";
+import type { Appointment, StaffingSource } from "@/mocks";
 import {
   formatDate,
   formatDuration,
@@ -49,10 +55,19 @@ import { WINDOW_LABEL } from "./appointment-meta";
 import {
   type BoardActions,
   CREW_ROLE_LABEL,
+  canOptimize,
+  type DefaultRoute,
   fitsVehicle,
   isMovable,
+  type OpenSlot,
   type RoutePlan,
+  SHIFT_LABEL,
+  slotLabel,
 } from "./dispatch-meta";
+import { InstanceFlagChips } from "./instance-flags";
+import { InstanceStatusPill, STAFFING_SOURCE } from "./route-meta";
+import { RouteScoreBadge } from "./route-score-badge";
+import { StaffSlotMenu } from "./staff-slot-menu";
 import { VEHICLE_CLASS } from "./work-order-meta";
 
 /**
@@ -61,6 +76,9 @@ import { VEHICLE_CLASS } from "./work-order-meta";
  * for its pins, `stroke` for its line. Fixed rather than theme tokens, like
  * the waste streams: a route has to hold its colour against the basemap.
  */
+/** Capacity bar label per basis. */
+const BASIS_LABEL = { volume: "Volume", visits: "Visits", weight: "Weight" };
+
 const ROUTE_COLORS = [
   {
     bar: "bg-emerald-500",
@@ -124,6 +142,8 @@ export function RouteSidebar({
   onSelectRoute,
   onSelectAppointment,
   actions,
+  defaultRoutes,
+  routesEmpty,
   top,
 }: {
   plans: RoutePlan[];
@@ -136,6 +156,10 @@ export function RouteSidebar({
   onSelectRoute: (routeId: string | null) => void;
   onSelectAppointment: (appointmentId: string) => void;
   actions: BoardActions;
+  /** Each backlog job's default route (R24), by appointment id. */
+  defaultRoutes: Map<string, DefaultRoute>;
+  /** Shown when the day has no instances (e.g. "Not generated yet"). */
+  routesEmpty?: ReactNode;
   top?: ReactNode;
 }) {
   return (
@@ -168,12 +192,14 @@ export function RouteSidebar({
 
         <TabsContent value="routes" className="min-h-0 overflow-y-auto">
           {plans.length === 0 ? (
-            <EmptyState
-              icon={CalendarX2}
-              title="No routes on this day"
-              description="Routes are generated from the service schedule. Pick another day to plan."
-              className="px-6"
-            />
+            (routesEmpty ?? (
+              <EmptyState
+                icon={CalendarX2}
+                title="No routes on this day"
+                description="Route instances are generated from each Route's schedule. Pick another day to plan."
+                className="px-6"
+              />
+            ))
           ) : (
             <ul className="flex flex-col gap-2 p-3">
               {plans.map((plan) => (
@@ -202,7 +228,7 @@ export function RouteSidebar({
             <EmptyState
               icon={Inbox}
               title="Backlog is clear"
-              description="Every appointment on this day is on a route."
+              description="Every job on this day is on a route instance."
               className="px-6 py-10"
             />
           ) : (
@@ -212,6 +238,7 @@ export function RouteSidebar({
                   <BacklogRow
                     appointment={apt}
                     plans={plans}
+                    defaultRoute={defaultRoutes.get(apt.id)}
                     onSelect={() => onSelectAppointment(apt.id)}
                     onAssign={(routeId) => actions.assign(apt.id, routeId)}
                   />
@@ -235,6 +262,7 @@ export function RouteSidebar({
                     <BacklogRow
                       appointment={apt}
                       plans={plans}
+                      defaultRoute={defaultRoutes.get(apt.id)}
                       showDate
                       onSelect={() => onSelectAppointment(apt.id)}
                       onAssign={(routeId) => actions.assign(apt.id, routeId)}
@@ -263,13 +291,15 @@ function RouteCard({
   onSelect: () => void;
   actions: BoardActions;
 }) {
-  const { route, pro, crew, vehicle, colors, locked } = plan;
+  const { route, template, pro, crew, vehicle, colors, locked } = plan;
   const vehicles = useVehicles();
   const technicians = useTechnicians();
   const { shiftOf } = useShifts();
   // Everyone on the route needs a working shift that day (Shift board).
   const offShift = [
-    { id: route.primaryServiceProId, name: pro?.name },
+    ...(route.primaryServiceProId
+      ? [{ id: route.primaryServiceProId, name: pro?.name }]
+      : []),
     ...crew.map((c) => ({ id: c.pro.id, name: c.pro.name })),
   ].filter((p) => !isWorkingShift(shiftOf(p.id, route.date)));
 
@@ -284,8 +314,20 @@ function RouteCard({
     (t) => t.role === "driver" && t.id !== route.primaryServiceProId,
   );
   const busyWith = (check: (p: RoutePlan) => boolean) =>
-    plans.find((p) => p.route.id !== route.id && check(p))?.route.name;
+    plans.find(
+      (p) =>
+        p.route.id !== route.id &&
+        p.route.shiftId === route.shiftId &&
+        check(p),
+    )?.route.name;
   const openStops = plan.stops.filter(isMovable).length;
+  const confirmed = route.status === "confirmed";
+  const canConfirm = plan.plannable && !locked;
+  const blocked = plan.blockers.length > 0;
+  const slotOf = (slot: string) => plan.openSlots.find((s) => s.slot === slot);
+  const truckSlot = slotOf("truck");
+  const driverSlot = slotOf("driver");
+  const helperSlots = plan.openSlots.filter((s) => s.kind === "helper");
 
   return (
     <div
@@ -295,7 +337,7 @@ function RouteCard({
       )}
     >
       {/* Stretched over the card so the whole card selects the route; the
-          content sits above it and lets clicks through, bar the menu. */}
+          content sits above it and lets clicks through, bar the controls. */}
       <button
         type="button"
         onClick={onSelect}
@@ -319,115 +361,191 @@ function RouteCard({
             {locked ? (
               <Lock
                 className="text-muted-foreground size-3.5 shrink-0"
-                aria-label="Locked"
+                aria-label={confirmed ? "Confirmed" : "Locked"}
               />
             ) : null}
           </p>
+          <p className="text-muted-foreground mt-0.5 flex items-center gap-1.5 text-xs">
+            <RouteCode plan={plan} />
+            {template && route.routeVersion !== template.version ? (
+              <span title="Generated from an earlier version of the Route">
+                v{route.routeVersion}
+              </span>
+            ) : null}
+          </p>
           <p className="text-muted-foreground text-xs tabular-nums">
-            {route.startTime}–{route.endTime} · {route.estimatedKm} km ·{" "}
-            {formatDuration(route.estimatedDriveMins)} drive
+            {SHIFT_LABEL[route.shiftId]} · {route.startTime}–{route.endTime} ·{" "}
+            {route.estimatedKm} km · {formatDuration(route.estimatedDriveMins)}{" "}
+            drive
           </p>
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                className="pointer-events-auto"
-              />
-            }
-            aria-label={`Actions for ${route.name}`}
-          >
-            <MoreVertical aria-hidden />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-60">
-            <DropdownMenuItem
-              onClick={() => actions.setLocked(route.id, !locked)}
-            >
-              {locked ? <LockOpen aria-hidden /> : <Lock aria-hidden />}
-              {locked ? "Unlock route" : "Lock route"}
-            </DropdownMenuItem>
-
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger disabled={locked}>
-                <Truck aria-hidden />
-                Change vehicle
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className="w-60">
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>
-                    {vehicle
-                      ? `${VEHICLE_CLASS[vehicle.vehicleClass]}s in service`
-                      : "Vehicles in service"}
-                  </DropdownMenuLabel>
-                  {swapVehicles.length === 0 ? (
-                    <DropdownMenuItem disabled>
-                      No other vehicle of this class
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <div className="flex items-center gap-1">
+            <InstanceStatusPill status={route.status} />
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    className="pointer-events-auto"
+                  />
+                }
+                aria-label={`Actions for ${route.name}`}
+              >
+                <MoreVertical aria-hidden />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-64">
+                {confirmed || locked ? (
+                  <DropdownMenuItem
+                    onClick={() => actions.setConfirmed(route.id, false)}
+                  >
+                    <LockOpen aria-hidden />
+                    {confirmed ? "Reopen instance" : "Unlock instance"}
+                  </DropdownMenuItem>
+                ) : (
+                  <>
+                    <DropdownMenuItem
+                      disabled={!canConfirm || blocked}
+                      onClick={() => actions.setConfirmed(route.id, true)}
+                    >
+                      <CheckCircle2 aria-hidden />
+                      Confirm
                     </DropdownMenuItem>
-                  ) : (
-                    swapVehicles.map((v) => {
-                      const busy = busyWith((p) => p.route.vehicleId === v.id);
-                      return (
-                        <DropdownMenuItem
-                          key={v.id}
-                          onClick={() => actions.setVehicle(route.id, v.id)}
-                        >
-                          <span className="font-mono text-xs">{v.plate}</span>
-                          <span className="text-muted-foreground ml-auto truncate text-xs">
-                            {busy ? `On ${busy}` : formatKg(v.capacityKg)}
-                          </span>
-                        </DropdownMenuItem>
-                      );
-                    })
-                  )}
-                </DropdownMenuGroup>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger disabled={locked}>
-                <UserRound aria-hidden />
-                Change primary pro
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className="w-60">
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Drivers</DropdownMenuLabel>
-                  {drivers.map((driver) => {
-                    const busy = busyWith(
-                      (p) => p.route.primaryServiceProId === driver.id,
-                    );
-                    return (
+                    {canConfirm && blocked ? (
                       <DropdownMenuItem
-                        key={driver.id}
-                        onClick={() => actions.setPrimary(route.id, driver.id)}
+                        onClick={() =>
+                          actions.setConfirmed(route.id, true, true)
+                        }
+                        className="items-start"
                       >
-                        <span className="truncate">{driver.name}</span>
-                        {busy ? (
-                          <span className="text-muted-foreground ml-auto truncate text-xs">
-                            On {busy}
+                        <ShieldAlert className="mt-0.5" aria-hidden />
+                        <span className="min-w-0">
+                          <span className="block">Confirm anyway</span>
+                          <span className="text-muted-foreground block text-xs">
+                            Override: {plan.blockers.join(", ")}
                           </span>
-                        ) : null}
+                        </span>
                       </DropdownMenuItem>
-                    );
-                  })}
-                </DropdownMenuGroup>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
+                    ) : null}
+                  </>
+                )}
 
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              disabled={locked || openStops === 0}
-              onClick={() => actions.clearRoute(route.id)}
-            >
-              <Undo2 aria-hidden />
-              Send open stops to backlog
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+                <DropdownMenuItem
+                  disabled={!canOptimize(plan) || openStops < 2}
+                  onClick={() => actions.optimize(route.id)}
+                  className="items-start"
+                >
+                  <Sparkles className="mt-0.5" aria-hidden />
+                  <span className="min-w-0">
+                    <span className="block">Optimize stop order</span>
+                    <span className="text-muted-foreground block text-xs">
+                      {!canOptimize(plan)
+                        ? "Reopen the instance to re-sequence it"
+                        : openStops < 2
+                          ? "Needs two or more open stops"
+                          : "By window, then nearest stop"}
+                    </span>
+                  </span>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger disabled={locked}>
+                    <Truck aria-hidden />
+                    Change vehicle
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="w-60">
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel>
+                        {vehicle
+                          ? `${VEHICLE_CLASS[vehicle.vehicleClass]}s in service`
+                          : "Vehicles in service"}
+                      </DropdownMenuLabel>
+                      {swapVehicles.length === 0 ? (
+                        <DropdownMenuItem disabled>
+                          No other vehicle of this class
+                        </DropdownMenuItem>
+                      ) : (
+                        swapVehicles.map((v) => {
+                          const busy = busyWith(
+                            (p) => p.route.vehicleId === v.id,
+                          );
+                          return (
+                            <DropdownMenuItem
+                              key={v.id}
+                              onClick={() => actions.setVehicle(route.id, v.id)}
+                            >
+                              <span className="font-mono text-xs">
+                                {v.plate}
+                              </span>
+                              <span className="text-muted-foreground ml-auto truncate text-xs">
+                                {busy ? `On ${busy}` : formatKg(v.capacityKg)}
+                              </span>
+                            </DropdownMenuItem>
+                          );
+                        })
+                      )}
+                    </DropdownMenuGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger disabled={locked}>
+                    <UserRound aria-hidden />
+                    Change driver
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent className="w-60">
+                    <DropdownMenuGroup>
+                      <DropdownMenuLabel>Drivers</DropdownMenuLabel>
+                      {drivers.map((driver) => {
+                        const busy = busyWith(
+                          (p) => p.route.primaryServiceProId === driver.id,
+                        );
+                        return (
+                          <DropdownMenuItem
+                            key={driver.id}
+                            onClick={() =>
+                              actions.setPrimary(route.id, driver.id)
+                            }
+                          >
+                            <span className="truncate">{driver.name}</span>
+                            {busy ? (
+                              <span className="text-muted-foreground ml-auto truncate text-xs">
+                                On {busy}
+                              </span>
+                            ) : null}
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </DropdownMenuGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  disabled={locked || openStops === 0}
+                  onClick={() => actions.clearRoute(route.id)}
+                >
+                  <Undo2 aria-hidden />
+                  Send open stops to backlog
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <RouteScoreBadge
+            score={plan.score}
+            className="pointer-events-auto mr-7"
+          />
+        </div>
       </div>
+
+      <InstanceFlagChips
+        flags={route.flags}
+        className="pointer-events-auto relative mt-2"
+      />
 
       <div className="pointer-events-none relative mt-3 flex flex-wrap items-center gap-1.5">
         {pro ? (
@@ -438,35 +556,66 @@ function RouteCard({
               </AvatarFallback>
             </Avatar>
             <span className="truncate text-xs font-medium">{pro.name}</span>
+            <SourceTag source={route.staffing.driver} />
           </span>
-        ) : (
-          <span className="text-muted-foreground text-xs">No primary pro</span>
+        ) : driverSlot ? null : (
+          <span className="text-muted-foreground text-xs">No driver</span>
         )}
         {crew.map((member) => (
           <Badge
             key={member.pro.id}
             variant="outline"
-            title={`${member.pro.name} · ${CREW_ROLE_LABEL[member.role]}`}
+            title={`${member.pro.name} · ${CREW_ROLE_LABEL[member.role]}${member.source && member.source !== "primary" ? ` · ${STAFFING_SOURCE[member.source]}` : ""}`}
           >
             {member.pro.initials}
             <span className="text-muted-foreground">
               {CREW_ROLE_LABEL[member.role]}
             </span>
+            <SourceTag source={member.source} />
           </Badge>
         ))}
       </div>
 
-      <p className="text-muted-foreground pointer-events-none relative mt-2 flex items-center gap-1.5 text-xs">
-        <Truck className="size-3.5" aria-hidden />
-        {vehicle ? (
-          <>
-            <span className="text-foreground font-mono">{vehicle.plate}</span>·{" "}
-            {VEHICLE_CLASS[vehicle.vehicleClass]}
-          </>
-        ) : (
-          "No vehicle assigned"
-        )}
-      </p>
+      {vehicle ? (
+        <p className="text-muted-foreground pointer-events-none relative mt-2 flex items-center gap-1.5 text-xs">
+          <Truck className="size-3.5" aria-hidden />
+          <span className="text-foreground font-mono">{vehicle.plate}</span>·{" "}
+          {VEHICLE_CLASS[vehicle.vehicleClass]}
+          <SourceTag source={route.staffing.truck} />
+        </p>
+      ) : truckSlot ? null : (
+        <p className="text-muted-foreground pointer-events-none relative mt-2 flex items-center gap-1.5 text-xs">
+          <Truck className="size-3.5" aria-hidden />
+          No vehicle assigned
+        </p>
+      )}
+
+      {plan.openSlots.length ? (
+        <ul className="relative mt-2 flex flex-col gap-1">
+          {[truckSlot, driverSlot, ...helperSlots]
+            .filter((s): s is OpenSlot => s !== undefined)
+            .map((slot) => (
+              <li
+                key={slot.slot}
+                className="border-destructive/40 bg-destructive-bg/50 flex items-center gap-2 rounded-md border border-dashed py-1 pr-1 pl-2"
+              >
+                <span className="text-destructive pointer-events-none min-w-0 flex-1 truncate text-xs font-medium">
+                  Unstaffed: {slotLabel(slot.slot)}
+                </span>
+                {canConfirm ? (
+                  <span className="pointer-events-auto">
+                    <StaffSlotMenu
+                      slot={slot}
+                      onStaff={(assetId) =>
+                        actions.staff(route.id, slot.slot, assetId)
+                      }
+                    />
+                  </span>
+                ) : null}
+              </li>
+            ))}
+        </ul>
+      ) : null}
 
       <div className="pointer-events-none relative mt-3 grid grid-cols-2 gap-3">
         <CapacityBar
@@ -475,16 +624,28 @@ function RouteCard({
           max={route.maxStops}
           display={`${plan.activeStops}/${route.maxStops}`}
         />
-        <CapacityBar
-          label="Load"
-          value={plan.loadKg}
-          max={vehicle?.capacityKg ?? 0}
-          display={
-            vehicle
-              ? `${formatKg(plan.loadKg)} / ${formatKg(vehicle.capacityKg)}`
-              : formatKg(plan.loadKg)
-          }
-        />
+        {plan.capacity ? (
+          // In the Route's own basis: m³ for REL, visits for SKIP/HOOK, kg
+          // for MED/HAZ/WWT — not truck payload, which misleads on exchanges.
+          <CapacityBar
+            label={BASIS_LABEL[plan.capacity.basis]}
+            value={plan.capacity.consumed}
+            max={plan.capacity.perShift}
+            display={`${formatAmount(plan.capacity.consumed, plan.capacity.unit)} / ${formatAmount(plan.capacity.perShift, plan.capacity.unit)}`}
+          />
+        ) : (
+          // One-off instance with no Route: estimated weight on the truck.
+          <CapacityBar
+            label="Load"
+            value={plan.loadKg}
+            max={vehicle?.capacityKg ?? 0}
+            display={
+              vehicle
+                ? `${formatKg(plan.loadKg)} / ${formatKg(vehicle.capacityKg)}`
+                : formatKg(plan.loadKg)
+            }
+          />
+        )}
       </div>
 
       {offShift.length ? (
@@ -502,7 +663,75 @@ function RouteCard({
           vehicle
         </p>
       ) : null}
+
+      {canConfirm ? (
+        <div className="relative mt-3 flex items-center justify-end gap-2">
+          {blocked ? (
+            <span className="text-muted-foreground pointer-events-none mr-auto truncate text-[11px]">
+              {plan.blockers.join(" · ")}
+            </span>
+          ) : null}
+          <Button
+            size="xs"
+            variant={blocked ? "outline" : "default"}
+            disabled={blocked}
+            title={
+              blocked
+                ? "Resolve first, or use Confirm anyway in the menu"
+                : "Lock the instance for the shift"
+            }
+            onClick={() => actions.setConfirmed(route.id, true)}
+          >
+            <CheckCircle2 data-icon="inline-start" />
+            Confirm
+          </Button>
+        </div>
+      ) : null}
     </div>
+  );
+}
+
+/** The Route code, linking to its template. */
+export function RouteCode({
+  plan,
+  className,
+}: {
+  plan: RoutePlan;
+  className?: string;
+}) {
+  const code = plan.template?.code ?? plan.route.id;
+  if (!plan.route.routeId)
+    return <span className={cn("font-mono", className)}>{code}</span>;
+  return (
+    <Link
+      href={`/field-service/routes/${plan.route.routeId}`}
+      onClick={(e) => e.stopPropagation()}
+      className={cn(
+        "text-info pointer-events-auto truncate font-mono hover:underline",
+        className,
+      )}
+    >
+      {code}
+    </Link>
+  );
+}
+
+/** Where a filled slot came from, when it wasn't the Route's primary. */
+function SourceTag({ source }: { source: StaffingSource | undefined }) {
+  if (!source || source === "primary") return null;
+  return (
+    <span
+      className={cn(
+        "rounded px-1 text-[10px] font-semibold tracking-wide uppercase",
+        source === "pool"
+          ? "bg-warning-bg text-warning"
+          : source === "backup"
+            ? "bg-info-bg text-info"
+            : "bg-muted text-muted-foreground",
+      )}
+    >
+      {STAFFING_SOURCE[source]}
+    </span>
   );
 }
 
@@ -548,12 +777,14 @@ function CapacityBar({
 function BacklogRow({
   appointment,
   plans,
+  defaultRoute,
   showDate = false,
   onSelect,
   onAssign,
 }: {
   appointment: Appointment;
   plans: RoutePlan[];
+  defaultRoute: DefaultRoute | undefined;
   showDate?: boolean;
   onSelect: () => void;
   onAssign: (routeId: string) => void;
@@ -562,57 +793,102 @@ function BacklogRow({
   const customer = directory.customer(appointment.customerId);
   const servicePoint = directory.servicePoint(appointment.servicePointId);
   const [first, ...rest] = appointment.workOrders;
+  const target = defaultRoute?.plan;
 
   return (
-    <div className="hover:bg-muted/50 flex items-start gap-2 px-3 py-2.5 transition-colors">
-      <button
-        type="button"
-        onClick={onSelect}
-        className="min-w-0 flex-1 text-left"
-      >
-        <span className="block truncate text-sm font-medium">
-          {customer?.name ?? appointment.ref}
-        </span>
-        <span className="text-muted-foreground block truncate text-xs">
-          {servicePoint?.location ?? servicePoint?.name}
-        </span>
-        <span className="text-muted-foreground mt-1 block text-xs tabular-nums">
-          {showDate ? `${formatDate(appointment.windowStart)} · ` : null}
-          {WINDOW_LABEL[appointment.window]}{" "}
-          {formatWindowRange(appointment.windowStart, appointment.windowEnd)}
-        </span>
-        <span className="mt-1.5 flex min-w-0 items-center gap-1.5">
-          <StreamTag stream={appointment.stream} className="h-5 text-[11px]" />
-          {first ? (
-            <span className="truncate text-xs">
-              {first.itemName}
-              {rest.length > 0 ? (
-                <span className="text-muted-foreground">
-                  {" "}
-                  +{rest.length} more
-                </span>
-              ) : null}
-            </span>
-          ) : null}
-        </span>
-      </button>
+    <div className="hover:bg-muted/50 px-3 py-2.5 transition-colors">
+      <div className="flex items-start gap-2">
+        <button
+          type="button"
+          onClick={onSelect}
+          className="min-w-0 flex-1 text-left"
+        >
+          <span className="block truncate text-sm font-medium">
+            {customer?.name ?? appointment.ref}
+          </span>
+          <span className="text-muted-foreground block truncate text-xs">
+            {servicePoint?.location ?? servicePoint?.name}
+          </span>
+          <span className="text-muted-foreground mt-1 block text-xs tabular-nums">
+            {showDate ? `${formatDate(appointment.windowStart)} · ` : null}
+            {WINDOW_LABEL[appointment.window]}{" "}
+            {formatWindowRange(appointment.windowStart, appointment.windowEnd)}
+          </span>
+          <span className="mt-1.5 flex min-w-0 items-center gap-1.5">
+            <StreamTag
+              stream={appointment.stream}
+              className="h-5 text-[11px]"
+            />
+            {first ? (
+              <span className="truncate text-xs">
+                {first.itemName}
+                {rest.length > 0 ? (
+                  <span className="text-muted-foreground">
+                    {" "}
+                    +{rest.length} more
+                  </span>
+                ) : null}
+              </span>
+            ) : null}
+          </span>
+        </button>
 
-      <AssignRouteMenu
-        appointment={appointment}
-        plans={plans}
-        onAssign={onAssign}
-        trigger={<Button variant="outline" size="xs" />}
-      >
-        <RouteIcon data-icon="inline-start" />
-        Assign
-      </AssignRouteMenu>
+        <AssignRouteMenu
+          appointment={appointment}
+          plans={plans}
+          onAssign={onAssign}
+          trigger={<Button variant="outline" size="xs" />}
+        >
+          <RouteIcon data-icon="inline-start" />
+          Assign
+        </AssignRouteMenu>
+      </div>
+      {defaultRoute ? (
+        <div className="mt-2 flex items-center gap-2 text-xs">
+          <CornerDownRight
+            className="text-muted-foreground size-3.5 shrink-0"
+            aria-hidden
+          />
+          {target ? (
+            <>
+              <span className="text-muted-foreground min-w-0 truncate">
+                Default route:{" "}
+                <span className="text-foreground font-mono text-[11px]">
+                  {defaultRoute.route.code}
+                </span>
+              </span>
+              <Button
+                size="xs"
+                className="ml-auto shrink-0"
+                disabled={target.locked}
+                title={
+                  target.locked
+                    ? "Its instance is confirmed — reopen it to add stops"
+                    : `Add to ${target.route.id}`
+                }
+                onClick={() => onAssign(target.route.id)}
+              >
+                Add to its instance
+              </Button>
+            </>
+          ) : (
+            <span className="text-muted-foreground min-w-0 truncate">
+              Default route{" "}
+              <span className="font-mono text-[11px]">
+                {defaultRoute.route.code}
+              </span>{" "}
+              doesn't run this day
+            </span>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }
 
 /**
  * The day's routes to put an appointment on. Routes whose truck can carry the
- * work come first; the rest carry a mismatch hint. Locked routes can't change.
+ * work come first; the rest carry a mismatch hint. Confirmed ones can't change.
  */
 export function AssignRouteMenu({
   appointment,
@@ -630,7 +906,7 @@ export function AssignRouteMenu({
   label?: string;
 }) {
   const candidates = plans
-    .filter((p) => p.route.id !== appointment.routeId)
+    .filter((p) => p.route.id !== appointment.routeInstanceId)
     .map((p) => ({
       plan: p,
       fits: fitsVehicle(appointment, p.vehicle?.vehicleClass),
@@ -645,7 +921,7 @@ export function AssignRouteMenu({
           <DropdownMenuLabel>{label}</DropdownMenuLabel>
           {candidates.length === 0 ? (
             <DropdownMenuItem disabled>
-              No other routes on this day
+              No other route instances on this day
             </DropdownMenuItem>
           ) : (
             candidates.map(({ plan, fits }) => (
@@ -666,8 +942,8 @@ export function AssignRouteMenu({
                   <span className="block truncate">{plan.route.name}</span>
                   <span className="text-muted-foreground block text-xs">
                     {plan.locked
-                      ? "Locked"
-                      : `${plan.activeStops}/${plan.route.maxStops} stops`}
+                      ? "Confirmed"
+                      : `${plan.template?.code ?? plan.route.id} · ${plan.activeStops}/${plan.route.maxStops} stops`}
                     {!fits ? (
                       <span className="text-warning"> · Vehicle mismatch</span>
                     ) : null}

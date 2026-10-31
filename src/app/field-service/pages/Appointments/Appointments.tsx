@@ -18,7 +18,11 @@ import {
 } from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAppointments, useDirectory } from "@/features/field-service";
+import {
+  useAppointments,
+  useDirectory,
+  useProjectedVisits,
+} from "@/features/field-service";
 import { cn } from "@/lib/utils";
 import {
   type Appointment,
@@ -35,7 +39,7 @@ import {
   CLOSED_STATUSES,
 } from "../../components";
 import { formatCount, toDubaiDayKey } from "../../utils";
-import { WorkOrdersList } from "./components";
+import { ScheduledByRoutes, WorkOrdersList } from "./components";
 
 const SKELETON_ROWS = [0, 1, 2, 3, 4, 5];
 const PAGE_SIZE = 25;
@@ -51,6 +55,11 @@ const PERIODS: { id: Period; label: string }[] = [
 ];
 
 const TODAY_KEY = toDubaiDayKey(MOCK_NOW);
+const WEEK_END_KEY = new Date(
+  Date.parse(`${TODAY_KEY}T00:00:00Z`) + 7 * 86_400_000,
+)
+  .toISOString()
+  .slice(0, 10);
 
 function inPeriod(apt: Appointment, period: Period) {
   const day = toDubaiDayKey(apt.windowStart);
@@ -64,6 +73,8 @@ export default function Appointments() {
   const appointments = useAppointments();
   const directory = useDirectory();
   const openBooking = useBookAppointmentModal((s) => s.openModal);
+  /** Next 14 days of route-scheduled visits, dispatched or not. */
+  const projected = useProjectedVisits();
 
   const [view, setView] = useState<View>("appointments");
   const [period, setPeriod] = useState<Period>("today");
@@ -89,7 +100,7 @@ export default function Appointments() {
         (a) => a.status === "failed" && toDubaiDayKey(a.windowStart) >= weekAgo,
       ).length,
       unassigned: all.filter(
-        (a) => !a.routeId && !CLOSED_STATUSES.includes(a.status),
+        (a) => !a.routeInstanceId && !CLOSED_STATUSES.includes(a.status),
       ).length,
     };
   }, [all]);
@@ -123,6 +134,28 @@ export default function Appointments() {
     return period === "past" ? rows.reverse() : rows;
   }, [all, period]);
 
+  /** Upcoming route-scheduled visits whose day isn't generated yet, filtered like the table. */
+  const notGenerated = useMemo(() => {
+    if (status !== "all") return [];
+    const term = query.trim().toLowerCase();
+    return (projected ?? []).filter((v) => {
+      if (v.instanceId || v.date <= TODAY_KEY) return false;
+      const site = directory.servicePoint(v.servicePointId);
+      const line = site?.serviceLines.find((l) => l.id === v.serviceLineId);
+      const itemStream = line
+        ? directory.serviceItem(line.serviceItemId)?.stream
+        : undefined;
+      if (stream !== "all" && itemStream !== stream) return false;
+      if (!term) return true;
+      const customer = directory.customer(v.customerId)?.name ?? "";
+      return `${v.routeCode} ${customer} ${site?.location ?? ""}`
+        .toLowerCase()
+        .includes(term);
+    });
+  }, [projected, status, stream, query, directory]);
+  const showProjected = period === "upcoming" && notGenerated.length > 0;
+  const projectedWeek = (projected ?? []).filter((v) => v.date < WEEK_END_KEY);
+
   const filtered = status !== "all" || stream !== "all" || query !== "";
   const clearFilters = () => {
     setStatus("all");
@@ -148,7 +181,7 @@ export default function Appointments() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <KpiCard
           label="Today"
           value={appointments.isSuccess ? formatCount(stats.today) : undefined}
@@ -178,6 +211,15 @@ export default function Appointments() {
             appointments.isSuccess ? formatCount(stats.unassigned) : undefined
           }
           hint="Not on a route yet"
+        />
+        <KpiCard
+          label="Projected next 7 days"
+          value={projected ? formatCount(projectedWeek.length) : undefined}
+          hint={
+            projected
+              ? `${formatCount(projectedWeek.filter((v) => !v.instanceId).length)} not generated yet`
+              : undefined
+          }
         />
       </div>
 
@@ -290,7 +332,7 @@ export default function Appointments() {
             />
           ) : view === "work-orders" ? (
             <WorkOrdersList appointments={inSelectedPeriod} />
-          ) : visible.length === 0 ? (
+          ) : visible.length === 0 && !showProjected ? (
             <EmptyState
               icon={SearchX}
               title={filtered ? "No appointments match" : "Nothing booked here"}
@@ -314,7 +356,13 @@ export default function Appointments() {
             />
           ) : (
             <>
-              <AppointmentsTable appointments={visible.slice(0, limit)} />
+              {visible.length ? (
+                <AppointmentsTable appointments={visible.slice(0, limit)} />
+              ) : (
+                <p className="text-muted-foreground py-4 text-center text-sm">
+                  No appointments booked yet — only route-scheduled visits.
+                </p>
+              )}
               {visible.length > limit ? (
                 <div className="flex items-center justify-between gap-2 border-t pt-3">
                   <p className="text-muted-foreground text-xs">
@@ -328,6 +376,9 @@ export default function Appointments() {
                     Show more
                   </Button>
                 </div>
+              ) : null}
+              {showProjected ? (
+                <ScheduledByRoutes visits={notGenerated} />
               ) : null}
             </>
           )}

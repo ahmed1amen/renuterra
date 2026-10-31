@@ -7,25 +7,41 @@
     "zone": "Al Quoz",
     "lat": 25.1155,
     "lng": 55.227,
-    "shift": "06:00–18:00",
+    "shift": "05:00–15:00",
     "status": "on-job",
-    "skills": ["Compactor", "Collection"],
+    "skills": ["REL operation"],
     "role": "driver",
     "defaultSchedule": {
-      "sun": "tpl_day_long",
-      "mon": "tpl_day_long",
-      "tue": "tpl_day_long",
-      "wed": "tpl_day_long",
-      "thu": "tpl_day_long",
-      "fri": "tpl_day_long"
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sun": "tpl_morning_long"
     },
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1001",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-REL",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
     "licences": [
       {
         "type": "heavy_vehicle",
-        "expiresOn": "2027-03-31"
+        "expiresOn": "2027-06-30"
       }
-    ],
-    "teamId": null
+    ]
   },
   {
     "id": "tech_2",
@@ -35,9 +51,9 @@
     "zone": "Deira",
     "lat": 25.27485,
     "lng": 55.29025,
-    "shift": "20:00–04:00",
+    "shift": "18:00–04:00",
     "status": "off-shift",
-    "skills": ["Compactor", "Night shift"],
+    "skills": ["REL operation"],
     "role": "driver",
     "defaultSchedule": {
       "mon": "tpl_night",
@@ -47,13 +63,33 @@
       "fri": "tpl_night",
       "sat": "tpl_night"
     },
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1008",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2026-09-28"
+      },
+      {
+        "code": "OP-REL",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
     "licences": [
       {
         "type": "heavy_vehicle",
         "expiresOn": "2026-09-28"
       }
-    ],
-    "teamId": null
+    ]
   },
   {
     "id": "tech_3",
@@ -63,28 +99,45 @@
     "zone": "Jebel Ali",
     "lat": 25.0292,
     "lng": 55.1205,
-    "shift": "06:00–18:00",
+    "shift": "05:00–15:00",
     "status": "available",
-    "skills": ["Hook loader", "Heavy vehicle"],
+    "skills": ["Hook / RoRo operation", "Skip chain operation"],
     "role": "driver",
     "defaultSchedule": {
-      "mon": "tpl_day_long",
-      "tue": "tpl_day_long",
-      "wed": "tpl_day_long",
-      "thu": "tpl_day_long",
-      "fri": "tpl_day_long"
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
     },
-    "licences": [
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1015",
+    "skillCodes": [
       {
-        "type": "heavy_vehicle",
-        "expiresOn": "2028-01-15"
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
       },
       {
-        "type": "hazmat",
+        "code": "OP-HOOK",
+        "expiresOn": null
+      },
+      {
+        "code": "OP-SKIP",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
         "expiresOn": "2027-06-30"
       }
     ],
-    "teamId": null
+    "licences": [
+      {
+        "type": "heavy_vehicle",
+        "expiresOn": "2027-06-30"
+      }
+    ]
   },
   {
     "id": "tech_4",
@@ -94,29 +147,57 @@
     "zone": "Business Bay",
     "lat": 25.17755,
     "lng": 55.27175,
-    "shift": "06:00–14:00",
+    "shift": "05:00–15:00",
     "status": "available",
-    "skills": ["Tanker", "Hazmat"],
+    "skills": ["Hazardous waste handling", "Tanker and vacuum operation"],
     "role": "driver",
     "defaultSchedule": {
-      "sun": "tpl_day_early",
-      "mon": "tpl_day_early",
-      "tue": "tpl_day_early",
-      "wed": "tpl_day_early",
-      "thu": "tpl_day_early",
-      "fri": "tpl_on_call"
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
     },
+    "teamId": null,
+    "entity": "GGH",
+    "employeeId": "EMP-1022",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "HAZ-ADR",
+        "expiresOn": "2026-09-20"
+      },
+      {
+        "code": "SAF-SPILL",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-TANK",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "CITY-AJM",
+        "expiresOn": "2027-06-30"
+      }
+    ],
     "licences": [
       {
         "type": "heavy_vehicle",
-        "expiresOn": "2027-11-02"
+        "expiresOn": "2027-06-30"
       },
       {
         "type": "hazmat",
         "expiresOn": "2026-09-20"
       }
-    ],
-    "teamId": null
+    ]
   },
   {
     "id": "tech_5",
@@ -126,25 +207,41 @@
     "zone": "Al Quoz",
     "lat": 25.1419,
     "lng": 55.215,
-    "shift": "06:00–18:00",
+    "shift": "05:00–15:00",
     "status": "available",
-    "skills": ["Skip loader", "Installation"],
+    "skills": ["Skip chain operation"],
     "role": "driver",
     "defaultSchedule": {
-      "mon": "tpl_day_long",
-      "tue": "tpl_day_long",
-      "wed": "tpl_day_long",
-      "thu": "tpl_day_long",
-      "fri": "tpl_day_long",
-      "sat": "tpl_day_long"
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
     },
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1029",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-SKIP",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
     "licences": [
       {
         "type": "heavy_vehicle",
-        "expiresOn": "2027-08-12"
+        "expiresOn": "2027-06-30"
       }
-    ],
-    "teamId": null
+    ]
   },
   {
     "id": "tech_6",
@@ -154,79 +251,45 @@
     "zone": "Deira",
     "lat": 25.24625,
     "lng": 55.35325,
-    "shift": "06:00–16:00",
+    "shift": "05:00–15:00",
     "status": "off-shift",
-    "skills": ["Medical waste", "Hazmat"],
+    "skills": ["Medical waste and infection control"],
     "role": "driver",
     "defaultSchedule": {
-      "mon": "tpl_day_medical",
-      "tue": "tpl_day_medical",
-      "wed": "tpl_day_medical",
-      "thu": "tpl_day_medical",
-      "fri": "tpl_day_medical",
-      "sat": "tpl_day_medical"
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
     },
+    "teamId": null,
+    "entity": "GGM",
+    "employeeId": "EMP-1036",
+    "skillCodes": [
+      {
+        "code": "LIC-LGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "MED-IC",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
     "licences": [
       {
         "type": "heavy_vehicle",
-        "expiresOn": "2027-02-10"
+        "expiresOn": "2027-06-30"
       },
       {
         "type": "medical_waste",
-        "expiresOn": "2027-04-01"
-      },
-      {
-        "type": "hazmat",
-        "expiresOn": "2027-04-01"
+        "expiresOn": "2027-06-30"
       }
-    ],
-    "teamId": null
-  },
-  {
-    "id": "tech_7",
-    "name": "Imran Qureshi",
-    "initials": "IQ",
-    "phone": "+971 55 555 0771",
-    "zone": "Al Quoz",
-    "lat": 25.121,
-    "lng": 55.219,
-    "shift": "06:00–14:00",
-    "status": "on-job",
-    "skills": ["Loader"],
-    "role": "loader",
-    "defaultSchedule": {
-      "sun": "tpl_day_long",
-      "mon": "tpl_day_long",
-      "tue": "tpl_day_long",
-      "wed": "tpl_day_long",
-      "thu": "tpl_day_long",
-      "fri": "tpl_day_long"
-    },
-    "licences": [],
-    "teamId": null
-  },
-  {
-    "id": "tech_8",
-    "name": "Joseph Mensah",
-    "initials": "JM",
-    "phone": "+971 55 555 0832",
-    "zone": "Dubai Marina",
-    "lat": 25.077,
-    "lng": 55.139,
-    "shift": "20:00–04:00",
-    "status": "off-shift",
-    "skills": ["Loader"],
-    "role": "loader",
-    "defaultSchedule": {
-      "mon": "tpl_night",
-      "tue": "tpl_night",
-      "wed": "tpl_night",
-      "thu": "tpl_night",
-      "fri": "tpl_night",
-      "sat": "tpl_night"
-    },
-    "licences": [],
-    "teamId": null
+    ]
   },
   {
     "id": "tech_9",
@@ -236,25 +299,360 @@
     "zone": "Dubai Marina",
     "lat": 25.081,
     "lng": 55.145,
-    "shift": "20:00–04:00",
+    "shift": "18:00–04:00",
     "status": "off-shift",
-    "skills": ["Hook loader", "Night shift"],
+    "skills": ["Hook / RoRo operation"],
     "role": "driver",
     "defaultSchedule": {
-      "sun": "tpl_night",
       "mon": "tpl_night",
       "tue": "tpl_night",
       "wed": "tpl_night",
       "thu": "tpl_night",
-      "fri": "tpl_night"
+      "fri": "tpl_night",
+      "sun": "tpl_night"
     },
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1043",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2026-08-15"
+      },
+      {
+        "code": "OP-HOOK",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
     "licences": [
       {
         "type": "heavy_vehicle",
         "expiresOn": "2026-08-15"
       }
+    ]
+  },
+  {
+    "id": "tech_11",
+    "name": "Omar Haddad",
+    "initials": "OH",
+    "phone": "+971 51 555 0011",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "driver",
+    "entity": "RWC",
+    "employeeId": "EMP-1050",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-REL",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
     ],
-    "teamId": null
+    "skills": ["REL operation"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": [
+      {
+        "type": "heavy_vehicle",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_16",
+    "name": "Hassan Ali",
+    "initials": "HA",
+    "phone": "+971 51 555 0016",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "driver",
+    "entity": "RWC",
+    "employeeId": "EMP-1057",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-REL",
+        "expiresOn": null
+      },
+      {
+        "code": "OP-SKIP",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["REL operation", "Skip chain operation"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "sat": "tpl_morning_long",
+      "sun": "tpl_morning_long"
+    },
+    "licences": [
+      {
+        "type": "heavy_vehicle",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_14",
+    "name": "Kiran Das",
+    "initials": "KD",
+    "phone": "+971 51 555 0014",
+    "zone": "Dubai Marina",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "driver",
+    "entity": "RWC",
+    "employeeId": "EMP-1064",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-REL",
+        "expiresOn": null
+      },
+      {
+        "code": "OP-HOOK",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
+    "skills": ["REL operation", "Hook / RoRo operation"],
+    "shift": "18:00–04:00",
+    "defaultSchedule": {
+      "tue": "tpl_night",
+      "wed": "tpl_night",
+      "thu": "tpl_night",
+      "fri": "tpl_night",
+      "sat": "tpl_night",
+      "sun": "tpl_night"
+    },
+    "licences": [
+      {
+        "type": "heavy_vehicle",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_15",
+    "name": "Noura Saeed",
+    "initials": "NS",
+    "phone": "+971 51 555 0015",
+    "zone": "Al Barsha",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "driver",
+    "entity": "GGM",
+    "employeeId": "EMP-1071",
+    "skillCodes": [
+      {
+        "code": "LIC-LGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "MED-IC",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Medical waste and infection control"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": [
+      {
+        "type": "heavy_vehicle",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "type": "medical_waste",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_12",
+    "name": "Bilal Khan",
+    "initials": "BK",
+    "phone": "+971 51 555 0012",
+    "zone": "Al Sajaa",
+    "lat": 25.32,
+    "lng": 55.63,
+    "status": "available",
+    "teamId": null,
+    "role": "driver",
+    "entity": "RWC",
+    "employeeId": "EMP-1078",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-REL",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-SHJ",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["REL operation"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": [
+      {
+        "type": "heavy_vehicle",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_13",
+    "name": "Yusuf Rahman",
+    "initials": "YR",
+    "phone": "+971 51 555 0013",
+    "zone": "Al Sajaa",
+    "lat": 25.33,
+    "lng": 55.62,
+    "status": "available",
+    "teamId": null,
+    "role": "driver",
+    "entity": "RWC",
+    "employeeId": "EMP-1085",
+    "skillCodes": [
+      {
+        "code": "LIC-HGV",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "OP-HOOK",
+        "expiresOn": null
+      },
+      {
+        "code": "OP-SKIP",
+        "expiresOn": null
+      },
+      {
+        "code": "CITY-SHJ",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Hook / RoRo operation", "Skip chain operation"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": [
+      {
+        "type": "heavy_vehicle",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_7",
+    "name": "Imran Qureshi",
+    "initials": "IQ",
+    "phone": "+971 55 555 0771",
+    "zone": "Al Quoz",
+    "lat": 25.121,
+    "lng": 55.219,
+    "shift": "05:00–15:00",
+    "status": "on-job",
+    "skills": ["Loader"],
+    "role": "loader",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1092",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "licences": []
   },
   {
     "id": "tech_10",
@@ -264,17 +662,631 @@
     "zone": "Al Quoz",
     "lat": 25.118,
     "lng": 55.224,
-    "shift": "06:00–14:00",
+    "shift": "05:00–15:00",
     "status": "on-job",
-    "skills": ["Trainee"],
+    "skills": ["Loader"],
     "role": "loader",
     "defaultSchedule": {
       "mon": "tpl_training",
       "tue": "tpl_training",
       "wed": "tpl_training",
-      "thu": "tpl_training"
+      "thu": "tpl_training",
+      "fri": "tpl_training",
+      "sat": "tpl_training"
     },
-    "licences": [],
-    "teamId": null
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1099",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "licences": []
+  },
+  {
+    "id": "tech_8",
+    "name": "Joseph Mensah",
+    "initials": "JM",
+    "phone": "+971 55 555 0832",
+    "zone": "Dubai Marina",
+    "lat": 25.077,
+    "lng": 55.139,
+    "shift": "18:00–04:00",
+    "status": "off-shift",
+    "skills": ["Loader"],
+    "role": "loader",
+    "defaultSchedule": {
+      "tue": "tpl_night",
+      "wed": "tpl_night",
+      "thu": "tpl_night",
+      "fri": "tpl_night",
+      "sat": "tpl_night",
+      "sun": "tpl_night"
+    },
+    "teamId": null,
+    "entity": "RWC",
+    "employeeId": "EMP-1106",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
+    "licences": []
+  },
+  {
+    "id": "tech_h01",
+    "name": "Abdul Karim",
+    "initials": "AK",
+    "phone": "+971 52 555 0001",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1113",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h02",
+    "name": "Sanjay Kumar",
+    "initials": "SK",
+    "phone": "+971 52 555 0002",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1120",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h03",
+    "name": "Peter Otieno",
+    "initials": "PO",
+    "phone": "+971 52 555 0003",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1127",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "18:00–04:00",
+    "defaultSchedule": {
+      "tue": "tpl_night",
+      "wed": "tpl_night",
+      "thu": "tpl_night",
+      "fri": "tpl_night",
+      "sat": "tpl_night",
+      "sun": "tpl_night"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h04",
+    "name": "Ali Raza",
+    "initials": "AR",
+    "phone": "+971 52 555 0004",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1134",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "18:00–04:00",
+    "defaultSchedule": {
+      "tue": "tpl_night",
+      "wed": "tpl_night",
+      "thu": "tpl_night",
+      "fri": "tpl_night",
+      "sat": "tpl_night",
+      "sun": "tpl_night"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h05",
+    "name": "Faisal Mahmood",
+    "initials": "FM",
+    "phone": "+971 52 555 0005",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1141",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "18:00–04:00",
+    "defaultSchedule": {
+      "tue": "tpl_night",
+      "wed": "tpl_night",
+      "thu": "tpl_night",
+      "fri": "tpl_night",
+      "sat": "tpl_night",
+      "sun": "tpl_night"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h06",
+    "name": "Ramesh Pillai",
+    "initials": "RP",
+    "phone": "+971 52 555 0006",
+    "zone": "Al Sajaa",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1148",
+    "skillCodes": [
+      {
+        "code": "CITY-SHJ",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h07",
+    "name": "Anwar Hossain",
+    "initials": "AH",
+    "phone": "+971 52 555 0007",
+    "zone": "Al Sajaa",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1155",
+    "skillCodes": [
+      {
+        "code": "CITY-SHJ",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h08",
+    "name": "Musa Bello",
+    "initials": "MB",
+    "phone": "+971 52 555 0008",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1162",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h09",
+    "name": "Tariq Aziz",
+    "initials": "TA",
+    "phone": "+971 52 555 0009",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1169",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "18:00–04:00",
+    "defaultSchedule": {
+      "tue": "tpl_night",
+      "wed": "tpl_night",
+      "thu": "tpl_night",
+      "fri": "tpl_night",
+      "sat": "tpl_night",
+      "sun": "tpl_night"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h10",
+    "name": "Rohan Shetty",
+    "initials": "RS",
+    "phone": "+971 52 555 0010",
+    "zone": "Al Sajaa",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1176",
+    "skillCodes": [
+      {
+        "code": "CITY-SHJ",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h11",
+    "name": "Emeka Obi",
+    "initials": "EO",
+    "phone": "+971 52 555 0011",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1183",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h12",
+    "name": "Waqas Ahmed",
+    "initials": "WA",
+    "phone": "+971 52 555 0012",
+    "zone": "Al Sajaa",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1190",
+    "skillCodes": [
+      {
+        "code": "CITY-SHJ",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h13",
+    "name": "Joel Mutua",
+    "initials": "JM",
+    "phone": "+971 52 555 0013",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "GGM",
+    "employeeId": "EMP-1197",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "MED-IC",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Medical waste and infection control"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": [
+      {
+        "type": "medical_waste",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_h14",
+    "name": "Nabil Saleh",
+    "initials": "NS",
+    "phone": "+971 52 555 0014",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "GGH",
+    "employeeId": "EMP-1204",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "HAZ-ADR",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "CITY-AJM",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Hazardous waste handling"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": [
+      {
+        "type": "hazmat",
+        "expiresOn": "2027-06-30"
+      }
+    ]
+  },
+  {
+    "id": "tech_h15",
+    "name": "Hamid Noori",
+    "initials": "HN",
+    "phone": "+971 52 555 0015",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1211",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h16",
+    "name": "Sunil Varma",
+    "initials": "SV",
+    "phone": "+971 52 555 0016",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1218",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "05:00–15:00",
+    "defaultSchedule": {
+      "mon": "tpl_morning_long",
+      "tue": "tpl_morning_long",
+      "wed": "tpl_morning_long",
+      "thu": "tpl_morning_long",
+      "fri": "tpl_morning_long",
+      "sat": "tpl_morning_long"
+    },
+    "licences": []
+  },
+  {
+    "id": "tech_h17",
+    "name": "Kofi Mensah",
+    "initials": "KM",
+    "phone": "+971 52 555 0017",
+    "zone": "Al Quoz",
+    "lat": 25.12,
+    "lng": 55.22,
+    "status": "available",
+    "teamId": null,
+    "role": "loader",
+    "entity": "RWC",
+    "employeeId": "EMP-1225",
+    "skillCodes": [
+      {
+        "code": "CITY-DXB",
+        "expiresOn": "2027-06-30"
+      },
+      {
+        "code": "SHIFT-NIGHT",
+        "expiresOn": null
+      }
+    ],
+    "skills": ["Loader"],
+    "shift": "18:00–04:00",
+    "defaultSchedule": {
+      "tue": "tpl_night",
+      "wed": "tpl_night",
+      "thu": "tpl_night",
+      "fri": "tpl_night",
+      "sat": "tpl_night",
+      "sun": "tpl_night"
+    },
+    "licences": []
   }
 ]

@@ -6,14 +6,21 @@ import {
   useAppointmentStore,
   useDirectory,
   useDispatchActions,
+  useOptimizer,
+  useRouteInstanceStore,
 } from "@/features/field-service";
-import type { Appointment } from "@/mocks";
+import type { Appointment, RouteInstance } from "@/mocks";
 import {
   type BoardActions,
+  canOptimize,
+  type DefaultRoute,
   fitsVehicle,
   isMovable,
   type RoutePlan,
+  slotKind,
+  slotLabel,
   VEHICLE_CLASS,
+  withoutSlotFlags,
 } from "../../../components";
 
 /** Where a stop slots into a route's drive order: by its planned arrival. */
@@ -24,14 +31,28 @@ function insertIndex(plan: RoutePlan, appointment: Appointment) {
   return index === -1 ? plan.stops.length : index;
 }
 
+/** "RWC-DXB-REL-001" — the Route code reads better in a toast than the name. */
+const codeOf = (plan: RoutePlan) => plan.template?.code ?? plan.route.name;
+
+/** The instance as the store holds it right now, so chained patches stack. */
+function latest(plan: RoutePlan): RouteInstance {
+  const patch = useRouteInstanceStore.getState().patches[plan.route.id];
+  return patch ? { ...plan.route, ...patch } : plan.route;
+}
+
 /**
  * The board's fake dispatch actions. Each one patches session state through
  * `useDispatchActions` and confirms with a toast — nothing is persisted.
  */
-export function useBoardActions(plans: RoutePlan[], backlog: Appointment[]) {
+export function useBoardActions(
+  plans: RoutePlan[],
+  backlog: Appointment[],
+  defaultRoutes: Map<string, DefaultRoute>,
+) {
   const dispatch = useDispatchActions();
   const updateAppointment = useAppointmentStore((s) => s.update);
   const directory = useDirectory();
+  const { optimize: runOptimizer } = useOptimizer();
 
   return useMemo(() => {
     const planOf = (routeId: string) =>
@@ -39,6 +60,12 @@ export function useBoardActions(plans: RoutePlan[], backlog: Appointment[]) {
     const appointmentOf = (id: string) =>
       plans.flatMap((p) => p.stops).find((a) => a.id === id) ??
       backlog.find((a) => a.id === id);
+
+    /** Confirm = the old lock, plus the instance status (spec §6.1). */
+    const confirm = (plan: RoutePlan) => {
+      dispatch.setLocked(plan.route.id, true);
+      dispatch.patch(plan.route.id, { status: "confirmed" });
+    };
 
     const actions: BoardActions = {
       assign: (appointmentId, routeId) => {
@@ -61,31 +88,96 @@ export function useBoardActions(plans: RoutePlan[], backlog: Appointment[]) {
         });
       },
 
-      setLocked: (routeId, locked) => {
-        dispatch.setLocked(routeId, locked);
-        const name = planOf(routeId)?.route.name;
-        toast.success(locked ? `${name} locked` : `${name} unlocked`, {
-          description: locked
-            ? "Its stops can't be moved until it's unlocked."
-            : undefined,
+      setConfirmed: (routeId, confirmed, force = false) => {
+        const plan = planOf(routeId);
+        if (!plan) return;
+        const name = plan.route.name;
+        if (!confirmed) {
+          dispatch.setLocked(routeId, false);
+          const unstaffed = plan.openSlots.length > 0;
+          dispatch.patch(routeId, {
+            status: unstaffed ? "unstaffed" : "planned",
+          });
+          toast.success(`${name} reopened`, {
+            description: "Stops and staffing can change again.",
+          });
+          return;
+        }
+        if (plan.blockers.length && !force) return;
+        confirm(plan);
+        toast.success(`${name} confirmed`, {
+          description: force
+            ? `Confirmed with an override: ${plan.blockers.join(", ")}.`
+            : "Its stops are locked for the shift.",
         });
       },
 
       setVehicle: (routeId, vehicleId) => {
-        dispatch.patch(routeId, { vehicleId });
+        const plan = planOf(routeId);
+        if (!plan) return;
+        const route = latest(plan);
+        dispatch.patch(routeId, {
+          vehicleId,
+          staffing: { ...route.staffing, truck: "manual" },
+          flags: withoutSlotFlags(route.flags, "truck"),
+        });
         const vehicle = directory.vehicle(vehicleId);
         toast.success(`Vehicle changed to ${vehicle?.plate}`, {
           description: vehicle
-            ? `${VEHICLE_CLASS[vehicle.vehicleClass]} on ${planOf(routeId)?.route.name}.`
+            ? `${VEHICLE_CLASS[vehicle.vehicleClass]} on ${plan.route.name}.`
             : undefined,
         });
       },
 
       setPrimary: (routeId, serviceProId) => {
-        dispatch.patch(routeId, { primaryServiceProId: serviceProId });
+        const plan = planOf(routeId);
+        if (!plan) return;
+        const route = latest(plan);
+        dispatch.patch(routeId, {
+          primaryServiceProId: serviceProId,
+          staffing: { ...route.staffing, driver: "manual" },
+          flags: withoutSlotFlags(route.flags, "driver"),
+        });
         toast.success(
-          `${directory.servicePro(serviceProId)?.name} now runs ${planOf(routeId)?.route.name}`,
+          `${directory.servicePro(serviceProId)?.name} now drives ${plan.route.name}`,
         );
+      },
+
+      staff: (routeId, slot, assetId) => {
+        const plan = planOf(routeId);
+        if (!plan) return;
+        const route = latest(plan);
+        const kind = slotKind(slot);
+        const flags = withoutSlotFlags(route.flags, slot);
+        const stillOpen = plan.openSlots.filter((s) => s.slot !== slot);
+        dispatch.patch(routeId, {
+          ...(kind === "truck"
+            ? { vehicleId: assetId }
+            : kind === "driver"
+              ? { primaryServiceProId: assetId }
+              : {
+                  crew: [
+                    ...route.crew,
+                    { serviceProId: assetId, role: "secondary" as const },
+                  ],
+                }),
+          staffing: { ...route.staffing, [slot]: "manual" },
+          flags,
+          status:
+            route.status === "unstaffed" && stillOpen.length === 0
+              ? "planned"
+              : route.status,
+        });
+        const name =
+          kind === "truck"
+            ? directory.vehicle(assetId)?.plate
+            : directory.servicePro(assetId)?.name;
+        toast.success(`${name} staffed as ${slotLabel(slot)}`, {
+          description:
+            stillOpen.length === 0
+              ? `${plan.route.name} is fully staffed and ready to confirm.`
+              : `${plan.route.name} still needs: ${stillOpen.map((s) => slotLabel(s.slot)).join(", ")}.`,
+        });
       },
 
       // Done in one patch: `move` reads the route from its last render, so
@@ -103,30 +195,100 @@ export function useBoardActions(plans: RoutePlan[], backlog: Appointment[]) {
             kept.includes(t.afterAppointmentId),
           ),
         });
-        for (const id of moving) updateAppointment(id, { routeId: null });
+        for (const id of moving)
+          updateAppointment(id, { routeInstanceId: null });
         toast.success(
           `${moving.length} ${moving.length === 1 ? "stop" : "stops"} sent to the backlog`,
           { description: `From ${plan.route.name}.` },
         );
       },
+
+      optimize: (routeId) => {
+        const plan = planOf(routeId);
+        if (!plan || !canOptimize(plan)) return;
+        const result = runOptimizer(routeId);
+        if (!result) return;
+        const code = codeOf(plan);
+        if (result.unchanged || !("undo" in result)) {
+          toast(`${code}: already in the best order`, {
+            description: "Fewer than two open stops to re-sequence.",
+          });
+          return;
+        }
+        const before = result.before?.total ?? "—";
+        const after = result.after?.total ?? "—";
+        // Re-timed but no better: say so rather than claim a gain.
+        const same = before === after;
+        toast.success(
+          same
+            ? `${code}: already in the best order`
+            : `${code} optimised: ${before} → ${after}`,
+          {
+            description: same
+              ? `Score stays at ${after}. Planned times recalculated.`
+              : "Open stops re-sequenced by window, then nearest stop. Planned times updated.",
+            action: {
+              label: "Undo",
+              onClick: () => {
+                result.undo();
+                toast(`${code}: original order restored`);
+              },
+            },
+          },
+        );
+      },
+    };
+
+    /** Header: confirm every instance with nothing blocking it. */
+    const confirmAllReady = () => {
+      const open = plans.filter((p) => p.plannable && !p.locked);
+      const ready = open.filter((p) => p.blockers.length === 0);
+      const blocked = open.filter((p) => p.blockers.length > 0);
+      for (const plan of ready) confirm(plan);
+      if (ready.length === 0) {
+        toast.warning("Nothing ready to confirm", {
+          description: blocked.length
+            ? `${blocked.length} ${blocked.length === 1 ? "instance needs" : "instances need"} staffing or a capacity fix first.`
+            : "Every instance on this day is already confirmed or under way.",
+        });
+        return;
+      }
+      toast.success(
+        `Confirmed ${ready.length} ${ready.length === 1 ? "instance" : "instances"}`,
+        {
+          description: blocked.length
+            ? `Still to resolve: ${blocked.map((p) => `${p.template?.code ?? p.route.name} (${p.blockers.join(", ")})`).join("; ")}.`
+            : "The whole day is confirmed.",
+        },
+      );
     };
 
     /**
-     * Put each backlog appointment on the first unlocked route whose truck can
-     * carry its first work order. Batched per route for the same reason as
-     * `clearRoute`.
+     * Place backlog: each open job goes to its default route's instance (R24)
+     * when that's open, else the first unconfirmed instance whose truck can
+     * carry its first work order. Batched per instance like `clearRoute`.
      */
-    const autoPlan = () => {
+    const placeBacklog = () => {
       const added = new Map<string, Appointment[]>();
       const unplaced: Appointment[] = [];
+      let onDefault = 0;
+      const open = (p: RoutePlan | undefined): p is RoutePlan =>
+        p !== undefined &&
+        !p.locked &&
+        p.route.status !== "cancelled" &&
+        p.route.status !== "completed";
       for (const apt of backlog) {
-        const plan = plans.find(
-          (p) => !p.locked && fitsVehicle(apt, p.vehicle?.vehicleClass),
-        );
+        const preferred = defaultRoutes.get(apt.id)?.plan;
+        const plan = open(preferred)
+          ? preferred
+          : plans.find(
+              (p) => open(p) && fitsVehicle(apt, p.vehicle?.vehicleClass),
+            );
         if (!plan) {
           unplaced.push(apt);
           continue;
         }
+        if (plan === preferred) onDefault++;
         added.set(plan.route.id, [...(added.get(plan.route.id) ?? []), apt]);
       }
 
@@ -145,31 +307,108 @@ export function useBoardActions(plans: RoutePlan[], backlog: Appointment[]) {
           ids.splice(next ? ids.indexOf(next.id) : ids.length, 0, apt.id);
         }
         dispatch.patch(routeId, { appointmentIds: ids });
-        for (const apt of apts) updateAppointment(apt.id, { routeId });
+        for (const apt of apts)
+          updateAppointment(apt.id, { routeInstanceId: routeId });
       }
 
       const placed = backlog.length - unplaced.length;
       if (backlog.length === 0) {
-        toast("Nothing to plan", {
+        toast("Nothing to place", {
           description: "The backlog for this day is empty.",
         });
       } else if (placed === 0) {
-        toast.warning("Auto-Plan couldn't place anything", {
+        toast.warning("Couldn't place any backlog", {
           description:
-            "No unlocked route has a vehicle that suits the backlog's work.",
+            "No unconfirmed instance has a truck that suits the backlog's work.",
         });
       } else {
         toast.success(
-          `Auto-Plan placed ${placed} of ${backlog.length} ${backlog.length === 1 ? "appointment" : "appointments"}`,
+          `Placed ${placed} of ${backlog.length} backlog ${backlog.length === 1 ? "job" : "jobs"}`,
           {
             description: unplaced.length
-              ? `${unplaced.map((a) => a.ref).join(", ")} still need${unplaced.length === 1 ? "s" : ""} a route with a suitable, unlocked vehicle.`
-              : `Across ${added.size} ${added.size === 1 ? "route" : "routes"}.`,
+              ? `${unplaced.map((a) => a.ref).join(", ")} still need${unplaced.length === 1 ? "s" : ""} an unconfirmed instance with a suitable truck.`
+              : `${onDefault} on ${onDefault === 1 ? "its" : "their"} default route, across ${added.size} ${added.size === 1 ? "instance" : "instances"}.`,
           },
         );
       }
     };
 
-    return { ...actions, autoPlan };
-  }, [plans, backlog, dispatch, updateAppointment, directory]);
+    /**
+     * Header: optimise every unconfirmed, open instance on the day. One Undo
+     * reverts the whole batch; confirmed / closed ones are skipped and named.
+     */
+    const optimizeAll = () => {
+      const eligible = plans.filter(canOptimize);
+      const skipped = plans.filter((p) => !canOptimize(p));
+      const undos: (() => void)[] = [];
+      const gains: { before: number; after: number }[] = [];
+      let unchanged = 0;
+      let improved = 0;
+      for (const plan of eligible) {
+        const result = runOptimizer(plan.route.id);
+        if (!result) continue;
+        if (result.unchanged || !("undo" in result)) {
+          unchanged++;
+          continue;
+        }
+        undos.push(result.undo);
+        if ((result.after?.total ?? 0) > (result.before?.total ?? 0))
+          improved++;
+        else unchanged++;
+        if (result.before && result.after)
+          gains.push({
+            before: result.before.total,
+            after: result.after.total,
+          });
+      }
+      const skippedNote = skipped.length
+        ? `Skipped ${skipped.length} confirmed or closed: ${skipped.map(codeOf).join(", ")}.`
+        : undefined;
+      if (undos.length === 0) {
+        toast(
+          eligible.length
+            ? "Every route is already in the best order"
+            : "Nothing to optimise",
+          {
+            description:
+              skippedNote ??
+              (eligible.length
+                ? "No instance has two or more open stops to re-sequence."
+                : "No route instances on this day."),
+          },
+        );
+        return;
+      }
+      const avg = (key: "before" | "after") =>
+        gains.length
+          ? Math.round(gains.reduce((n, g) => n + g[key], 0) / gains.length)
+          : "—";
+      toast.success(
+        `${improved} optimised, avg ${avg("before")} → ${avg("after")}${unchanged ? `, ${unchanged} unchanged` : ""}`,
+        {
+          description:
+            skippedNote ?? "Every unconfirmed instance re-sequenced.",
+          action: {
+            label: "Undo",
+            onClick: () => {
+              for (const undo of undos.reverse()) undo();
+              toast(
+                `${undos.length} ${undos.length === 1 ? "instance" : "instances"} restored to their original order`,
+              );
+            },
+          },
+        },
+      );
+    };
+
+    return { ...actions, confirmAllReady, placeBacklog, optimizeAll };
+  }, [
+    plans,
+    backlog,
+    defaultRoutes,
+    dispatch,
+    updateAppointment,
+    directory,
+    runOptimizer,
+  ]);
 }

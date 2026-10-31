@@ -1,12 +1,12 @@
 import { StatusPill } from "@/components/shared";
-import type { Route, Shift, Technician } from "@/mocks";
+import type { RouteInstance, Shift, Technician } from "@/mocks";
 import { CREW_ROLE_LABEL } from "./dispatch-meta";
 import { formatShiftWindow, licenceState, SHIFT_TYPE } from "./shift-meta";
 
-/** Driver, Loader, or Trainee (a loader still learning the rounds). */
+/** Driver, Helper, or Trainee (a helper still learning the rounds). */
 export function proRole(pro: Technician) {
   if (pro.role === "driver") return "Driver";
-  return pro.skills.includes("Trainee") ? "Trainee" : "Loader";
+  return pro.skills.includes("Trainee") ? "Trainee" : "Helper";
 }
 
 /** The licence closest to (or furthest past) its expiry, with its state. */
@@ -25,8 +25,8 @@ export function needsRenewal(pro: Technician) {
   return Boolean(worst && worst.state.tone !== "success");
 }
 
-/** Primary / Loader / Trainee on a route, or `null` if the pro isn't on it. */
-export function routeRoleOf(route: Route, proId: string) {
+/** Primary / Helper / Trainee on a route, or `null` if the pro isn't on it. */
+export function routeRoleOf(route: RouteInstance, proId: string) {
   if (route.primaryServiceProId === proId) return CREW_ROLE_LABEL.primary;
   const crew = route.crew.find((c) => c.serviceProId === proId);
   return crew ? CREW_ROLE_LABEL[crew.role] : null;

@@ -51,7 +51,7 @@ export function ShiftTemplateDialog({
   const id = useId();
   const save = useShiftTemplateStore((s) => s.save);
   const [name, setName] = useState(template?.name ?? "");
-  const [type, setType] = useState<ShiftType>(template?.type ?? "day");
+  const [type, setType] = useState<ShiftType>(template?.type ?? "morning");
   const [start, setStart] = useState(template?.startTime ?? "06:00");
   const [end, setEnd] = useState(template?.endTime ?? "14:00");
   const [active, setActive] = useState(template?.active ?? true);

@@ -14,11 +14,15 @@ import {
   type ContainerType,
   CUSTOMERS,
   type Customer,
-  JOBS,
-  type Job,
   mockFetch,
+  OPS_MASTERS,
+  type OpsMasters,
+  ROUTE_ASSIGNMENTS,
+  ROUTE_INSTANCES,
   ROUTES,
   type Route,
+  type RouteAssignment,
+  type RouteInstance,
   SERVICE_ITEMS,
   SERVICE_POINTS,
   type ServiceItem,
@@ -34,11 +38,6 @@ import {
 } from "@/mocks";
 
 export const fieldServiceApi = {
-  listJobs: (): Promise<Job[]> =>
-    mockFetch(
-      [...JOBS].sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor)),
-    ),
-
   listTechnicians: (): Promise<Technician[]> => mockFetch(TECHNICIANS),
 
   listCustomers: (): Promise<Customer[]> =>
@@ -59,7 +58,15 @@ export const fieldServiceApi = {
 
   listContainers: (): Promise<Container[]> => mockFetch(CONTAINERS),
 
+  listRouteInstances: (): Promise<RouteInstance[]> =>
+    mockFetch(ROUTE_INSTANCES),
+
   listRoutes: (): Promise<Route[]> => mockFetch(ROUTES),
+
+  listRouteAssignments: (): Promise<RouteAssignment[]> =>
+    mockFetch(ROUTE_ASSIGNMENTS),
+
+  getOpsMasters: (): Promise<OpsMasters> => mockFetch(OPS_MASTERS),
 
   listVehicles: (): Promise<Vehicle[]> => mockFetch(VEHICLES),
 

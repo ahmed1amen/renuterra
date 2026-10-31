@@ -49,7 +49,7 @@ export function AppointmentsTable({
         {appointments.map((apt) => {
           const customer = directory.customer(apt.customerId);
           const site = directory.servicePoint(apt.servicePointId);
-          const route = directory.route(apt.routeId);
+          const route = directory.routeInstance(apt.routeInstanceId);
           const pro = directory.servicePro(route?.primaryServiceProId);
           const href = `/field-service/appointments/${apt.id}`;
           return (
@@ -66,7 +66,10 @@ export function AppointmentsTable({
                 >
                   {apt.ref}
                 </Link>
-                <span className="text-muted-foreground block text-xs">
+                <span
+                  className="text-muted-foreground block text-xs"
+                  title="Visit purpose"
+                >
                   {SERVICE_TYPE_LABEL[apt.serviceType]}
                   {apt.type !== "standard"
                     ? ` · ${APPOINTMENT_TYPE[apt.type].label}`
@@ -75,11 +78,13 @@ export function AppointmentsTable({
               </TableCell>
               <TableCell className="whitespace-nowrap">
                 <span className="block text-sm">
-                  {formatDate(apt.windowStart)}
+                  {formatDate(apt.windowStart)}{" "}
+                  <span className="font-mono text-xs tabular-nums">
+                    {formatWindowRange(apt.windowStart, apt.windowEnd)}
+                  </span>
                 </span>
-                <span className="text-muted-foreground block font-mono text-xs tabular-nums">
-                  {WINDOW_LABEL[apt.window]} ·{" "}
-                  {formatWindowRange(apt.windowStart, apt.windowEnd)}
+                <span className="text-muted-foreground block text-xs">
+                  {WINDOW_LABEL[apt.window]} window
                 </span>
               </TableCell>
               <TableCell className="max-w-64">

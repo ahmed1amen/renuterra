@@ -19,7 +19,7 @@ export const SHIFT_TYPE: Record<
   ShiftType,
   { label: string; tone: StatusTone; icon: LucideIcon }
 > = {
-  day: { label: "Day", tone: "info", icon: Sun },
+  morning: { label: "Morning", tone: "info", icon: Sun },
   night: { label: "Night", tone: "neutral", icon: Moon },
   "on-call": { label: "On call", tone: "warning", icon: PhoneCall },
   training: { label: "Training", tone: "success", icon: GraduationCap },

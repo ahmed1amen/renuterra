@@ -26,6 +26,7 @@ import {
   useCustomers,
   useDirectory,
   useDispatchActions,
+  useRouteInstances,
   useRoutes,
   useServiceItems,
   useServicePoints,
@@ -89,6 +90,7 @@ function BookingForm({
   const book = useAppointmentStore((s) => s.book);
   const customers = useCustomers();
   const servicePoints = useServicePoints();
+  const instances = useRouteInstances();
   const routes = useRoutes();
   const directory = useDirectory();
   const { move } = useDispatchActions();
@@ -108,7 +110,8 @@ function BookingForm({
   const [arrivalWindow, setArrivalWindow] = useState<ArrivalWindow | null>(
     null,
   );
-  const [routeId, setRouteId] = useState("");
+  /** `null` until the user picks — then the default route's run is proposed. */
+  const [routeChoice, setRouteChoice] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
 
   const customer: Customer | undefined = customers.data?.find(
@@ -130,7 +133,19 @@ function BookingForm({
   const effectiveWindow = arrivalWindow ?? line?.window ?? "AM";
   const type = preset.type ?? "standard";
   const blocked = customer?.flags.includes("do_not_service") ?? false;
-  const dayRoutes = (routes.data ?? []).filter((r) => r.date === day);
+  const dayRoutes = (instances.data ?? []).filter((r) => r.date === day);
+  // The line's default route, and its run on the chosen day if generated.
+  const defaultRoute = serviceLineId
+    ? routes.data?.find(
+        (r) =>
+          r.status === "active" && r.serviceLineIds.includes(serviceLineId),
+      )
+    : undefined;
+  const defaultRun = defaultRoute
+    ? dayRoutes.find((r) => r.routeId === defaultRoute.id)
+    : undefined;
+  const defaultInstance = defaultRun?.lockedAt ? undefined : defaultRun;
+  const routeId = routeChoice ?? defaultInstance?.id ?? "";
   const ready =
     Boolean(customer && servicePoint && line && item && day) && !blocked;
 
@@ -149,7 +164,7 @@ function BookingForm({
       window: effectiveWindow,
       windowStart: dubaiDateTime(day, from),
       windowEnd: dubaiDateTime(day, to),
-      routeId: routeId || null,
+      routeInstanceId: routeId || null,
       notes: notes.trim() || undefined,
       originalAppointmentId: preset.originalAppointmentId,
     });
@@ -235,6 +250,7 @@ function BookingForm({
               onChange={(e) => {
                 setServicePointId(e.target.value);
                 setServiceLineId("");
+                setRouteChoice(null);
               }}
             >
               <NativeSelectOption value="">
@@ -257,6 +273,7 @@ function BookingForm({
               onChange={(e) => {
                 setServiceLineId(e.target.value);
                 setArrivalWindow(null);
+                setRouteChoice(null);
               }}
             >
               <NativeSelectOption value="">
@@ -281,9 +298,9 @@ function BookingForm({
             ) : null}
           </Field>
 
-          <Field label="Visit type">
+          <Field label="Visit purpose">
             <ChoiceChips
-              label="Visit type"
+              label="Visit purpose"
               options={SERVICE_TYPES}
               value={serviceType}
               onChange={setServiceType}
@@ -299,7 +316,7 @@ function BookingForm({
                 min={toDayKey(TODAY)}
                 onChange={(e) => {
                   setDay(e.target.value);
-                  setRouteId("");
+                  setRouteChoice(null);
                 }}
               />
             </Field>
@@ -317,16 +334,22 @@ function BookingForm({
             label="Route"
             htmlFor={`${id}-route`}
             hint={
-              dayRoutes.length
-                ? "Leave it in the backlog to let dispatch place it."
-                : "No routes that day yet — it goes to the backlog."
+              defaultInstance && defaultRoute
+                ? `Default route ${defaultRoute.code} runs this day — add to its run.`
+                : defaultRun && defaultRoute
+                  ? `Default route ${defaultRoute.code}'s run is locked — pick another or leave it in the backlog.`
+                  : defaultRoute
+                    ? `Default route ${defaultRoute.code} isn't generated for this day — it waits in the backlog.`
+                    : dayRoutes.length
+                      ? "Leave it in the backlog to let dispatch place it."
+                      : "No routes that day yet — it goes to the backlog."
             }
           >
             <NativeSelect
               id={`${id}-route`}
               className="w-full"
               value={routeId}
-              onChange={(e) => setRouteId(e.target.value)}
+              onChange={(e) => setRouteChoice(e.target.value)}
             >
               <NativeSelectOption value="">Leave in backlog</NativeSelectOption>
               {dayRoutes.map((r) => (
@@ -337,6 +360,7 @@ function BookingForm({
                 >
                   {r.name} — {directory.servicePro(r.primaryServiceProId)?.name}
                   {r.lockedAt ? " (locked)" : ""}
+                  {r.id === defaultInstance?.id ? " · default route" : ""}
                 </NativeSelectOption>
               ))}
             </NativeSelect>

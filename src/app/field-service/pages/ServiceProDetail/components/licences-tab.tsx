@@ -2,7 +2,7 @@
 
 import { IdCard, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import { EmptyState, StatusPill } from "@/components/shared";
+import { EmptyState, ErrorState, StatusPill } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -20,30 +21,52 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useOpsMasters } from "@/features/field-service";
 import type { Technician } from "@/mocks";
-import { LICENCE_TYPE, licenceState } from "../../../components";
+import { licenceState } from "../../../components";
 import { formatDate } from "../../../utils";
 
+/** Dated codes first, soonest expiry on top; untracked ones after. */
+const byExpiry = (
+  a: { code: string; expiresOn: string | null },
+  b: { code: string; expiresOn: string | null },
+) => {
+  if (a.expiresOn && b.expiresOn) return a.expiresOn.localeCompare(b.expiresOn);
+  if (a.expiresOn) return -1;
+  if (b.expiresOn) return 1;
+  return a.code.localeCompare(b.code);
+};
+
 export function LicencesTab({ pro }: { pro: Technician }) {
-  const licences = [...(pro.licences ?? [])].sort((a, b) =>
-    a.expiresOn.localeCompare(b.expiresOn),
-  );
+  const masters = useOpsMasters();
+  const codes = [...(pro.skillCodes ?? [])].sort(byExpiry);
+  const skillName = (code: string) =>
+    masters.data?.skillCodes.find((s) => s.code === code)?.name;
+
   return (
     <div className="grid gap-4 lg:grid-cols-3">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Licences</CardTitle>
+          <CardTitle>Skill codes</CardTitle>
           <CardDescription>
-            Checked against the vehicle and waste stream when the pro is put on
-            a route.
+            Checked against the route's required skills when the pro is
+            assigned. A lapsed code stops counting the day it expires.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {licences.length ? (
+          {masters.isPending ? (
+            <Skeleton className="h-40 w-full" />
+          ) : masters.isError ? (
+            <ErrorState
+              error={masters.error}
+              onRetry={() => masters.refetch()}
+            />
+          ) : codes.length ? (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Licence</TableHead>
+                  <TableHead>Code</TableHead>
+                  <TableHead>Skill</TableHead>
                   <TableHead>Expires</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>
@@ -52,41 +75,56 @@ export function LicencesTab({ pro }: { pro: Technician }) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {licences.map((licence) => {
-                  const state = licenceState(licence.expiresOn);
+                {codes.map((skill) => {
+                  const state = skill.expiresOn
+                    ? licenceState(skill.expiresOn)
+                    : null;
+                  const name = skillName(skill.code) ?? skill.code;
                   return (
-                    <TableRow key={licence.type}>
-                      <TableCell className="text-sm font-medium">
-                        {LICENCE_TYPE[licence.type]}
+                    <TableRow key={skill.code}>
+                      <TableCell className="font-mono text-sm font-medium">
+                        {skill.code}
                       </TableCell>
+                      <TableCell className="text-sm">{name}</TableCell>
                       <TableCell className="text-sm tabular-nums">
-                        {formatDate(`${licence.expiresOn}T00:00:00Z`)}{" "}
-                        {licence.expiresOn.slice(0, 4)}
+                        {skill.expiresOn ? (
+                          <>
+                            {formatDate(`${skill.expiresOn}T00:00:00Z`)}{" "}
+                            {skill.expiresOn.slice(0, 4)}
+                          </>
+                        ) : (
+                          <span className="text-muted-foreground">
+                            No expiry
+                          </span>
+                        )}
                       </TableCell>
                       <TableCell>
-                        <StatusPill tone={state.tone} dot>
-                          {state.label}
-                        </StatusPill>
+                        {state ? (
+                          <StatusPill tone={state.tone} dot>
+                            {state.label}
+                          </StatusPill>
+                        ) : (
+                          <StatusPill tone="neutral">Not tracked</StatusPill>
+                        )}
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant={
-                            state.tone === "success" ? "ghost" : "outline"
-                          }
-                          size="sm"
-                          onClick={() =>
-                            toast.success(
-                              `${LICENCE_TYPE[licence.type]} renewal requested`,
-                              {
+                        {state ? (
+                          <Button
+                            variant={
+                              state.tone === "success" ? "ghost" : "outline"
+                            }
+                            size="sm"
+                            onClick={() =>
+                              toast.success(`${name} renewal requested`, {
                                 description:
-                                  "Prototype — HR would upload the renewed licence.",
-                              },
-                            )
-                          }
-                        >
-                          <RefreshCw data-icon="inline-start" />
-                          Renew
-                        </Button>
+                                  "Prototype — HR would upload the renewed evidence.",
+                              })
+                            }
+                          >
+                            <RefreshCw data-icon="inline-start" />
+                            Renew
+                          </Button>
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );
@@ -96,8 +134,8 @@ export function LicencesTab({ pro }: { pro: Technician }) {
           ) : (
             <EmptyState
               icon={IdCard}
-              title="No licences on file"
-              description="Loaders and trainees ride as crew and don't need a driving licence."
+              title="No skill codes on file"
+              description="Add licences, inductions and certificates so Dispatch can match this pro to routes."
               className="py-8"
             />
           )}
@@ -108,7 +146,8 @@ export function LicencesTab({ pro }: { pro: Technician }) {
         <CardHeader>
           <CardTitle>Skills</CardTitle>
           <CardDescription>
-            What Dispatch matches against a route's vehicle and work.
+            Free-text tags from the old roster, kept for reference. Route rules
+            match the skill codes.
           </CardDescription>
         </CardHeader>
         <CardContent>

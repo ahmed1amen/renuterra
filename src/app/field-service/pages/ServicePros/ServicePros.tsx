@@ -26,12 +26,12 @@ import {
 } from "@/components/ui/table";
 import {
   isWorkingShift,
-  useRoutes,
+  useRouteInstances,
   useShifts,
   useTechnicians,
 } from "@/features/field-service";
 import { cn } from "@/lib/utils";
-import type { Route, Technician } from "@/mocks";
+import type { RouteInstance, Technician } from "@/mocks";
 import {
   LicenceBadge,
   needsRenewal,
@@ -50,7 +50,7 @@ type RoleFilter = "all" | "drivers" | "crew";
 const FILTERS: { id: RoleFilter; label: string }[] = [
   { id: "all", label: "All" },
   { id: "drivers", label: "Drivers" },
-  { id: "crew", label: "Loaders & trainees" },
+  { id: "crew", label: "Helpers & trainees" },
 ];
 
 const matchesRole = (pro: Technician, filter: RoleFilter) =>
@@ -61,7 +61,7 @@ export default function ServicePros() {
   const router = useRouter();
   const pros = useTechnicians();
   const shifts = useShifts();
-  const routes = useRoutes();
+  const routes = useRouteInstances();
 
   const [role, setRole] = useState<RoleFilter>("all");
   const [query, setQuery] = useState("");
@@ -71,10 +71,10 @@ export default function ServicePros() {
 
   /** Today's route per pro — as primary or as crew. */
   const routeToday = useMemo(() => {
-    const map = new Map<string, Route>();
+    const map = new Map<string, RouteInstance>();
     for (const route of routes.data ?? []) {
       if (route.date !== today) continue;
-      map.set(route.primaryServiceProId, route);
+      if (route.primaryServiceProId) map.set(route.primaryServiceProId, route);
       for (const c of route.crew) map.set(c.serviceProId, route);
     }
     return map;
@@ -122,7 +122,7 @@ export default function ServicePros() {
           { label: "Service pros" },
         ]}
         title="Service pros"
-        description="Drivers, loaders and trainees: today's shift, route and licence status."
+        description="Drivers, helpers and trainees: today's shift, route and licence status."
         actions={
           <Button
             size="sm"
@@ -229,7 +229,7 @@ export default function ServicePros() {
             <EmptyState
               icon={Users}
               title="No service pros yet"
-              description="Add the drivers and loaders who run your routes."
+              description="Add the drivers and helpers who run your routes."
             />
           ) : visible.length === 0 ? (
             <EmptyState

@@ -30,7 +30,15 @@
           "cnt_00428",
           "cnt_00437",
           "cnt_00446"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": 0.95,
+        "contractStatus": "active"
       },
       {
         "id": "sp_01_l2",
@@ -39,7 +47,15 @@
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "AM",
-        "containerIds": ["cnt_00455", "cnt_00463", "cnt_00464", "cnt_00471"]
+        "containerIds": ["cnt_00455", "cnt_00463", "cnt_00464", "cnt_00471"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_01_l3",
@@ -59,7 +75,15 @@
           "cnt_00511",
           "cnt_00513",
           "cnt_00517"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -85,7 +109,14 @@
         "frequency": "weekly",
         "days": ["tue", "sat"],
         "window": "night",
-        "containerIds": ["cnt_00521"]
+        "containerIds": ["cnt_00521"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "19:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_02_l2",
@@ -101,7 +132,14 @@
           "cnt_00543",
           "cnt_00545",
           "cnt_00548"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "19:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -133,7 +171,14 @@
           "cnt_00574",
           "cnt_00575",
           "cnt_00580"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "19:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_03_l2",
@@ -151,7 +196,14 @@
           "cnt_00621",
           "cnt_00627",
           "cnt_00636"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "19:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -177,7 +229,15 @@
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "AM",
-        "containerIds": []
+        "containerIds": [],
+        "entity": "GGM",
+        "timeWindow": {
+          "kind": "range",
+          "from": "07:00",
+          "to": "09:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_04_l2",
@@ -186,7 +246,15 @@
         "frequency": "weekly",
         "days": ["tue", "sat"],
         "window": "AM",
-        "containerIds": ["cnt_00659", "cnt_00661"]
+        "containerIds": ["cnt_00659", "cnt_00661"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_04_l3",
@@ -195,7 +263,15 @@
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "AM",
-        "containerIds": []
+        "containerIds": [],
+        "entity": "GGM",
+        "timeWindow": {
+          "kind": "range",
+          "from": "07:00",
+          "to": "09:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -220,7 +296,15 @@
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "containerIds": []
+        "containerIds": [],
+        "entity": "GGM",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_05_l2",
@@ -229,7 +313,15 @@
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "containerIds": []
+        "containerIds": [],
+        "entity": "GGM",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -255,7 +347,14 @@
         "frequency": "daily",
         "days": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
         "window": "night",
-        "containerIds": ["cnt_00671", "cnt_00676"]
+        "containerIds": ["cnt_00671", "cnt_00676"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "19:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_06_l2",
@@ -264,7 +363,14 @@
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "night",
-        "containerIds": ["cnt_00679"]
+        "containerIds": ["cnt_00679"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "19:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -306,7 +412,14 @@
           "cnt_00744",
           "cnt_00748",
           "cnt_00755"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "22:00"
+        },
+        "fillRate": 0.95,
+        "contractStatus": "active"
       },
       {
         "id": "sp_07_l2",
@@ -315,7 +428,14 @@
         "frequency": "weekly",
         "days": ["wed", "sat"],
         "window": "night",
-        "containerIds": ["cnt_00761", "cnt_00769", "cnt_00773", "cnt_00774"]
+        "containerIds": ["cnt_00761", "cnt_00769", "cnt_00773", "cnt_00774"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "after",
+          "from": "19:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -341,7 +461,15 @@
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "AM",
-        "containerIds": ["cnt_00778", "cnt_00779"]
+        "containerIds": ["cnt_00778", "cnt_00779"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_08_l2",
@@ -350,7 +478,15 @@
         "frequency": "weekly",
         "days": ["sat"],
         "window": "AM",
-        "containerIds": ["cnt_00780"]
+        "containerIds": ["cnt_00780"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -375,7 +511,13 @@
         "frequency": "on-call",
         "days": [],
         "window": "AT",
-        "containerIds": ["cnt_00781", "cnt_00790"]
+        "containerIds": ["cnt_00781", "cnt_00790"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "none"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -401,7 +543,15 @@
         "frequency": "monthly",
         "days": ["wed"],
         "window": "AM",
-        "containerIds": []
+        "containerIds": [],
+        "entity": "GGH",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_10_l2",
@@ -410,7 +560,15 @@
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "containerIds": ["cnt_00798", "cnt_00801", "cnt_00809"]
+        "containerIds": ["cnt_00798", "cnt_00801", "cnt_00809"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_10_l3",
@@ -419,7 +577,13 @@
         "frequency": "on-call",
         "days": [],
         "window": "AT",
-        "containerIds": []
+        "containerIds": [],
+        "entity": "GGM",
+        "timeWindow": {
+          "kind": "none"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -445,7 +609,15 @@
         "frequency": "weekly",
         "days": ["mon", "wed", "fri"],
         "window": "PM",
-        "containerIds": ["cnt_00817", "cnt_00819", "cnt_00826", "cnt_00833"]
+        "containerIds": ["cnt_00817", "cnt_00819", "cnt_00826", "cnt_00833"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "10:00",
+          "to": "13:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_11_l2",
@@ -454,7 +626,15 @@
         "frequency": "weekly",
         "days": ["thu"],
         "window": "PM",
-        "containerIds": ["cnt_00834", "cnt_00836", "cnt_00842"]
+        "containerIds": ["cnt_00834", "cnt_00836", "cnt_00842"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "10:00",
+          "to": "13:00"
+        },
+        "fillRate": null,
+        "contractStatus": "expired"
       }
     ]
   },
@@ -480,7 +660,15 @@
         "frequency": "daily",
         "days": ["mon", "tue", "wed", "thu", "fri", "sat"],
         "window": "AM",
-        "containerIds": ["cnt_00846"]
+        "containerIds": ["cnt_00846"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_12_l2",
@@ -489,7 +677,15 @@
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "PM",
-        "containerIds": ["cnt_00854"]
+        "containerIds": ["cnt_00854"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "10:00",
+          "to": "13:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_12_l3",
@@ -498,7 +694,15 @@
         "frequency": "weekly",
         "days": ["wed"],
         "window": "PM",
-        "containerIds": ["cnt_00857", "cnt_00861"]
+        "containerIds": ["cnt_00857", "cnt_00861"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "10:00",
+          "to": "13:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -522,7 +726,15 @@
         "frequency": "weekly",
         "days": ["tue", "sat"],
         "window": "PM",
-        "containerIds": ["cnt_00870", "cnt_00879", "cnt_00883"]
+        "containerIds": ["cnt_00870", "cnt_00879", "cnt_00883"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "10:00",
+          "to": "13:00"
+        },
+        "fillRate": null,
+        "contractStatus": "credit-hold"
       }
     ]
   },
@@ -556,7 +768,14 @@
           "cnt_00934",
           "cnt_00939",
           "cnt_00948"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "before",
+          "to": "08:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_14_l2",
@@ -565,7 +784,15 @@
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "containerIds": ["cnt_00971", "cnt_00980", "cnt_00983"]
+        "containerIds": ["cnt_00971", "cnt_00980", "cnt_00983"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -598,7 +825,14 @@
           "cnt_01010",
           "cnt_01014",
           "cnt_01020"
-        ]
+        ],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "before",
+          "to": "08:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -622,7 +856,15 @@
         "frequency": "weekly",
         "days": ["mon", "thu"],
         "window": "AM",
-        "containerIds": ["cnt_01027"]
+        "containerIds": ["cnt_01027"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       },
       {
         "id": "sp_16_l2",
@@ -631,7 +873,15 @@
         "frequency": "weekly",
         "days": ["wed", "sat"],
         "window": "AM",
-        "containerIds": ["cnt_01032", "cnt_01034"]
+        "containerIds": ["cnt_01032", "cnt_01034"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -655,7 +905,15 @@
         "frequency": "weekly",
         "days": ["tue", "fri"],
         "window": "AM",
-        "containerIds": ["cnt_01036", "cnt_01040", "cnt_01043", "cnt_01047"]
+        "containerIds": ["cnt_01036", "cnt_01040", "cnt_01043", "cnt_01047"],
+        "entity": "RWC",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },
@@ -681,7 +939,15 @@
         "frequency": "weekly",
         "days": ["thu"],
         "window": "AM",
-        "containerIds": ["cnt_01050"]
+        "containerIds": ["cnt_01050"],
+        "entity": "GGH",
+        "timeWindow": {
+          "kind": "range",
+          "from": "05:00",
+          "to": "10:00"
+        },
+        "fillRate": null,
+        "contractStatus": "active"
       }
     ]
   },

@@ -26,7 +26,7 @@ export type BookingInput = {
   windowStart: string;
   windowEnd: string;
   /** `null` leaves it in the backlog for dispatch to route. */
-  routeId: string | null;
+  routeInstanceId: string | null;
   notes?: string;
   originalAppointmentId?: string;
 };
@@ -58,7 +58,7 @@ function toAppointment(input: BookingInput): Appointment {
       10,
       Math.round(5 + item.minutesPerUnit * line.quantity),
     ),
-    routeId: input.routeId,
+    routeInstanceId: input.routeInstanceId,
     workOrders: [workOrder],
     startedAt: null,
     completedAt: null,
@@ -83,6 +83,8 @@ type AppointmentState = {
   patches: Record<string, Partial<Appointment>>;
   /** Adds the booking and returns the appointment it became. */
   book: (input: BookingInput) => Appointment;
+  /** Adds appointments made elsewhere — e.g. stops the dispatch engine generated. */
+  addMany: (appointments: Appointment[]) => void;
   update: (id: string, patch: Partial<Appointment>) => void;
 };
 
@@ -94,6 +96,8 @@ export const useAppointmentStore = create<AppointmentState>((set) => ({
     set((state) => ({ booked: [appointment, ...state.booked] }));
     return appointment;
   },
+  addMany: (appointments) =>
+    set((state) => ({ booked: [...appointments, ...state.booked] })),
   update: (id, patch) =>
     set((state) => ({
       patches: { ...state.patches, [id]: { ...state.patches[id], ...patch } },

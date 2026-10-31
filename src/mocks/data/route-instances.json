@@ -1,0 +1,1574 @@
+[
+  {
+    "id": "RWC-DXB-REL-001-20260831-M",
+    "routeId": "rt_01",
+    "routeVersion": 1,
+    "name": "Dubai REL Morning A",
+    "date": "2026-08-31",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_10",
+        "role": "trainee"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "13:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20410", "apt_20503", "apt_20471"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-001-20260831-M-tip1",
+        "afterAppointmentId": "apt_20471",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T10:56:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 48.5,
+    "estimatedDriveMins": 107,
+    "lockedAt": "2026-08-30T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-002-20260831-M",
+    "routeId": "rt_02",
+    "routeVersion": 1,
+    "name": "Dubai Recyclables Morning",
+    "date": "2026-08-31",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_11",
+    "crew": [
+      {
+        "serviceProId": "tech_h01",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h02",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_9",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20406", "apt_20523"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-002-20260831-M-tip1",
+        "afterAppointmentId": "apt_20523",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-08-31T13:55:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 42.0,
+    "estimatedDriveMins": 92,
+    "lockedAt": "2026-08-30T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-HOOK-001-20260831-M",
+    "routeId": "rt_03",
+    "routeVersion": 1,
+    "name": "Dubai Hook Morning",
+    "date": "2026-08-31",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_3",
+    "crew": [
+      {
+        "serviceProId": "tech_h08",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_3",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "15:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20462", "apt_20483"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-001-20260831-M-tip1",
+        "afterAppointmentId": "apt_20462",
+        "facility": "Al Lusaily C&D Facility",
+        "plannedStart": "2026-08-31T05:30:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-DXB-HOOK-001-20260831-M-tip2",
+        "afterAppointmentId": "apt_20483",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T11:37:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 57.0,
+    "estimatedDriveMins": 125,
+    "lockedAt": "2026-08-30T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "GGM-DXB-MED-001-20260831-M",
+    "routeId": "rt_05",
+    "routeVersion": 1,
+    "name": "Healthcare Dubai Weekdays",
+    "date": "2026-08-31",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_6",
+    "crew": [
+      {
+        "serviceProId": "tech_h13",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_6",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20430"],
+    "tippingTrips": [
+      {
+        "id": "GGM-DXB-MED-001-20260831-M-tip1",
+        "afterAppointmentId": "apt_20430",
+        "facility": "GGM Treatment Facility",
+        "plannedStart": "2026-08-31T06:05:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-08-30T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-003-20260831-N",
+    "routeId": "rt_07",
+    "routeVersion": 1,
+    "name": "Marina & Downtown REL Night",
+    "date": "2026-08-31",
+    "shiftId": "NIGHT",
+    "status": "completed",
+    "primaryServiceProId": "tech_2",
+    "crew": [],
+    "vehicleId": "veh_2",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [
+      {
+        "kind": "unstaffed",
+        "slot": "helper-1"
+      },
+      {
+        "kind": "unstaffed",
+        "slot": "helper-2"
+      }
+    ],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 24,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20420"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-003-20260831-N-tip1",
+        "afterAppointmentId": "apt_20420",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T19:23:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-08-30T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-HOOK-002-20260831-N",
+    "routeId": "rt_09",
+    "routeVersion": 1,
+    "name": "Malls Hook Night",
+    "date": "2026-08-31",
+    "shiftId": "NIGHT",
+    "status": "completed",
+    "primaryServiceProId": "tech_9",
+    "crew": [],
+    "vehicleId": "veh_4",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [
+      {
+        "kind": "unstaffed",
+        "slot": "helper-1"
+      }
+    ],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 5,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20451", "apt_20441"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-002-20260831-N-tip1",
+        "afterAppointmentId": "apt_20451",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-08-31T18:26:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-DXB-HOOK-002-20260831-N-tip2",
+        "afterAppointmentId": "apt_20441",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-08-31T19:23:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 57.0,
+    "estimatedDriveMins": 125,
+    "lockedAt": "2026-08-30T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-SHJ-HOOK-001-20260831-M",
+    "routeId": "rt_11",
+    "routeVersion": 1,
+    "name": "Sharjah Hook Mon/Thu",
+    "date": "2026-08-31",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_13",
+    "crew": [
+      {
+        "serviceProId": "tech_h10",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_11",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "13:00",
+    "maxStops": 5,
+    "colorIndex": 10,
+    "appointmentIds": ["apt_20508"],
+    "tippingTrips": [
+      {
+        "id": "RWC-SHJ-HOOK-001-20260831-M-tip1",
+        "afterAppointmentId": "apt_20508",
+        "facility": "Bee'ah Al Sajaa Complex",
+        "plannedStart": "2026-08-31T04:33:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-08-30T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-001-20260901-M",
+    "routeId": "rt_01",
+    "routeVersion": 1,
+    "name": "Dubai REL Morning A",
+    "date": "2026-09-01",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_10",
+        "role": "trainee"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "13:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": ["apt_20468", "apt_20435", "apt_20492", "apt_20489"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-001-20260901-M-tip1",
+        "afterAppointmentId": "apt_20489",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-01T13:30:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 55.0,
+    "estimatedDriveMins": 121,
+    "lockedAt": "2026-08-31T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-002-20260901-M",
+    "routeId": "rt_02",
+    "routeVersion": 1,
+    "name": "Dubai Recyclables Morning",
+    "date": "2026-09-01",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_11",
+    "crew": [
+      {
+        "serviceProId": "tech_h01",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h02",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_9",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20500"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-002-20260901-M-tip1",
+        "afterAppointmentId": "apt_20500",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-09-01T04:22:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-08-31T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "GGM-DXB-MED-001-20260901-M",
+    "routeId": "rt_05",
+    "routeVersion": 1,
+    "name": "Healthcare Dubai Weekdays",
+    "date": "2026-09-01",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_6",
+    "crew": [
+      {
+        "serviceProId": "tech_h13",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_6",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20438"],
+    "tippingTrips": [
+      {
+        "id": "GGM-DXB-MED-001-20260901-M-tip1",
+        "afterAppointmentId": "apt_20438",
+        "facility": "GGM Treatment Facility",
+        "plannedStart": "2026-09-01T03:29:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-08-31T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-003-20260901-N",
+    "routeId": "rt_07",
+    "routeVersion": 1,
+    "name": "Marina & Downtown REL Night",
+    "date": "2026-09-01",
+    "shiftId": "NIGHT",
+    "status": "completed",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h03",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 24,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20455", "apt_20425"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-003-20260901-N-tip1",
+        "afterAppointmentId": "apt_20425",
+        "facility": "Warsan Organics Facility",
+        "plannedStart": "2026-09-01T19:23:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 42.0,
+    "estimatedDriveMins": 92,
+    "lockedAt": "2026-08-31T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-HOOK-002-20260901-N",
+    "routeId": "rt_09",
+    "routeVersion": 1,
+    "name": "Malls Hook Night",
+    "date": "2026-09-01",
+    "shiftId": "NIGHT",
+    "status": "partial",
+    "primaryServiceProId": "tech_9",
+    "crew": [
+      {
+        "serviceProId": "tech_h09",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_4",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 5,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20415", "apt_20442"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-002-20260901-N-tip1",
+        "afterAppointmentId": "apt_20415",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-01T18:23:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-DXB-HOOK-002-20260901-N-tip2",
+        "afterAppointmentId": "apt_20442",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-01T19:19:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 57.0,
+    "estimatedDriveMins": 125,
+    "lockedAt": "2026-08-31T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-SHJ-REL-001-20260901-M",
+    "routeId": "rt_10",
+    "routeVersion": 1,
+    "name": "Sharjah REL Morning",
+    "date": "2026-09-01",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_12",
+    "crew": [
+      {
+        "serviceProId": "tech_h06",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h07",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_13",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "11:00",
+    "maxStops": 24,
+    "colorIndex": 9,
+    "appointmentIds": ["apt_20515"],
+    "tippingTrips": [
+      {
+        "id": "RWC-SHJ-REL-001-20260901-M-tip1",
+        "afterAppointmentId": "apt_20515",
+        "facility": "Bee'ah Al Sajaa Complex",
+        "plannedStart": "2026-09-01T03:48:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-08-31T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-001-20260902-M",
+    "routeId": "rt_01",
+    "routeVersion": 1,
+    "name": "Dubai REL Morning A",
+    "date": "2026-09-02",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_10",
+        "role": "trainee"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "13:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": [
+      "apt_20411",
+      "apt_20400",
+      "apt_20493",
+      "apt_20504",
+      "apt_20472"
+    ],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-001-20260902-M-tip1",
+        "afterAppointmentId": "apt_20472",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-02T13:41:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 61.5,
+    "estimatedDriveMins": 135,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-SKIP-001-20260902-M",
+    "routeId": "rt_04",
+    "routeVersion": 1,
+    "name": "Dubai Skip Weekdays",
+    "date": "2026-09-02",
+    "shiftId": "MORNING",
+    "status": "partial",
+    "primaryServiceProId": "tech_5",
+    "crew": [
+      {
+        "serviceProId": "tech_h11",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_5",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "15:00",
+    "maxStops": 6,
+    "colorIndex": 6,
+    "appointmentIds": ["apt_20520", "apt_20487"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-SKIP-001-20260902-M-tip1",
+        "afterAppointmentId": "apt_20520",
+        "facility": "Al Lusaily C&D Facility",
+        "plannedStart": "2026-09-02T03:31:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-DXB-SKIP-001-20260902-M-tip2",
+        "afterAppointmentId": "apt_20487",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-09-02T13:11:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 57.0,
+    "estimatedDriveMins": 125,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "GGM-DXB-MED-001-20260902-M",
+    "routeId": "rt_05",
+    "routeVersion": 1,
+    "name": "Healthcare Dubai Weekdays",
+    "date": "2026-09-02",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_6",
+    "crew": [
+      {
+        "serviceProId": "tech_h13",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_6",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20431"],
+    "tippingTrips": [
+      {
+        "id": "GGM-DXB-MED-001-20260902-M-tip1",
+        "afterAppointmentId": "apt_20431",
+        "facility": "GGM Treatment Facility",
+        "plannedStart": "2026-09-02T03:39:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "GGH-DXB-HAZ-001-20260902-M",
+    "routeId": "rt_06",
+    "routeVersion": 1,
+    "name": "JAFZA Hazardous Weekly",
+    "date": "2026-09-02",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_4",
+    "crew": [
+      {
+        "serviceProId": "tech_h14",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_15",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "07:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 7,
+    "appointmentIds": ["apt_20467"],
+    "tippingTrips": [
+      {
+        "id": "GGH-DXB-HAZ-001-20260902-M-tip1",
+        "afterAppointmentId": "apt_20467",
+        "facility": "GGH Hazardous Facility",
+        "plannedStart": "2026-09-02T06:04:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-003-20260902-N",
+    "routeId": "rt_07",
+    "routeVersion": 1,
+    "name": "Marina & Downtown REL Night",
+    "date": "2026-09-02",
+    "shiftId": "NIGHT",
+    "status": "partial",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h03",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 24,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20456", "apt_20421"],
+    "tippingTrips": [],
+    "estimatedKm": 20.5,
+    "estimatedDriveMins": 45,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-004-20260902-N",
+    "routeId": "rt_08",
+    "routeVersion": 1,
+    "name": "Marina Recyclables Night",
+    "date": "2026-09-02",
+    "shiftId": "NIGHT",
+    "status": "completed",
+    "primaryServiceProId": "tech_14",
+    "crew": [
+      {
+        "serviceProId": "tech_h04",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h05",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_10",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "23:00",
+    "maxStops": 24,
+    "colorIndex": 8,
+    "appointmentIds": ["apt_20418", "apt_20459"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-004-20260902-N-tip1",
+        "afterAppointmentId": "apt_20459",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-09-02T19:20:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 42.0,
+    "estimatedDriveMins": 92,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-HOOK-002-20260902-N",
+    "routeId": "rt_09",
+    "routeVersion": 1,
+    "name": "Malls Hook Night",
+    "date": "2026-09-02",
+    "shiftId": "NIGHT",
+    "status": "completed",
+    "primaryServiceProId": "tech_9",
+    "crew": [
+      {
+        "serviceProId": "tech_h09",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_4",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 5,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20443"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-002-20260902-N-tip1",
+        "afterAppointmentId": "apt_20443",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-02T19:32:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-SHJ-SKIP-001-20260902-M",
+    "routeId": "rt_12",
+    "routeVersion": 1,
+    "name": "Sharjah Skip Wed/Sat",
+    "date": "2026-09-02",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_13",
+    "crew": [
+      {
+        "serviceProId": "tech_h12",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_12",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "13:00",
+    "maxStops": 5,
+    "colorIndex": 11,
+    "appointmentIds": ["apt_20512"],
+    "tippingTrips": [
+      {
+        "id": "RWC-SHJ-SKIP-001-20260902-M-tip1",
+        "afterAppointmentId": "apt_20512",
+        "facility": "Bee'ah Al Sajaa Complex",
+        "plannedStart": "2026-09-02T05:05:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-01T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-002-20260903-M",
+    "routeId": "rt_02",
+    "routeVersion": 1,
+    "name": "Dubai Recyclables Morning",
+    "date": "2026-09-03",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_11",
+    "crew": [
+      {
+        "serviceProId": "tech_h01",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h02",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_9",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20407", "apt_20476"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-002-20260903-M-tip1",
+        "afterAppointmentId": "apt_20476",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-09-03T12:07:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 42.0,
+    "estimatedDriveMins": 92,
+    "lockedAt": "2026-09-02T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-HOOK-001-20260903-M",
+    "routeId": "rt_03",
+    "routeVersion": 1,
+    "name": "Dubai Hook Morning",
+    "date": "2026-09-03",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_3",
+    "crew": [
+      {
+        "serviceProId": "tech_h08",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_3",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "15:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20478", "apt_20463", "apt_20484"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-001-20260903-M-tip1",
+        "afterAppointmentId": "apt_20478",
+        "facility": "Warsan Organics Facility",
+        "plannedStart": "2026-09-03T05:02:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-DXB-HOOK-001-20260903-M-tip2",
+        "afterAppointmentId": "apt_20463",
+        "facility": "Al Lusaily C&D Facility",
+        "plannedStart": "2026-09-03T05:46:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-DXB-HOOK-001-20260903-M-tip3",
+        "afterAppointmentId": "apt_20484",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T13:26:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 78.5,
+    "estimatedDriveMins": 173,
+    "lockedAt": "2026-09-02T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-003-20260903-N",
+    "routeId": "rt_07",
+    "routeVersion": 1,
+    "name": "Marina & Downtown REL Night",
+    "date": "2026-09-03",
+    "shiftId": "NIGHT",
+    "status": "partial",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h03",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 24,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20426", "apt_20457"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-003-20260903-N-tip1",
+        "afterAppointmentId": "apt_20457",
+        "facility": "Warsan Organics Facility",
+        "plannedStart": "2026-09-03T19:16:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-02T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-HOOK-002-20260903-N",
+    "routeId": "rt_09",
+    "routeVersion": 1,
+    "name": "Malls Hook Night",
+    "date": "2026-09-03",
+    "shiftId": "NIGHT",
+    "status": "completed",
+    "primaryServiceProId": "tech_9",
+    "crew": [
+      {
+        "serviceProId": "tech_h09",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_4",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 5,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20452", "apt_20444"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-002-20260903-N-tip1",
+        "afterAppointmentId": "apt_20452",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-09-03T17:34:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-DXB-HOOK-002-20260903-N-tip2",
+        "afterAppointmentId": "apt_20444",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-03T18:18:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 57.0,
+    "estimatedDriveMins": 125,
+    "lockedAt": "2026-09-02T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-SHJ-HOOK-001-20260903-M",
+    "routeId": "rt_11",
+    "routeVersion": 1,
+    "name": "Sharjah Hook Mon/Thu",
+    "date": "2026-09-03",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_13",
+    "crew": [
+      {
+        "serviceProId": "tech_h10",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_11",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "13:00",
+    "maxStops": 5,
+    "colorIndex": 10,
+    "appointmentIds": ["apt_20509", "apt_20525"],
+    "tippingTrips": [
+      {
+        "id": "RWC-SHJ-HOOK-001-20260903-M-tip1",
+        "afterAppointmentId": "apt_20509",
+        "facility": "Bee'ah Al Sajaa Complex",
+        "plannedStart": "2026-09-03T03:56:00.000Z",
+        "durationMins": 40
+      },
+      {
+        "id": "RWC-SHJ-HOOK-001-20260903-M-tip2",
+        "afterAppointmentId": "apt_20525",
+        "facility": "Bee'ah Al Sajaa Complex",
+        "plannedStart": "2026-09-03T09:00:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 57.0,
+    "estimatedDriveMins": 125,
+    "lockedAt": "2026-09-02T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "GGH-AJM-HAZ-001-20260903-M",
+    "routeId": "rt_13",
+    "routeVersion": 1,
+    "name": "Ajman Waste Oil Weekly",
+    "date": "2026-09-03",
+    "shiftId": "MORNING",
+    "status": "completed",
+    "primaryServiceProId": "tech_4",
+    "crew": [
+      {
+        "serviceProId": "tech_h14",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_7",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "07:00",
+    "endTime": "13:00",
+    "maxStops": 24,
+    "colorIndex": 12,
+    "appointmentIds": ["apt_20518"],
+    "tippingTrips": [
+      {
+        "id": "GGH-AJM-HAZ-001-20260903-M-tip1",
+        "afterAppointmentId": "apt_20518",
+        "facility": "GGH Ajman Transfer",
+        "plannedStart": "2026-09-03T05:19:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-02T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-001-20260904-M",
+    "routeId": "rt_01",
+    "routeVersion": 1,
+    "name": "Dubai REL Morning A",
+    "date": "2026-09-04",
+    "shiftId": "MORNING",
+    "status": "in-progress",
+    "primaryServiceProId": "tech_1",
+    "crew": [
+      {
+        "serviceProId": "tech_7",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_10",
+        "role": "trainee"
+      }
+    ],
+    "vehicleId": "veh_1",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "13:00",
+    "maxStops": 24,
+    "colorIndex": 0,
+    "appointmentIds": [
+      "apt_20412",
+      "apt_20505",
+      "apt_20494",
+      "apt_20469",
+      "apt_20526",
+      "apt_20473"
+    ],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-001-20260904-M-tip1",
+        "afterAppointmentId": "apt_20473",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T10:43:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 68.0,
+    "estimatedDriveMins": 150,
+    "lockedAt": "2026-09-03T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-002-20260904-M",
+    "routeId": "rt_02",
+    "routeVersion": 1,
+    "name": "Dubai Recyclables Morning",
+    "date": "2026-09-04",
+    "shiftId": "MORNING",
+    "status": "in-progress",
+    "primaryServiceProId": "tech_11",
+    "crew": [
+      {
+        "serviceProId": "tech_h01",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h02",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_9",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 4,
+    "appointmentIds": ["apt_20501"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-002-20260904-M-tip1",
+        "afterAppointmentId": "apt_20501",
+        "facility": "Al Qusais MRF",
+        "plannedStart": "2026-09-04T02:38:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-03T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-HOOK-001-20260904-M",
+    "routeId": "rt_03",
+    "routeVersion": 1,
+    "name": "Dubai Hook Morning",
+    "date": "2026-09-04",
+    "shiftId": "MORNING",
+    "status": "in-progress",
+    "primaryServiceProId": "tech_3",
+    "crew": [
+      {
+        "serviceProId": "tech_h08",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_4",
+    "staffing": {
+      "truck": "backup",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [
+      {
+        "kind": "substitute",
+        "slot": "truck",
+        "source": "backup"
+      }
+    ],
+    "startTime": "06:00",
+    "endTime": "15:00",
+    "maxStops": 6,
+    "colorIndex": 2,
+    "appointmentIds": ["apt_20479"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-001-20260904-M-tip1",
+        "afterAppointmentId": "apt_20479",
+        "facility": "Warsan Organics Facility",
+        "plannedStart": "2026-09-04T06:05:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-03T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "GGM-DXB-MED-001-20260904-M",
+    "routeId": "rt_05",
+    "routeVersion": 1,
+    "name": "Healthcare Dubai Weekdays",
+    "date": "2026-09-04",
+    "shiftId": "MORNING",
+    "status": "in-progress",
+    "primaryServiceProId": "tech_6",
+    "crew": [
+      {
+        "serviceProId": "tech_h13",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_6",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "06:00",
+    "endTime": "12:00",
+    "maxStops": 24,
+    "colorIndex": 5,
+    "appointmentIds": ["apt_20432", "apt_20439"],
+    "tippingTrips": [
+      {
+        "id": "GGM-DXB-MED-001-20260904-M-tip1",
+        "afterAppointmentId": "apt_20439",
+        "facility": "GGM Treatment Facility",
+        "plannedStart": "2026-09-04T05:54:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 42.0,
+    "estimatedDriveMins": 92,
+    "lockedAt": "2026-09-03T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  },
+  {
+    "id": "RWC-DXB-REL-003-20260904-N",
+    "routeId": "rt_07",
+    "routeVersion": 1,
+    "name": "Marina & Downtown REL Night",
+    "date": "2026-09-04",
+    "shiftId": "NIGHT",
+    "status": "planned",
+    "primaryServiceProId": "tech_2",
+    "crew": [
+      {
+        "serviceProId": "tech_8",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h03",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_2",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 24,
+    "colorIndex": 1,
+    "appointmentIds": ["apt_20422"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-REL-003-20260904-N-tip1",
+        "afterAppointmentId": "apt_20422",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T19:03:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "RWC-DXB-HOOK-002-20260904-N",
+    "routeId": "rt_09",
+    "routeVersion": 1,
+    "name": "Malls Hook Night",
+    "date": "2026-09-04",
+    "shiftId": "NIGHT",
+    "status": "planned",
+    "primaryServiceProId": "tech_9",
+    "crew": [
+      {
+        "serviceProId": "tech_h09",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_4",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary"
+    },
+    "helpersRequired": 1,
+    "flags": [],
+    "startTime": "19:00",
+    "endTime": "24:00",
+    "maxStops": 5,
+    "colorIndex": 3,
+    "appointmentIds": ["apt_20445"],
+    "tippingTrips": [
+      {
+        "id": "RWC-DXB-HOOK-002-20260904-N-tip1",
+        "afterAppointmentId": "apt_20445",
+        "facility": "Dubai Investment Park Landfill",
+        "plannedStart": "2026-09-04T18:45:00.000Z",
+        "durationMins": 40
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": null,
+    "lockedBy": null
+  },
+  {
+    "id": "RWC-SHJ-REL-001-20260904-M",
+    "routeId": "rt_10",
+    "routeVersion": 1,
+    "name": "Sharjah REL Morning",
+    "date": "2026-09-04",
+    "shiftId": "MORNING",
+    "status": "in-progress",
+    "primaryServiceProId": "tech_12",
+    "crew": [
+      {
+        "serviceProId": "tech_h06",
+        "role": "secondary"
+      },
+      {
+        "serviceProId": "tech_h07",
+        "role": "secondary"
+      }
+    ],
+    "vehicleId": "veh_13",
+    "staffing": {
+      "truck": "primary",
+      "driver": "primary",
+      "helper-1": "primary",
+      "helper-2": "primary"
+    },
+    "helpersRequired": 2,
+    "flags": [],
+    "startTime": "05:00",
+    "endTime": "11:00",
+    "maxStops": 24,
+    "colorIndex": 9,
+    "appointmentIds": ["apt_20516"],
+    "tippingTrips": [
+      {
+        "id": "RWC-SHJ-REL-001-20260904-M-tip1",
+        "afterAppointmentId": "apt_20516",
+        "facility": "Bee'ah Al Sajaa Complex",
+        "plannedStart": "2026-09-04T05:00:00.000Z",
+        "durationMins": 35
+      }
+    ],
+    "estimatedKm": 35.5,
+    "estimatedDriveMins": 78,
+    "lockedAt": "2026-09-03T16:00:00.000Z",
+    "lockedBy": "usr_2"
+  }
+]

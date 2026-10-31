@@ -20,7 +20,7 @@ import {
   isWorkingShift,
   useAppointments,
   useDefaultScheduleStore,
-  useRoutes,
+  useRouteInstances,
   useShiftStore,
   useShifts,
   useShiftTemplates,
@@ -67,7 +67,7 @@ export default function ShiftBoard() {
   const pros = useTechnicians();
   const shifts = useShifts();
   const templates = useShiftTemplates();
-  const routes = useRoutes();
+  const routes = useRouteInstances();
   const appointments = useAppointments();
   const setMany = useShiftStore((s) => s.setMany);
   const removeShift = useShiftStore((s) => s.remove);
@@ -111,7 +111,7 @@ export default function ShiftBoard() {
       { id: "drivers", label: "Drivers", pros: visible.filter(isDriver) },
       {
         id: "crew",
-        label: "Loaders & trainees",
+        label: "Helpers & trainees",
         pros: visible.filter((p) => !isDriver(p)),
       },
     ];

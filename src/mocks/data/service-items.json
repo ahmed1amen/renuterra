@@ -14,7 +14,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "GEN"
   },
   {
     "id": "si_rel_660_gen",
@@ -31,7 +32,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "GEN"
   },
   {
     "id": "si_rec_1100",
@@ -48,7 +50,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "MDR"
   },
   {
     "id": "si_rec_660",
@@ -65,7 +68,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "MDR"
   },
   {
     "id": "si_food_240",
@@ -82,7 +86,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": "240L liner",
-    "active": true
+    "active": true,
+    "wasteCode": "FOOD"
   },
   {
     "id": "si_comp_15_gen",
@@ -99,7 +104,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "GEN"
   },
   {
     "id": "si_comp_15_rec",
@@ -116,7 +122,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "MDR"
   },
   {
     "id": "si_comp_20_gen",
@@ -133,7 +140,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "GEN"
   },
   {
     "id": "si_roro_30_cd",
@@ -150,7 +158,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "CND"
   },
   {
     "id": "si_roro_30_food",
@@ -167,7 +176,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "FOOD"
   },
   {
     "id": "si_roro_40_rec",
@@ -184,7 +194,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "MDR"
   },
   {
     "id": "si_skip_10_gen",
@@ -201,7 +212,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "GEN"
   },
   {
     "id": "si_skip_10_rec",
@@ -218,7 +230,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "MDR"
   },
   {
     "id": "si_skip_20_cd",
@@ -235,7 +248,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "CND"
   },
   {
     "id": "si_med_bag",
@@ -252,7 +266,8 @@
     "requiresSeals": true,
     "requiresConsignmentNote": true,
     "consumable": "Yellow bag",
-    "active": true
+    "active": true,
+    "wasteCode": "MED"
   },
   {
     "id": "si_med_sharps",
@@ -269,7 +284,8 @@
     "requiresSeals": true,
     "requiresConsignmentNote": true,
     "consumable": "Empty sharps box",
-    "active": true
+    "active": true,
+    "wasteCode": "MED"
   },
   {
     "id": "si_haz_drum",
@@ -286,7 +302,8 @@
     "requiresSeals": true,
     "requiresConsignmentNote": true,
     "consumable": "Empty 200L drum",
-    "active": true
+    "active": true,
+    "wasteCode": "HAZ-S"
   },
   {
     "id": "si_hat_oil",
@@ -303,7 +320,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": true,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "HAZ-L"
   },
   {
     "id": "si_pharma_dest",
@@ -320,7 +338,8 @@
     "requiresSeals": true,
     "requiresConsignmentNote": true,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": "MED"
   },
   {
     "id": "si_cnt_delivery",
@@ -337,7 +356,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": null
   },
   {
     "id": "si_cnt_removal",
@@ -354,7 +374,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": null
   },
   {
     "id": "si_cnt_check",
@@ -371,7 +392,8 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": true
+    "active": true,
+    "wasteCode": null
   },
   {
     "id": "si_rel_240_gen",
@@ -388,6 +410,7 @@
     "requiresSeals": false,
     "requiresConsignmentNote": false,
     "consumable": null,
-    "active": false
+    "active": false,
+    "wasteCode": "GEN"
   }
 ]

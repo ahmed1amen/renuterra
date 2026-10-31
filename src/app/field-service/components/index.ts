@@ -26,20 +26,25 @@ export {
   appointmentLoadKg,
   type BoardActions,
   CREW_ROLE_LABEL,
+  canOptimize,
+  confirmBlockers,
+  type DefaultRoute,
   fitsVehicle,
   isMovable,
   METHOD_VEHICLE_CLASSES,
+  type OpenSlot,
+  PLANNABLE_STATUSES,
   type RoutePlan,
   requiredClasses,
+  SHIFT_LABEL,
+  type SlotKind,
+  type StaffOption,
+  slotKind,
+  slotLabel,
+  withoutSlotFlags,
 } from "./dispatch-meta";
 export { ChoiceChips, Field } from "./form-field";
-export {
-  JOB_STATUS,
-  JOB_STATUS_ORDER,
-  JobStatusPill,
-  PriorityLabel,
-  SERVICE_TYPES,
-} from "./job-status";
+export { flagChips, InstanceFlagChips } from "./instance-flags";
 export {
   MapLegend,
   type RouteLine,
@@ -49,6 +54,49 @@ export {
 } from "./map-markers";
 export { MonthCalendar } from "./month-calendar";
 export { type LatLng, OsmMap } from "./osm-map";
+export {
+  describeProjection,
+  formatDayKey,
+  ProjectedVisitsTable,
+  ProjectionBadge,
+} from "./projected-visits";
+export { RouteFormDialog } from "./route-form-dialog";
+export {
+  logRouteEvent,
+  type RouteEvent,
+  useRouteHistory,
+} from "./route-history";
+export {
+  CodeChips,
+  DAY_LABEL,
+  DAY_ORDER,
+  DayToggles,
+  dayKeyFromToday,
+  formatDay,
+  formatDays,
+  formatShortDay,
+  isBlocked,
+  RuleCheckList,
+  scheduleLabel,
+  TODAY_KEY,
+  UtilisationBar,
+  utilisationTone,
+} from "./route-labels";
+export {
+  formatTimeWindow,
+  INSTANCE_STATUS,
+  InstanceStatusPill,
+  ROUTE_STATUS,
+  RouteStatusPill,
+  SCHEDULE_PATTERN,
+  STAFFING_SOURCE,
+} from "./route-meta";
+export {
+  formatMetricValue,
+  GRADE_TONE,
+  RouteScoreBadge,
+  RouteScoreBreakdown,
+} from "./route-score-badge";
 export {
   AssignRouteMenu,
   type RouteColors,
@@ -75,10 +123,12 @@ export {
   SHIFT_TYPE_ORDER,
   shiftHours,
 } from "./shift-meta";
+export { StaffSlotMenu } from "./staff-slot-menu";
 export {
   TechnicianIdentity,
   TechnicianStatusPill,
 } from "./technician-lane";
+export { useRouteContext } from "./use-route-context";
 export {
   CONTAINER_KIND,
   CONTAINER_LOCATION,

@@ -21,7 +21,8 @@ import {
   defaultScheduleOf,
   isWorkingShift,
   useDefaultScheduleStore,
-  useRoutes,
+  useOpsMasters,
+  useRouteInstances,
   useShifts,
   useShiftTemplates,
   useTechnicians,
@@ -29,14 +30,12 @@ import {
 } from "@/features/field-service";
 import type { Technician } from "@/mocks";
 import {
-  LICENCE_TYPE,
-  needsRenewal,
+  licenceState,
   proRole,
   routeRoleOf,
   ShiftSummary,
   shiftHours,
   TechnicianStatusPill,
-  worstLicence,
 } from "../../components";
 import {
   addDays,
@@ -60,6 +59,18 @@ const LICENCE_KPI = {
   warning: "Expiring",
   destructive: "Expired",
 } as const;
+
+/** The expiry-tracked skill code closest to (or furthest past) its expiry. */
+function worstSkillCode(pro: Technician) {
+  const dated = (pro.skillCodes ?? []).filter(
+    (s): s is { code: string; expiresOn: string } => s.expiresOn !== null,
+  );
+  if (!dated.length) return null;
+  const worst = [...dated].sort((a, b) =>
+    a.expiresOn.localeCompare(b.expiresOn),
+  )[0];
+  return { ...worst, state: licenceState(worst.expiresOn) };
+}
 
 const rangeFormat = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
@@ -107,10 +118,11 @@ export default function ServiceProDetail({ id }: { id: string }) {
 
 function Detail({ pro }: { pro: Technician }) {
   const shifts = useShifts();
-  const routes = useRoutes();
+  const routes = useRouteInstances();
   const vehicles = useVehicles();
   const templates = useShiftTemplates();
   const schedules = useDefaultScheduleStore((s) => s.schedules);
+  const masters = useOpsMasters();
   const [tab, setTab] = useState<Tab>("schedule");
   const [weekOffset, setWeekOffset] = useState(0);
 
@@ -148,7 +160,12 @@ function Detail({ pro }: { pro: Technician }) {
     vehicles.data?.find((v) => v.id === vehicleId);
 
   const schedule = defaultScheduleOf(pro, schedules);
-  const worst = worstLicence(pro);
+  const worst = worstSkillCode(pro);
+  const skillCount = pro.skillCodes?.length ?? 0;
+  const entityName = pro.entity
+    ? (masters.data?.entities.find((e) => e.code === pro.entity)?.name ??
+      pro.entity)
+    : null;
   const loaded = shifts.isSuccess && routes.isSuccess;
   const thisWeekLabel = weekOffset === 0 ? "this week" : weekRange(weekStart);
   const todayShift = shifts.shiftOf(pro.id, toDayKey(TODAY));
@@ -163,7 +180,9 @@ function Detail({ pro }: { pro: Technician }) {
           { label: pro.name },
         ]}
         title={pro.name}
-        description={`${proRole(pro)} · ${pro.zone}`}
+        description={[proRole(pro), pro.zone, pro.employeeId, pro.entity]
+          .filter(Boolean)
+          .join(" · ")}
         actions={
           <>
             <Button
@@ -224,10 +243,12 @@ function Detail({ pro }: { pro: Technician }) {
           value={worst ? LICENCE_KPI[worst.state.tone] : "—"}
           hint={
             worst
-              ? needsRenewal(pro)
-                ? `${LICENCE_TYPE[worst.type]}: ${worst.state.label.toLowerCase()}`
-                : `${pro.licences?.length ?? 0} on file`
-              : "None on file"
+              ? worst.state.tone !== "success"
+                ? `${worst.code}: ${worst.state.label.toLowerCase()}`
+                : `${skillCount} skill codes on file`
+              : skillCount
+                ? "No expiring skill codes"
+                : "None on file"
           }
         />
       </div>
@@ -239,7 +260,7 @@ function Detail({ pro }: { pro: Technician }) {
             <TabsTrigger value="licences">
               Licences & skills
               <span className="font-mono text-[11px] tabular-nums opacity-70">
-                {pro.licences?.length ?? 0}
+                {skillCount}
               </span>
             </TabsTrigger>
             <TabsTrigger value="routes">
@@ -338,6 +359,25 @@ function Detail({ pro }: { pro: Technician }) {
                   <Skeleton className="h-5 w-32" />
                 ) : (
                   <ShiftSummary shift={todayShift} />
+                )}
+              </Fact>
+              <Fact label="Employee ID">
+                {pro.employeeId ? (
+                  <span className="font-mono">{pro.employeeId}</span>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
+              </Fact>
+              <Fact label="Entity">
+                {entityName ? (
+                  <>
+                    <span className="font-mono">{pro.entity}</span>
+                    <span className="text-muted-foreground block text-xs">
+                      {entityName}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
                 )}
               </Fact>
               <Fact label="Zone">{pro.zone}</Fact>

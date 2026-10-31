@@ -108,50 +108,13 @@ export type Technician = {
   defaultSchedule?: Partial<Record<DayOfWeek, string>>;
   licences?: { type: LicenceType; expiresOn: string }[];
   teamId?: string | null;
+  employeeId?: string;
+  entity?: EntityCode;
+  /** Skill codes from the master (LIC-HGV, OP-REL, CITY-DXB, SHIFT-NIGHT…). */
+  skillCodes?: { code: string; expiresOn: string | null }[];
 };
 
 export type LicenceType = "heavy_vehicle" | "hazmat" | "medical_waste";
-
-export type JobStatus =
-  | "unassigned"
-  | "scheduled"
-  | "en-route"
-  | "on-site"
-  | "completed"
-  | "blocked";
-
-export type JobPriority = "low" | "normal" | "high" | "urgent";
-
-export type ServiceType =
-  | "collection"
-  | "maintenance"
-  | "installation"
-  | "inspection";
-
-export type Job = {
-  id: string;
-  /** Human-facing work order number. */
-  ref: string;
-  customer: string;
-  site: string;
-  address: string;
-  /** Service point position, for the dispatch map. */
-  lat: number;
-  lng: number;
-  zone: string;
-  serviceType: ServiceType;
-  /** Waste stream the job handles; drives the stream colour in the UI. */
-  stream: "recyclable" | "food" | "medical" | "hazardous" | "cd" | "general";
-  status: JobStatus;
-  priority: JobPriority;
-  /** Start of the booked slot. */
-  scheduledFor: string;
-  /** Arrival window shown to the customer. */
-  window: string;
-  durationMins: number;
-  technicianId: string | null;
-  notes?: string;
-};
 
 // ---------------------------------------------------------------------------
 // Field Ops — customers, service points and appointments.
@@ -315,6 +278,8 @@ export type ServiceItem = {
   requiresConsignmentNote: boolean;
   /** Left behind on each service, e.g. "Yellow bag". */
   consumable: string | null;
+  /** Fine-grained waste code (`GEN`, `MDR`, `MED`…); `null` for logistics. */
+  wasteCode: string | null;
   active: boolean;
 };
 
@@ -360,7 +325,24 @@ export type ServiceLine = {
   window: ArrivalWindow;
   /** Tracked containers this line services. */
   containerIds: string[];
+  /** Operating company that serves and bills it — medical is GGM, hazardous GGH. */
+  entity: EntityCode;
+  /**
+   * When the stop may happen: before / after a time, a range, or any time.
+   * Lives on the line, not the customer — one site can have several.
+   */
+  timeWindow: TimeWindow;
+  /** Overrides the route's fill-rate assumption for this line (0–1). */
+  fillRate: number | null;
+  /** Contract state from the CRM; anything but active is skipped at generation. */
+  contractStatus: "active" | "expired" | "suspended" | "credit-hold";
 };
+
+export type TimeWindow =
+  | { kind: "none" }
+  | { kind: "before"; to: string }
+  | { kind: "after"; from: string }
+  | { kind: "range"; from: string; to: string };
 
 /** A physical site where waste is collected. Named "Customer - Location". */
 export type ServicePoint = {
@@ -496,10 +478,10 @@ export type Appointment = {
   plannedStart: string;
   durationMins: number;
   /**
-   * The route this visit is on; its service pro is the route's primary.
-   * `null` = not routed yet (backlog).
+   * The route instance (one route's run on one day) this visit is a stop on;
+   * its service pro is the instance's driver. `null` = backlog.
    */
-  routeId: string | null;
+  routeInstanceId: string | null;
   workOrders: WorkOrder[];
   startedAt: string | null;
   completedAt: string | null;
@@ -520,9 +502,17 @@ export type Vehicle = {
   id: string;
   plate: string;
   vehicleClass: VehicleClass;
+  /** Truck-type master id, e.g. `REL-25`. */
+  truckTypeId: string;
+  /** Registered company; `null` = shared pool usable by any entity. */
+  entity: EntityCode | null;
   /** Payload. */
   capacityKg: number;
   status: VehicleStatus;
+  /** Cities the truck is permitted to work in. */
+  permits: CityCode[];
+  registrationExpiry: string;
+  insuranceExpiry: string;
 };
 
 export type RouteCrewRole = "secondary" | "trainee";
@@ -541,15 +531,43 @@ export type TippingTrip = {
  * One day's run: a name and a primary service pro who works through its
  * appointments in order, plus optional crew, the truck and tipping trips.
  */
-export type Route = {
+export type RouteInstanceStatus =
+  | "planned"
+  | "unstaffed"
+  | "confirmed"
+  | "in-progress"
+  | "completed"
+  | "partial"
+  | "cancelled";
+
+/** How an instance's truck / driver / helper slot got filled (spec §4.3). */
+export type StaffingSource = "primary" | "backup" | "pool" | "manual";
+
+/**
+ * One execution of a Route on one date and shift — what the driver works,
+ * dispatch monitors and billing reconciles. Generated from the Route.
+ * Id: `[RouteCode]-[YYYYMMDD]-[M|N]`.
+ */
+export type RouteInstance = {
   id: string;
+  /** The Route (template) it was generated from; `null` for a one-off. */
+  routeId: string | null;
+  routeVersion: number;
   name: string;
   /** Dubai calendar day, `2026-09-04`. */
   date: string;
-  /** A `Technician` id — owns the route and every appointment on it. */
-  primaryServiceProId: string;
+  shiftId: RouteShiftId;
+  status: RouteInstanceStatus;
+  /** The driver — `null` while the slot is unstaffed. */
+  primaryServiceProId: string | null;
   crew: { serviceProId: string; role: RouteCrewRole }[];
   vehicleId: string | null;
+  /** Where each filled slot came from; keys are `truck`, `driver`, `helper-1`… */
+  staffing: Record<string, StaffingSource>;
+  /** Helper slots the Route requires; unfilled ones keep the instance Unstaffed. */
+  helpersRequired: number;
+  /** Generation flags: unstaffed slots, over capacity, stops outside windows. */
+  flags: InstanceFlag[];
   /** Local `HH:mm`; `24:00` for a run that ends at midnight. */
   startTime: string;
   endTime: string;
@@ -566,7 +584,7 @@ export type Route = {
 };
 
 /** What kind of availability a shift gives. Leave = not available that day. */
-export type ShiftType = "day" | "night" | "on-call" | "training" | "leave";
+export type ShiftType = "morning" | "night" | "on-call" | "training" | "leave";
 
 /** A reusable daily window, e.g. "Night 20:00–04:00". */
 export type ShiftTemplate = {
@@ -597,3 +615,176 @@ export type Shift = {
   trainerId: string | null;
   note?: string;
 };
+
+// ---------------------------------------------------------------------------
+// Route model — docs/product/specs/route-definition.md. A Route is a standing
+// template; instances are generated from it per dispatch day.
+// ---------------------------------------------------------------------------
+
+/** Operating companies: waste collection, hazardous, medical. */
+export type EntityCode = "RWC" | "GGH" | "GGM";
+export type CityCode = "DXB" | "AUH" | "SHJ" | "AJM" | "FUJ" | "RAK" | "UAQ";
+export type ServiceTypeCode =
+  | "REL"
+  | "SKIP"
+  | "HOOK"
+  | "COMP"
+  | "MED"
+  | "HAZ"
+  | "WWT";
+export type CapacityBasis = "volume" | "visits" | "weight";
+export type RouteShiftId = "MORNING" | "NIGHT";
+export type RouteStatus = "draft" | "active" | "suspended" | "retired";
+export type SchedulePattern =
+  | "daily"
+  | "weekdays"
+  | "weekly"
+  | "alternate"
+  | "custom";
+
+export type OperatingEntity = { code: EntityCode; name: string };
+export type City = { code: CityCode; name: string };
+export type Depot = {
+  id: string;
+  name: string;
+  city: CityCode;
+  lat: number;
+  lng: number;
+};
+export type DisposalSite = {
+  id: string;
+  name: string;
+  city: CityCode;
+  kind:
+    | "landfill"
+    | "transfer"
+    | "mrf"
+    | "organics"
+    | "cnd"
+    | "treatment"
+    | "wastewater";
+  /** Waste codes the site accepts. */
+  wasteCodes: string[];
+};
+export type ServiceTypeDef = {
+  code: ServiceTypeCode;
+  name: string;
+  capacityBasis: CapacityBasis;
+  /** Default helper count for a new Route of this type. */
+  defaultHelpers: number;
+  /** Skill codes every driver on this service type needs. */
+  requiredSkills: string[];
+};
+export type TruckType = {
+  id: string;
+  name: string;
+  serviceTypes: ServiceTypeCode[];
+  capacityBasis: CapacityBasis;
+  /** Compacting bodies: m³ and compression (1:5 for REL). */
+  bodyM3: number | null;
+  compressionRatio: number | null;
+  payloadKg: number;
+  /** Secured container slots (medical / hazardous). */
+  containerSlots: number | null;
+};
+export type SkillCode = {
+  code: string;
+  name: string;
+  evidence: string;
+  expiryTracked: boolean;
+};
+/** Fine-grained waste code; `group` is the stream colour and ESG bucket. */
+export type WasteCode = {
+  code: string;
+  name: string;
+  group: WasteStreamId;
+  /** Codes it may share a truck body with on the same trip. */
+  coCollectWith: string[];
+};
+export type RouteShift = {
+  id: RouteShiftId;
+  name: string;
+  startTime: string;
+  endTime: string;
+};
+
+/** Every admin-maintained lookup list the Route model depends on (spec §7). */
+export type OpsMasters = {
+  entities: OperatingEntity[];
+  cities: City[];
+  depots: Depot[];
+  disposalSites: DisposalSite[];
+  serviceTypes: ServiceTypeDef[];
+  truckTypes: TruckType[];
+  skillCodes: SkillCode[];
+  wasteCodes: WasteCode[];
+  shifts: RouteShift[];
+};
+
+/** A recurring run: what, where, with which truck and driver, when. */
+export type Route = {
+  id: string;
+  /** `[Entity]-[City]-[ServiceType]-[NNN]`, immutable once Active. */
+  code: string;
+  name: string;
+  entity: EntityCode;
+  serviceType: ServiceTypeCode;
+  city: CityCode;
+  zone: string | null;
+  /** First is the required type, the rest are allowed alternates. */
+  truckTypeIds: string[];
+  requiredSkills: string[];
+  wasteCodes: string[];
+  coCollection: boolean;
+  schedule: {
+    pattern: SchedulePattern;
+    /** Weekly / custom days; ignored for daily and weekdays. */
+    days: DayOfWeek[];
+    /** Alternate days count from here. */
+    anchorDate: string | null;
+  };
+  shiftId: RouteShiftId;
+  startTime: string;
+  endTime: string;
+  depotId: string;
+  disposalSiteIds: string[];
+  helpers: number;
+  plannedTrips: number;
+  /** Exchange routes: visits that fit in a shift. */
+  plannedVisits: number | null;
+  /** Standard 0.8; a service line can override it. */
+  fillRate: number;
+  status: RouteStatus;
+  validFrom: string;
+  validTo: string | null;
+  /** Operations supervisor accountable (a `User` id). */
+  ownerId: string;
+  version: number;
+  colorIndex: number;
+  /** Attached service lines in stop order. Each line sits on one Route. */
+  serviceLineIds: string[];
+};
+
+/** Staffs a Route: one asset, primary or ranked backup, on some days. */
+export type RouteAssignment = {
+  id: string;
+  routeId: string;
+  assetType: "truck" | "driver" | "helper";
+  /** Vehicle id for trucks, `Technician` id for people. */
+  assetId: string;
+  role: "primary" | "backup";
+  /** 0 for primaries, 1 = first backup… */
+  rank: number;
+  /** Empty = every Route day. */
+  days: DayOfWeek[];
+  validFrom: string;
+  validTo: string | null;
+  status: "active" | "suspended";
+};
+
+export type InstanceFlag =
+  | { kind: "unstaffed"; slot: string }
+  | { kind: "over-capacity"; utilisation: number }
+  | { kind: "outside-window"; appointmentId: string }
+  | { kind: "contract-skipped"; serviceLineId: string; reason: string }
+  | { kind: "substitute"; slot: string; source: StaffingSource };

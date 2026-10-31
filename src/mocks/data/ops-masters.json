@@ -1,0 +1,458 @@
+{
+  "entities": [
+    {
+      "code": "RWC",
+      "name": "Renuterra Waste Collection"
+    },
+    {
+      "code": "GGH",
+      "name": "Golden Gate Hazardous"
+    },
+    {
+      "code": "GGM",
+      "name": "Golden Gate Medical"
+    }
+  ],
+  "cities": [
+    {
+      "code": "DXB",
+      "name": "Dubai"
+    },
+    {
+      "code": "AUH",
+      "name": "Abu Dhabi"
+    },
+    {
+      "code": "SHJ",
+      "name": "Sharjah"
+    },
+    {
+      "code": "AJM",
+      "name": "Ajman"
+    },
+    {
+      "code": "FUJ",
+      "name": "Fujairah"
+    },
+    {
+      "code": "RAK",
+      "name": "Ras Al Khaimah"
+    },
+    {
+      "code": "UAQ",
+      "name": "Umm Al Quwain"
+    }
+  ],
+  "depots": [
+    {
+      "id": "dep_alquoz",
+      "name": "Al Quoz yard",
+      "city": "DXB",
+      "lat": 25.1302,
+      "lng": 55.2296
+    },
+    {
+      "id": "dep_ggm_dxb",
+      "name": "GGM Dubai depot",
+      "city": "DXB",
+      "lat": 25.0105,
+      "lng": 55.1201
+    },
+    {
+      "id": "dep_jafza",
+      "name": "JAFZA hazardous yard",
+      "city": "DXB",
+      "lat": 24.9968,
+      "lng": 55.0842
+    },
+    {
+      "id": "dep_sajaa",
+      "name": "Al Sajaa yard",
+      "city": "SHJ",
+      "lat": 25.3214,
+      "lng": 55.6389
+    },
+    {
+      "id": "dep_ajman",
+      "name": "Al Jurf yard",
+      "city": "AJM",
+      "lat": 25.4021,
+      "lng": 55.514
+    }
+  ],
+  "disposalSites": [
+    {
+      "id": "ds_dip",
+      "name": "Dubai Investment Park Landfill",
+      "city": "DXB",
+      "kind": "landfill",
+      "wasteCodes": ["GEN"]
+    },
+    {
+      "id": "ds_warsan",
+      "name": "Warsan Organics Facility",
+      "city": "DXB",
+      "kind": "organics",
+      "wasteCodes": ["FOOD", "GREEN"]
+    },
+    {
+      "id": "ds_qusais_mrf",
+      "name": "Al Qusais MRF",
+      "city": "DXB",
+      "kind": "mrf",
+      "wasteCodes": ["MDR", "CARD", "PET"]
+    },
+    {
+      "id": "ds_lusaily",
+      "name": "Al Lusaily C&D Facility",
+      "city": "DXB",
+      "kind": "cnd",
+      "wasteCodes": ["CND", "METAL"]
+    },
+    {
+      "id": "ds_ggm",
+      "name": "GGM Treatment Facility",
+      "city": "DXB",
+      "kind": "treatment",
+      "wasteCodes": ["MED"]
+    },
+    {
+      "id": "ds_ggh",
+      "name": "GGH Hazardous Facility",
+      "city": "DXB",
+      "kind": "treatment",
+      "wasteCodes": ["HAZ-S", "HAZ-L"]
+    },
+    {
+      "id": "ds_sajaa",
+      "name": "Bee'ah Al Sajaa Complex",
+      "city": "SHJ",
+      "kind": "transfer",
+      "wasteCodes": ["GEN", "MDR", "CND"]
+    },
+    {
+      "id": "ds_ajm_ggh",
+      "name": "GGH Ajman Transfer",
+      "city": "AJM",
+      "kind": "transfer",
+      "wasteCodes": ["HAZ-L", "HAZ-S"]
+    }
+  ],
+  "serviceTypes": [
+    {
+      "code": "REL",
+      "name": "Rear-end loader",
+      "capacityBasis": "volume",
+      "defaultHelpers": 2,
+      "requiredSkills": ["LIC-HGV", "OP-REL"]
+    },
+    {
+      "code": "SKIP",
+      "name": "Skip loader",
+      "capacityBasis": "visits",
+      "defaultHelpers": 1,
+      "requiredSkills": ["LIC-HGV", "OP-SKIP"]
+    },
+    {
+      "code": "HOOK",
+      "name": "Hook loader / RoRo",
+      "capacityBasis": "visits",
+      "defaultHelpers": 1,
+      "requiredSkills": ["LIC-HGV", "OP-HOOK"]
+    },
+    {
+      "code": "COMP",
+      "name": "Compactor / bulk",
+      "capacityBasis": "volume",
+      "defaultHelpers": 1,
+      "requiredSkills": ["LIC-HGV"]
+    },
+    {
+      "code": "MED",
+      "name": "Medical waste",
+      "capacityBasis": "weight",
+      "defaultHelpers": 1,
+      "requiredSkills": ["LIC-LGV", "MED-IC"]
+    },
+    {
+      "code": "HAZ",
+      "name": "Hazardous waste",
+      "capacityBasis": "weight",
+      "defaultHelpers": 1,
+      "requiredSkills": ["LIC-HGV", "HAZ-ADR", "SAF-SPILL"]
+    },
+    {
+      "code": "WWT",
+      "name": "Wastewater / sludge tanker",
+      "capacityBasis": "volume",
+      "defaultHelpers": 1,
+      "requiredSkills": ["LIC-HGV", "OP-TANK"]
+    }
+  ],
+  "truckTypes": [
+    {
+      "id": "REL-07",
+      "name": "Rear loader 7 m³",
+      "serviceTypes": ["REL"],
+      "capacityBasis": "volume",
+      "bodyM3": 7,
+      "compressionRatio": 5,
+      "payloadKg": 4000,
+      "containerSlots": null
+    },
+    {
+      "id": "REL-14",
+      "name": "Rear loader 14 m³",
+      "serviceTypes": ["REL"],
+      "capacityBasis": "volume",
+      "bodyM3": 14,
+      "compressionRatio": 5,
+      "payloadKg": 7500,
+      "containerSlots": null
+    },
+    {
+      "id": "REL-25",
+      "name": "Rear loader 25 m³",
+      "serviceTypes": ["REL"],
+      "capacityBasis": "volume",
+      "bodyM3": 25,
+      "compressionRatio": 5,
+      "payloadKg": 12000,
+      "containerSlots": null
+    },
+    {
+      "id": "SKP-STD",
+      "name": "Skip loader",
+      "serviceTypes": ["SKIP"],
+      "capacityBasis": "visits",
+      "bodyM3": null,
+      "compressionRatio": null,
+      "payloadKg": 8000,
+      "containerSlots": 1
+    },
+    {
+      "id": "HOOK-STD",
+      "name": "Hook loader",
+      "serviceTypes": ["HOOK"],
+      "capacityBasis": "visits",
+      "bodyM3": null,
+      "compressionRatio": null,
+      "payloadKg": 16000,
+      "containerSlots": 1
+    },
+    {
+      "id": "BOX-MED",
+      "name": "Enclosed box, medical",
+      "serviceTypes": ["MED"],
+      "capacityBasis": "weight",
+      "bodyM3": null,
+      "compressionRatio": null,
+      "payloadKg": 1200,
+      "containerSlots": 40
+    },
+    {
+      "id": "BOX-HAZ",
+      "name": "ADR box truck",
+      "serviceTypes": ["HAZ"],
+      "capacityBasis": "weight",
+      "bodyM3": null,
+      "compressionRatio": null,
+      "payloadKg": 3000,
+      "containerSlots": 24
+    },
+    {
+      "id": "TNK-VAC",
+      "name": "Vacuum tanker",
+      "serviceTypes": ["WWT", "HAZ"],
+      "capacityBasis": "volume",
+      "bodyM3": 10,
+      "compressionRatio": 1,
+      "payloadKg": 10000,
+      "containerSlots": null
+    },
+    {
+      "id": "FLT",
+      "name": "Flatbed",
+      "serviceTypes": ["COMP", "HAZ"],
+      "capacityBasis": "weight",
+      "bodyM3": null,
+      "compressionRatio": null,
+      "payloadKg": 8000,
+      "containerSlots": null
+    }
+  ],
+  "skillCodes": [
+    {
+      "code": "LIC-LGV",
+      "name": "Light goods licence",
+      "evidence": "UAE licence class",
+      "expiryTracked": true
+    },
+    {
+      "code": "LIC-HGV",
+      "name": "Heavy goods licence",
+      "evidence": "UAE licence class",
+      "expiryTracked": true
+    },
+    {
+      "code": "OP-REL",
+      "name": "REL operation",
+      "evidence": "Internal induction",
+      "expiryTracked": false
+    },
+    {
+      "code": "OP-SKIP",
+      "name": "Skip chain operation",
+      "evidence": "Internal induction",
+      "expiryTracked": false
+    },
+    {
+      "code": "OP-HOOK",
+      "name": "Hook / RoRo operation",
+      "evidence": "Internal induction",
+      "expiryTracked": false
+    },
+    {
+      "code": "OP-TANK",
+      "name": "Tanker and vacuum operation",
+      "evidence": "Internal induction",
+      "expiryTracked": false
+    },
+    {
+      "code": "HAZ-ADR",
+      "name": "Hazardous waste handling",
+      "evidence": "ADR / authority certificate",
+      "expiryTracked": true
+    },
+    {
+      "code": "MED-IC",
+      "name": "Medical waste and infection control",
+      "evidence": "Certificate",
+      "expiryTracked": true
+    },
+    {
+      "code": "SAF-SPILL",
+      "name": "Spill response",
+      "evidence": "Certificate",
+      "expiryTracked": true
+    },
+    {
+      "code": "CITY-DXB",
+      "name": "Eligible to work in Dubai",
+      "evidence": "Permit / induction",
+      "expiryTracked": true
+    },
+    {
+      "code": "CITY-SHJ",
+      "name": "Eligible to work in Sharjah",
+      "evidence": "Permit / induction",
+      "expiryTracked": true
+    },
+    {
+      "code": "CITY-AJM",
+      "name": "Eligible to work in Ajman",
+      "evidence": "Permit / induction",
+      "expiryTracked": true
+    },
+    {
+      "code": "SHIFT-NIGHT",
+      "name": "Cleared for night shift",
+      "evidence": "HR flag",
+      "expiryTracked": false
+    }
+  ],
+  "wasteCodes": [
+    {
+      "code": "GEN",
+      "name": "General (residual) waste",
+      "group": "general",
+      "coCollectWith": ["FOOD"]
+    },
+    {
+      "code": "FOOD",
+      "name": "Food / organic waste",
+      "group": "food",
+      "coCollectWith": ["GEN"]
+    },
+    {
+      "code": "MDR",
+      "name": "Mixed dry recyclables",
+      "group": "recyclable",
+      "coCollectWith": []
+    },
+    {
+      "code": "CARD",
+      "name": "Cardboard / paper",
+      "group": "recyclable",
+      "coCollectWith": []
+    },
+    {
+      "code": "PET",
+      "name": "PET plastics",
+      "group": "recyclable",
+      "coCollectWith": []
+    },
+    {
+      "code": "GLASS",
+      "name": "Glass",
+      "group": "recyclable",
+      "coCollectWith": []
+    },
+    {
+      "code": "METAL",
+      "name": "Scrap metal",
+      "group": "recyclable",
+      "coCollectWith": []
+    },
+    {
+      "code": "CND",
+      "name": "Construction and demolition",
+      "group": "cd",
+      "coCollectWith": []
+    },
+    {
+      "code": "GREEN",
+      "name": "Garden / green waste",
+      "group": "food",
+      "coCollectWith": []
+    },
+    {
+      "code": "WWS",
+      "name": "Wastewater / sludge",
+      "group": "hazardous",
+      "coCollectWith": []
+    },
+    {
+      "code": "MED",
+      "name": "Medical waste",
+      "group": "medical",
+      "coCollectWith": []
+    },
+    {
+      "code": "HAZ-S",
+      "name": "Hazardous, solid / packaged",
+      "group": "hazardous",
+      "coCollectWith": ["HAZ-S"]
+    },
+    {
+      "code": "HAZ-L",
+      "name": "Hazardous, liquid",
+      "group": "hazardous",
+      "coCollectWith": []
+    }
+  ],
+  "shifts": [
+    {
+      "id": "MORNING",
+      "name": "Morning",
+      "startTime": "05:00",
+      "endTime": "15:00"
+    },
+    {
+      "id": "NIGHT",
+      "name": "Night",
+      "startTime": "18:00",
+      "endTime": "04:00"
+    }
+  ]
+}

@@ -30,6 +30,15 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Code, Demo, SectionHeader } from "../components";
 
 export default function MenusPage() {
@@ -161,6 +170,27 @@ export default function MenusPage() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+        </Demo>
+        <Demo title="Sheet (side drawer)">
+          <Sheet>
+            <SheetTrigger render={<Button variant="outline" />}>
+              Open truck DXB P 48213
+            </SheetTrigger>
+            <SheetContent className="sm:max-w-md">
+              <SheetHeader>
+                <SheetTitle>DXB P 48213</SheetTitle>
+                <SheetDescription>
+                  Row details open in a right-hand sheet so the list stays in
+                  view. Close with Esc, the backdrop or the X.
+                </SheetDescription>
+              </SheetHeader>
+              <SheetFooter>
+                <Button onClick={() => toast.success("Sent to workshop")}>
+                  Send to workshop
+                </Button>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
         </Demo>
       </div>
     </div>

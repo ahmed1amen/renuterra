@@ -29,7 +29,7 @@ export type DayCoverage = {
 export type ProGroup = { id: string; label: string; pros: Technician[] };
 
 /**
- * Pros down the side (grouped Drivers / Loaders & trainees), the week's seven
+ * Pros down the side (grouped Drivers / Helpers & trainees), the week's seven
  * days across, and a Coverage row that compares drivers on shift to routes.
  */
 export function ShiftGrid({

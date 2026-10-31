@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import type { Route, Vehicle } from "@/mocks";
+import type { RouteInstance, Vehicle } from "@/mocks";
 import { routeRoleOf, VEHICLE_CLASS } from "../../../components";
 import { formatDate, TODAY, toDayKey } from "../../../utils";
 
@@ -35,7 +35,7 @@ export function RoutesTab({
 }: {
   proId: string;
   /** Sorted by date, oldest first. */
-  routes: Route[];
+  routes: RouteInstance[];
   vehicleOf: (id: string | null) => Vehicle | undefined;
 }) {
   const router = useRouter();

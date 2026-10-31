@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import type { Route, Shift } from "@/mocks";
+import type { RouteInstance, Shift } from "@/mocks";
 import { routeRoleOf, ShiftSummary } from "../../../components";
 import { formatWeekday, isSameDay, parseDayKey, TODAY } from "../../../utils";
 
@@ -34,7 +34,7 @@ export function WeekSchedule({
   /** Day keys, Sunday to Saturday. */
   days: string[];
   shiftOf: (date: string) => Shift | undefined;
-  routesOn: (date: string) => Route[];
+  routesOn: (date: string) => RouteInstance[];
   rangeLabel: string;
   /** -1 previous, +1 next, 0 back to this week. */
   onShiftWeek: (delta: -1 | 0 | 1) => void;

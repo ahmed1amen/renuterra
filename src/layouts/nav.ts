@@ -5,6 +5,7 @@ import {
   CalendarCheck,
   CalendarRange,
   Clock,
+  Database,
   FileSignature,
   Gauge,
   HardHat,
@@ -14,6 +15,8 @@ import {
   type LucideIcon,
   Palette,
   Radio,
+  Route as RouteIcon,
+  Truck,
   UserRoundSearch,
 } from "lucide-react";
 
@@ -89,14 +92,19 @@ export const APP_NAVS: AppNav[] = [
           },
           { label: "Dispatch", href: "/field-service/dispatch", icon: Radio },
           {
-            label: "Shift board",
-            href: "/field-service/shift-board",
-            icon: CalendarRange,
+            label: "Routes",
+            href: "/field-service/routes",
+            icon: RouteIcon,
           },
           {
             label: "Appointments",
             href: "/field-service/appointments",
             icon: CalendarCheck,
+          },
+          {
+            label: "Shift board",
+            href: "/field-service/shift-board",
+            icon: CalendarRange,
           },
         ],
       },
@@ -112,6 +120,11 @@ export const APP_NAVS: AppNav[] = [
             label: "Service pros",
             href: "/field-service/service-pros",
             icon: HardHat,
+          },
+          {
+            label: "Fleet",
+            href: "/field-service/fleet",
+            icon: Truck,
           },
         ],
       },
@@ -132,6 +145,11 @@ export const APP_NAVS: AppNav[] = [
             label: "Shift templates",
             href: "/field-service/settings/shift-templates",
             icon: Clock,
+          },
+          {
+            label: "Lookups",
+            href: "/field-service/settings/ops-lists",
+            icon: Database,
           },
         ],
       },

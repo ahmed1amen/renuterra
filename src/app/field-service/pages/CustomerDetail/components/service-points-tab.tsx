@@ -1,6 +1,7 @@
 "use client";
 
 import { CalendarPlus, MapPin } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { EmptyState, StatusPill, StreamTag } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useContainers, useDirectory } from "@/features/field-service";
+import {
+  type ProjectedVisit,
+  useContainers,
+  useDirectory,
+  useRoutes,
+} from "@/features/field-service";
 import { cn } from "@/lib/utils";
 import type { ServicePoint, WasteStreamId } from "@/mocks";
 import { useBookAppointmentModal } from "@/stores/book-appointment-modal";
@@ -28,9 +34,10 @@ import {
   CONTAINER_LOCATION,
   FREQUENCY_LABEL,
   formatCountUnit,
+  formatDayKey,
+  formatTimeWindow,
   HANDLING_METHOD,
   ServicePointMap,
-  WINDOW_LABEL,
 } from "../../../components";
 import { formatDate } from "../../../utils";
 
@@ -47,14 +54,26 @@ const DAY_LABEL: Record<string, string> = {
 /** Sites on the left, the selected site's containers and services on the right. */
 export function ServicePointsTab({
   servicePoints,
+  projected,
   bookable,
 }: {
   servicePoints: ServicePoint[];
+  /** The customer's projected visits, soonest first. */
+  projected: ProjectedVisit[];
   /** False when the customer is on hold — booking is hidden. */
   bookable: boolean;
 }) {
   const openBooking = useBookAppointmentModal((s) => s.openModal);
   const directory = useDirectory();
+  const routes = useRoutes();
+  /** The active Route a service line is attached to (each line has one). */
+  const routeOf = (lineId: string) =>
+    routes.data?.find(
+      (r) => r.status !== "retired" && r.serviceLineIds.includes(lineId),
+    );
+  /** Next projected visit per service line. */
+  const nextOf = (lineId: string) =>
+    projected.find((v) => v.serviceLineId === lineId);
   const containers = useContainers();
   const [selectedId, setSelectedId] = useState(servicePoints[0]?.id ?? null);
   const selected = servicePoints.find((sp) => sp.id === selectedId);
@@ -182,12 +201,14 @@ export function ServicePointsTab({
                       <TableHead>Stream</TableHead>
                       <TableHead>Schedule</TableHead>
                       <TableHead>Window</TableHead>
+                      <TableHead>Route</TableHead>
                       <TableHead className="text-right" />
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {selected.serviceLines.map((line) => {
                       const item = directory.serviceItem(line.serviceItemId);
+                      const next = nextOf(line.id);
                       return (
                         <TableRow key={line.id}>
                           <TableCell className="text-sm">
@@ -209,9 +230,39 @@ export function ServicePointsTab({
                                 {line.days.map((d) => DAY_LABEL[d]).join(", ")}
                               </span>
                             ) : null}
+                            {next ? (
+                              <span className="text-muted-foreground block text-xs">
+                                Next: {formatDayKey(next.date)}
+                              </span>
+                            ) : null}
+                          </TableCell>
+                          <TableCell className="text-sm whitespace-nowrap">
+                            {formatTimeWindow(line.timeWindow)}
+                            <span className="text-muted-foreground block text-xs">
+                              {line.entity}
+                            </span>
                           </TableCell>
                           <TableCell className="text-sm">
-                            {WINDOW_LABEL[line.window]}
+                            {routeOf(line.id) ? (
+                              <Link
+                                href={`/field-service/routes/${routeOf(line.id)?.id}`}
+                                className="font-mono text-xs hover:underline"
+                              >
+                                {routeOf(line.id)?.code}
+                              </Link>
+                            ) : (
+                              <span className="text-muted-foreground text-xs">
+                                Not on a route
+                              </span>
+                            )}
+                            {line.contractStatus !== "active" ? (
+                              <Badge
+                                variant="warning"
+                                className="mt-1 block w-fit"
+                              >
+                                Contract {line.contractStatus.replace("-", " ")}
+                              </Badge>
+                            ) : null}
                           </TableCell>
                           <TableCell className="text-right">
                             {bookable && selected.status === "active" ? (

@@ -29,8 +29,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  type ProjectedVisit,
   useAppointments,
   useCustomers,
+  useProjectedVisits,
   useServiceItems,
   useServicePoints,
 } from "@/features/field-service";
@@ -47,9 +49,10 @@ import {
   CLOSED_STATUSES,
   CustomerFlags,
   CustomerStatusPill,
+  formatDayKey,
   TIER_LABEL,
 } from "../../components";
-import { formatCount, formatDate } from "../../utils";
+import { formatCount, formatDate, toDubaiDayKey } from "../../utils";
 
 const SKELETON_ROWS = [0, 1, 2, 3, 4, 5];
 
@@ -60,6 +63,14 @@ const FILTERS: { id: StatusFilter; label: string }[] = [
   { id: "active", label: "Active" },
   { id: "passive", label: "Passive" },
 ];
+
+/** A customer's next visit: a booked appointment or a route projection. */
+type NextVisit = {
+  /** Dubai day key. */
+  day: string;
+  appointment?: Appointment;
+  projection?: ProjectedVisit;
+};
 
 /** Flags that mean someone should look at the account. */
 const ATTENTION_FLAGS = ["at_risk", "past_due", "do_not_service"];
@@ -74,6 +85,7 @@ export default function Customers() {
     [serviceItems.data],
   );
   const appointments = useAppointments();
+  const projected = useProjectedVisits();
 
   const [status, setStatus] = useState<StatusFilter>("active");
   const [tier, setTier] = useState<CustomerTier | "all">("all");
@@ -81,7 +93,10 @@ export default function Customers() {
 
   const all = useMemo(() => customers.data ?? [], [customers.data]);
 
-  /** Per-customer rollups: sites, streams handled and the next open visit. */
+  /**
+   * Per-customer rollups: sites, streams handled and the next visit — the
+   * earliest of an open appointment and the route schedule's projection.
+   */
   const rollup = useMemo(() => {
     const sites = new Map<string, ServicePoint[]>();
     for (const sp of servicePoints.data ?? []) {
@@ -93,8 +108,23 @@ export default function Customers() {
         continue;
       if (!next.has(apt.customerId)) next.set(apt.customerId, apt);
     }
-    return { sites, next };
-  }, [servicePoints.data, appointments.data]);
+    const nextVisit = new Map<string, NextVisit>();
+    for (const [customerId, apt] of next) {
+      nextVisit.set(customerId, {
+        day: toDubaiDayKey(apt.windowStart),
+        appointment: apt,
+      });
+    }
+    // Projections are soonest first, so the first per customer is the earliest.
+    for (const visit of projected ?? []) {
+      const current = nextVisit.get(visit.customerId);
+      // A same-day appointment wins: it's the real thing.
+      if (!current || visit.date < current.day) {
+        nextVisit.set(visit.customerId, { day: visit.date, projection: visit });
+      }
+    }
+    return { sites, next: nextVisit };
+  }, [servicePoints.data, appointments.data, projected]);
 
   const counts = useMemo(() => {
     const map = new Map<StatusFilter, number>([["all", all.length]]);
@@ -302,8 +332,10 @@ export default function Customers() {
                     ),
                   ] as WasteStreamId[];
                   const next = rollup.next.get(customer.id);
-                  const nextServicePoint = next
-                    ? sites.find((sp) => sp.id === next.servicePointId)
+                  const nextServicePoint = next?.appointment
+                    ? sites.find(
+                        (sp) => sp.id === next.appointment?.servicePointId,
+                      )
                     : undefined;
                   const href = `/field-service/customers/${customer.id}`;
                   return (
@@ -343,13 +375,22 @@ export default function Customers() {
                         </span>
                       </TableCell>
                       <TableCell className="text-sm">
-                        {next ? (
+                        {next?.appointment ? (
                           <>
                             <span className="block">
-                              {formatDate(next.windowStart)}
+                              {formatDate(next.appointment.windowStart)}
                             </span>
                             <span className="text-muted-foreground block max-w-48 truncate text-xs">
                               {nextServicePoint?.location}
+                            </span>
+                          </>
+                        ) : next?.projection ? (
+                          <>
+                            <span className="block">
+                              {formatDayKey(next.day)}
+                            </span>
+                            <span className="text-muted-foreground block max-w-48 truncate text-xs">
+                              by route {next.projection.routeCode}
                             </span>
                           </>
                         ) : (

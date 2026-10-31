@@ -7,12 +7,11 @@ import {
   CircleCheck,
   ClipboardCheck,
   FileSearch,
-  Lock,
   MapPin,
   MoreHorizontal,
   OctagonAlert,
   Phone,
-  Route,
+  Route as RouteIcon,
   ShieldCheck,
   Truck,
 } from "lucide-react";
@@ -54,7 +53,7 @@ import {
   useCatalogItems,
   useDirectory,
   useDispatchActions,
-  useRoutes,
+  useRouteInstances,
 } from "@/features/field-service";
 import {
   type Appointment,
@@ -73,9 +72,11 @@ import {
   CustomerFlags,
   FAILED_REASON,
   fitsVehicle,
+  InstanceStatusPill,
   SERVICE_TYPE_LABEL,
   ServicePointMap,
   SOURCE_LABEL,
+  STAFFING_SOURCE,
   TechnicianIdentity,
   TIER_LABEL,
   VEHICLE_CLASS,
@@ -178,7 +179,7 @@ export default function AppointmentDetail({ id }: { id: string }) {
 
 function Detail({ appointment: apt }: { appointment: Appointment }) {
   const directory = useDirectory();
-  const routes = useRoutes();
+  const routes = useRouteInstances();
   const { move } = useDispatchActions();
   // Includes items added in Settings this session.
   const serviceItems = useCatalogItems();
@@ -190,7 +191,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
 
   const customer = directory.customer(apt.customerId);
   const site = directory.servicePoint(apt.servicePointId);
-  const route = directory.route(apt.routeId);
+  const route = directory.routeInstance(apt.routeInstanceId);
   const pro = directory.servicePro(route?.primaryServiceProId);
   const vehicle = directory.vehicle(route?.vehicleId);
   const sameDayRoutes = (routes.data ?? []).filter(
@@ -424,8 +425,10 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
               </CardTitle>
               <CardDescription>
                 {formatDate(apt.windowStart)} ·{" "}
-                {WINDOW_LABEL[apt.window].toLowerCase()} window{" "}
-                {formatWindowRange(apt.windowStart, apt.windowEnd)}
+                <span className="font-mono tabular-nums">
+                  {formatWindowRange(apt.windowStart, apt.windowEnd)}
+                </span>{" "}
+                · {WINDOW_LABEL[apt.window].toLowerCase()} window
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
@@ -434,7 +437,10 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                 <Fact label="Stream">
                   <StreamTag stream={apt.stream} />
                 </Fact>
-                <Fact label="Visit type">
+                <Fact label="Visit purpose">
+                  {SERVICE_TYPE_LABEL[apt.serviceType]}
+                </Fact>
+                <Fact label="Appointment type">
                   {APPOINTMENT_TYPE[apt.type].label}
                 </Fact>
                 <Fact label="Source">{SOURCE_LABEL[apt.source]}</Fact>
@@ -659,28 +665,40 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                 <CardDescription className="flex items-center gap-1.5">
                   Stop {route.appointmentIds.indexOf(apt.id) + 1} of{" "}
                   {route.appointmentIds.length}
-                  {route.lockedAt ? (
-                    <Badge variant="neutral" className="gap-1">
-                      <Lock className="size-3" aria-hidden />
-                      Locked
-                    </Badge>
-                  ) : null}
+                  <InstanceStatusPill status={route.status} />
                 </CardDescription>
               ) : null}
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               {route ? (
                 <>
-                  <Link
-                    href="/field-service/dispatch"
-                    className="block font-medium hover:underline"
-                  >
-                    {route.name}
-                  </Link>
+                  <div>
+                    <Link
+                      href="/field-service/dispatch"
+                      className="block font-medium hover:underline"
+                    >
+                      {route.name}
+                    </Link>
+                    <p className="text-muted-foreground font-mono text-xs">
+                      {route.id}
+                    </p>
+                    {route.routeId ? (
+                      <Link
+                        href={`/field-service/routes/${route.routeId}`}
+                        className="text-info text-xs hover:underline"
+                      >
+                        Open route definition
+                      </Link>
+                    ) : null}
+                  </div>
                   {pro ? (
                     <div>
                       <p className="text-muted-foreground mb-1 text-xs">
-                        Primary service pro
+                        Driver
+                        {route.staffing.driver &&
+                        route.staffing.driver !== "primary"
+                          ? ` · ${STAFFING_SOURCE[route.staffing.driver].toLowerCase()}`
+                          : ""}
                       </p>
                       <TechnicianIdentity technician={pro} showPhone />
                     </div>
@@ -690,7 +708,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                       {route.crew.map((member) => (
                         <li key={member.serviceProId}>
                           {directory.servicePro(member.serviceProId)?.name} ·{" "}
-                          {member.role === "trainee" ? "Trainee" : "Loader"}
+                          {member.role === "trainee" ? "Trainee" : "Helper"}
                         </li>
                       ))}
                     </ul>
@@ -721,7 +739,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                       />
                     }
                   >
-                    <Route data-icon="inline-start" />
+                    <RouteIcon data-icon="inline-start" />
                     {route ? "Move to another route" : "Add to a route"}
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-72">
