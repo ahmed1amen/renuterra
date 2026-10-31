@@ -52,6 +52,7 @@ import {
   RouteFormDialog,
   RouteScoreBadge,
   RouteStatusPill,
+  SCORE_SCOPE,
   scheduleLabel,
   TODAY_KEY,
   UtilisationBar,
@@ -268,7 +269,7 @@ export default function Routes() {
           value={
             scoresLoaded
               ? avgScore === null
-                ? "—"
+                ? "-"
                 : `${avgScore} · ${GRADE_LABEL[gradeOf(avgScore)]}`
               : undefined
           }
@@ -514,7 +515,10 @@ export default function Routes() {
                         <UtilisationBar pct={util.pct} />
                       </TableCell>
                       <TableCell>
-                        <RouteScoreBadge score={score} />
+                        <RouteScoreBadge
+                          score={score}
+                          scope={SCORE_SCOPE.design}
+                        />
                       </TableCell>
                       <TableCell>
                         <RouteStatusPill status={route.status} />

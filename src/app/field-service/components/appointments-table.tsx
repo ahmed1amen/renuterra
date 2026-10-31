@@ -17,6 +17,9 @@ import { formatDate, formatWindowRange } from "../utils";
 import {
   APPOINTMENT_TYPE,
   AppointmentStatusPill,
+  CANCEL_REASON,
+  FAILED_REASON,
+  RESCHEDULE_REASON,
   SERVICE_TYPE_LABEL,
   WINDOW_LABEL,
 } from "./appointment-meta";
@@ -90,7 +93,7 @@ export function AppointmentsTable({
               <TableCell className="max-w-64">
                 {showCustomer ? (
                   <span className="block truncate text-sm font-medium">
-                    {customer?.name ?? "—"}
+                    {customer?.name ?? "-"}
                   </span>
                 ) : null}
                 <span
@@ -100,7 +103,7 @@ export function AppointmentsTable({
                       : "block truncate text-sm font-medium"
                   }
                 >
-                  {site?.location ?? "—"}
+                  {site?.location ?? "-"}
                   {site ? ` · ${site.area}` : ""}
                 </span>
               </TableCell>
@@ -129,6 +132,23 @@ export function AppointmentsTable({
               </TableCell>
               <TableCell>
                 <AppointmentStatusPill status={apt.status} />
+                {apt.status === "failed" && apt.failedReason ? (
+                  <span className="text-muted-foreground mt-0.5 block text-[11px]">
+                    {FAILED_REASON[apt.failedReason]}
+                  </span>
+                ) : apt.status === "cancelled" && apt.cancelReason ? (
+                  <span className="text-muted-foreground mt-0.5 block text-[11px]">
+                    {CANCEL_REASON[apt.cancelReason]}
+                  </span>
+                ) : apt.rescheduled ? (
+                  <span
+                    className="text-muted-foreground mt-0.5 block text-[11px]"
+                    title={`Moved from ${apt.rescheduled.fromDay}, asked by ${apt.rescheduled.requestedBy}`}
+                  >
+                    Moved:{" "}
+                    {RESCHEDULE_REASON[apt.rescheduled.reason].toLowerCase()}
+                  </span>
+                ) : null}
               </TableCell>
             </TableRow>
           );

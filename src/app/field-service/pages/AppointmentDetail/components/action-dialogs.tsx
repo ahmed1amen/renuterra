@@ -13,8 +13,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { Appointment, ArrivalWindow } from "@/mocks";
-import { ChoiceChips, Field, WINDOW_LABEL } from "../../../components";
+import type { Appointment, ArrivalWindow, RescheduleReason } from "@/mocks";
+import {
+  ChoiceChips,
+  Field,
+  RESCHEDULE_REASON,
+  WINDOW_LABEL,
+} from "../../../components";
 import { addDays, TODAY, toDayKey, toDubaiDayKey } from "../../../utils";
 
 const WINDOWS = (Object.keys(WINDOW_LABEL) as ArrivalWindow[]).map((id) => ({
@@ -22,13 +27,30 @@ const WINDOWS = (Object.keys(WINDOW_LABEL) as ArrivalWindow[]).map((id) => ({
   label: WINDOW_LABEL[id],
 }));
 
+const REASONS = (Object.keys(RESCHEDULE_REASON) as RescheduleReason[]).map(
+  (id) => ({ id, label: RESCHEDULE_REASON[id] }),
+);
+
+const ASKED_BY = [
+  { id: "customer" as const, label: "Customer" },
+  { id: "operations" as const, label: "Operations" },
+];
+
+export type RescheduleInput = {
+  day: string;
+  window: ArrivalWindow;
+  reason: RescheduleReason;
+  requestedBy: "customer" | "operations";
+  note: string;
+};
+
 type DialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
 /**
- * Pick a reason (and an optional note) to close out a visit — cancel or report
+ * Pick a reason (and an optional note) to close out a visit: cancel or report
  * a failed visit. "Other" requires a note.
  */
 export function ReasonDialog<R extends string>({
@@ -116,7 +138,7 @@ export function RescheduleDialog({
   onConfirm,
 }: DialogProps & {
   appointment: Appointment;
-  onConfirm: (day: string, window: ArrivalWindow, note: string) => void;
+  onConfirm: (input: RescheduleInput) => void;
 }) {
   const id = useId();
   const current = toDubaiDayKey(appointment.windowStart);
@@ -127,6 +149,10 @@ export function RescheduleDialog({
     appointment.window,
   );
   const [note, setNote] = useState("");
+  const [reason, setReason] = useState<RescheduleReason>("customer_request");
+  const [requestedBy, setRequestedBy] = useState<"customer" | "operations">(
+    "customer",
+  );
   const unchanged = day === current && arrivalWindow === appointment.window;
 
   return (
@@ -156,13 +182,34 @@ export function RescheduleDialog({
               onChange={setArrivalWindow}
             />
           </Field>
+          <Field label="Reason">
+            <ChoiceChips
+              label="Reason"
+              options={REASONS}
+              value={reason}
+              onChange={(next) => {
+                setReason(next);
+                setRequestedBy(
+                  next === "customer_request" ? "customer" : "operations",
+                );
+              }}
+            />
+          </Field>
+          <Field label="Asked by">
+            <ChoiceChips
+              label="Asked by"
+              options={ASKED_BY}
+              value={requestedBy}
+              onChange={setRequestedBy}
+            />
+          </Field>
           <Field label="Note" htmlFor={`${id}-note`}>
             <Textarea
               id={`${id}-note`}
               rows={2}
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Why it moved — e.g. customer asked for the afternoon."
+              placeholder="Anything else: e.g. call the site manager on arrival."
             />
           </Field>
         </div>
@@ -172,7 +219,15 @@ export function RescheduleDialog({
           </Button>
           <Button
             disabled={!day || unchanged}
-            onClick={() => onConfirm(day, arrivalWindow, note.trim())}
+            onClick={() =>
+              onConfirm({
+                day,
+                window: arrivalWindow,
+                reason,
+                requestedBy,
+                note: note.trim(),
+              })
+            }
           >
             Reschedule
           </Button>

@@ -1,6 +1,6 @@
 /**
  * Projected visits: when a service line will next be collected, worked out
- * from its frequency and its Route's schedule — before any instance exists.
+ * from its frequency and its Route's schedule: before any instance exists.
  * Answers "when is my next collection?" on customer and appointment screens
  * without pretending the stop has been dispatched.
  */

@@ -58,6 +58,7 @@ export default function Dashboard() {
             <KpiCard
               label="Runs today"
               value={k ? formatCount(k.runsToday) : undefined}
+              href="/field-service/dispatch"
               hint={runsHint}
             />
             <KpiCard
@@ -65,11 +66,17 @@ export default function Dashboard() {
               value={k ? formatCount(k.unstaffedAhead) : undefined}
               hint={k ? `Next 7 days · ${k.unstaffedToday} today` : undefined}
               tone={k && k.unstaffedAhead > 0 ? "destructive" : "default"}
+              href={
+                k?.firstUnstaffedDay
+                  ? `/field-service/dispatch?date=${k.firstUnstaffedDay}`
+                  : "/field-service/dispatch"
+              }
             />
             <KpiCard
               label="Stops done today"
               value={k ? `${k.stopsDone} / ${k.stopsPlanned}` : undefined}
               hint={k ? `${k.stopsFailed} failed visits` : undefined}
+              href="/field-service/appointments?period=today"
             />
             <KpiCard
               label="Collected today"
@@ -79,13 +86,17 @@ export default function Dashboard() {
                   ? `${formatCount(k.workOrdersToday)} completed work orders`
                   : undefined
               }
+              href="/field-service/appointments?period=today&view=work-orders"
             />
             <KpiCard
-              label="Backlog"
+              label="Backlog, all days"
               value={k ? formatCount(k.backlog) : undefined}
               hint={
-                k ? `${k.staleBacklog} waiting since before today` : undefined
+                k
+                  ? `${k.staleBacklog} waiting since before today · Dispatch shows one day at a time`
+                  : undefined
               }
+              href="/field-service/appointments?period=all&backlog=1"
             />
             <KpiCard
               label="Failed visits"
@@ -97,6 +108,7 @@ export default function Dashboard() {
                     : "Last 7 days"
                   : undefined
               }
+              href="/field-service/appointments?period=all&status=failed"
             />
           </div>
 

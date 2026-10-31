@@ -1,10 +1,10 @@
 /**
- * Phase-1 route optimisation (spec §5 rule 5): re-sequence an instance's open
+ * Phase-1 route optimisation (spec section 5 rule 5): re-sequence an instance's open
  * stops by time window, then nearest next stop, and recompute planned times.
  * Closed stops (completed, failed, cancelled, in progress) keep their place
  * at the front. Scored before and after so the dispatcher sees the gain.
  *
- * Phase 2 — real cycle times from GPS — replaces the straight-line estimates
+ * Phase 2 (real cycle times from GPS) replaces the straight-line estimates
  * later; the shape of the result stays the same.
  */
 import type { Appointment, RouteInstance, TippingTrip } from "@/mocks";

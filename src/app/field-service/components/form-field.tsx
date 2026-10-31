@@ -27,7 +27,7 @@ export function Field({
   );
 }
 
-/** Single-choice pill row — a lighter radio group for 2–6 short options. */
+/** Single-choice pill row: a lighter radio group for 2–6 short options. */
 export function ChoiceChips<T extends string>({
   options,
   value,

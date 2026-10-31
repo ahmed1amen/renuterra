@@ -2,9 +2,17 @@
 
 import { CalendarPlus } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 import { EmptyState, StreamTag } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
-import { type ProjectedVisit, useDirectory } from "@/features/field-service";
+import { Button } from "@/components/ui/button";
+import {
+  type ProjectedVisit,
+  useDirectory,
+  useDispatchActions,
+  useRouteInstances,
+  useRoutes,
+} from "@/features/field-service";
 import type { Appointment } from "@/mocks";
 import {
   describeProjection,
@@ -34,6 +42,35 @@ export function NextVisits({
   adHoc: Appointment[];
 }) {
   const directory = useDirectory();
+  const instances = useRouteInstances().data ?? [];
+  const routes = useRoutes().data ?? [];
+  const { move } = useDispatchActions();
+
+  /**
+   * Where an ad-hoc job stands (R24): on a run, or waiting in the backlog
+   * with its default route's run that day proposed when it can still take it.
+   */
+  const dispatchState = (apt: Appointment) => {
+    const day = toDubaiDayKey(apt.windowStart);
+    const onRun = instances.find((i) => i.id === apt.routeInstanceId);
+    if (onRun) return { onRun, day };
+    const route = routes.find(
+      (r) =>
+        apt.serviceLineId !== null &&
+        r.serviceLineIds.includes(apt.serviceLineId),
+    );
+    const defaultRun = route
+      ? instances.find(
+          (i) =>
+            i.routeId === route.id &&
+            i.date === day &&
+            !i.lockedAt &&
+            !i.closure &&
+            i.status !== "cancelled",
+        )
+      : undefined;
+    return { onRun: undefined, day, defaultRun };
+  };
 
   const groups = new Map<string, DayGroup>();
   const groupOf = (day: string) => {
@@ -77,7 +114,7 @@ export function NextVisits({
                 >
                   <span className="min-w-0">
                     <span className="block truncate font-medium">
-                      {site?.location ?? "—"}
+                      {site?.location ?? "-"}
                     </span>
                     <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
                       <StreamTag stream={apt.stream} />
@@ -93,9 +130,14 @@ export function NextVisits({
                   >
                     {apt.ref}
                   </Link>
-                  <span>
-                    <Badge variant="warning">Ad-hoc</Badge>
-                  </span>
+                  <AdHocState
+                    apt={apt}
+                    state={dispatchState(apt)}
+                    onAdd={(runId, runName) => {
+                      move(apt.id, runId);
+                      toast.success(`${apt.ref} added to ${runName}`);
+                    }}
+                  />
                 </li>
               );
             })}
@@ -108,11 +150,11 @@ export function NextVisits({
                 >
                   <span className="min-w-0">
                     <span className="block truncate font-medium">
-                      {site?.location ?? "—"}
+                      {site?.location ?? "-"}
                     </span>
                     <span className="text-muted-foreground flex items-center gap-1.5 text-xs">
                       {item ? <StreamTag stream={item.stream} /> : null}
-                      <span className="truncate">{item?.name ?? "—"}</span>
+                      <span className="truncate">{item?.name ?? "-"}</span>
                     </span>
                   </span>
                   <span className="font-mono text-xs tabular-nums">
@@ -134,5 +176,59 @@ export function NextVisits({
         </li>
       ))}
     </ol>
+  );
+}
+
+function AdHocState({
+  apt,
+  state,
+  onAdd,
+}: {
+  apt: Appointment;
+  state: {
+    onRun: { id: string; name: string } | undefined;
+    day: string;
+    defaultRun?: { id: string; name: string };
+  };
+  onAdd: (runId: string, runName: string) => void;
+}) {
+  if (state.onRun)
+    return (
+      <span className="flex flex-col items-start gap-0.5">
+        <Badge variant="neutral">Ad-hoc</Badge>
+        <Link
+          href={`/field-service/dispatch?date=${state.day}`}
+          className="text-info truncate text-[11px] hover:underline"
+          title={`On ${state.onRun.name}`}
+        >
+          On {state.onRun.name}
+        </Link>
+      </span>
+    );
+  return (
+    <span className="flex flex-col items-start gap-1">
+      <Badge variant="warning">Not on a run</Badge>
+      {state.defaultRun ? (
+        <Button
+          size="xs"
+          variant="outline"
+          title={`Default route's run: ${state.defaultRun.name}`}
+          aria-label={`Add ${apt.ref} to ${state.defaultRun.name}`}
+          onClick={() =>
+            state.defaultRun &&
+            onAdd(state.defaultRun.id, state.defaultRun.name)
+          }
+        >
+          Add to its run
+        </Button>
+      ) : (
+        <Link
+          href={`/field-service/dispatch?date=${state.day}&tab=backlog`}
+          className="text-info text-[11px] hover:underline"
+        >
+          Assign on Dispatch
+        </Link>
+      )}
+    </span>
   );
 }

@@ -19,11 +19,11 @@ const MAX_ZOOM = 18;
 
 /** How far the zoom animation closes on its target each frame. */
 const ZOOM_EASING = 0.3;
-/** Wheel pixels per zoom level — Leaflet's default feel. */
+/** Wheel pixels per zoom level: Leaflet's default feel. */
 const WHEEL_PX_PER_ZOOM = 60;
 
 /**
- * Carto's basemaps — OpenStreetMap data in a pale, low-contrast style that
+ * Carto's basemaps: OpenStreetMap data in a pale, low-contrast style that
  * lets route lines and job pins read on top of it. A light and a dark tileset
  * rather than a CSS filter, so labels stay legible in both themes.
  *
@@ -76,13 +76,13 @@ export type MapApi = {
 };
 
 /**
- * Slippy map over Carto's OpenStreetMap basemaps — drag to pan, wheel to zoom.
+ * Slippy map over Carto's OpenStreetMap basemaps: drag to pan, wheel to zoom.
  * Deliberately dependency-free: tiles are plain <img> elements positioned in
  * world pixel space, which keeps overlays (job pins, technician markers) a
  * matter of absolute positioning on the same transform.
  *
  * Zoom is fractional and animated. Tiles only exist at integer zooms, so the
- * layer for the nearest integer is CSS-scaled by the remainder — the same
+ * layer for the nearest integer is CSS-scaled by the remainder: the same
  * trick Leaflet and MapLibre use to make a wheel gesture continuous instead of
  * snapping one level at a time. The previous integer layer is kept underneath
  * until the new one has loaded, so zooming never flashes empty background.
@@ -136,7 +136,7 @@ export function OsmMap({
   }, []);
 
   /**
-   * Zoom toward a point on screen, keeping the place under it fixed — what
+   * Zoom toward a point on screen, keeping the place under it fixed: what
    * makes wheel zoom feel anchored to the cursor rather than recentring.
    */
   const zoomAround = useCallback(

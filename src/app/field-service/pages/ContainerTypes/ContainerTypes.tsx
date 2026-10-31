@@ -311,7 +311,7 @@ export default function ContainerTypes() {
                       </TableCell>
                       <TableCell className="text-sm">
                         {!type.tracked ? (
-                          <span className="text-muted-foreground">—</span>
+                          <span className="text-muted-foreground">-</span>
                         ) : inUse ? (
                           <>
                             <span className="block font-mono tabular-nums">

@@ -53,7 +53,7 @@ export function Demo({
         <div className="text-sm font-semibold">
           {title}
           {hint ? (
-            <span className="text-muted-foreground font-normal"> — {hint}</span>
+            <span className="text-muted-foreground font-normal">: {hint}</span>
           ) : null}
         </div>
       ) : null}

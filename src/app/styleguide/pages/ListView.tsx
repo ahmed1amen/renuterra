@@ -68,14 +68,14 @@ type Row = {
   createdAt: string;
 };
 
-/** 48 deterministic rows derived from the lead fixtures — enough to page. */
+/** 48 deterministic rows derived from the lead fixtures: enough to page. */
 const ROWS: Row[] = Array.from({ length: 48 }, (_, index) => {
   const lead = LEADS[index % LEADS.length];
   const cycle = Math.floor(index / LEADS.length);
   return {
     id: `${lead.id}_${String(index + 1).padStart(2, "0")}`,
     name: `${lead.firstName} ${lead.lastName}`,
-    company: cycle === 0 ? lead.company : `${lead.company} — site ${cycle + 1}`,
+    company: cycle === 0 ? lead.company : `${lead.company}: site ${cycle + 1}`,
     status: lead.status,
     source: lead.source,
     owner: findUser(lead.ownerId)?.name ?? "Unassigned",
@@ -398,7 +398,7 @@ export default function ListViewPage() {
   const confirmDelete = () => {
     if (!pendingDelete) return;
     setDeleted((prev) => [...prev, pendingDelete.id]);
-    toast.success(`${pendingDelete.name} deleted — prototype only`);
+    toast.success(`${pendingDelete.name} deleted: prototype only`);
     setPendingDelete(null);
   };
 
@@ -411,7 +411,7 @@ export default function ListViewPage() {
           <>
             The standard index screen: search and bulk actions in the toolbar,
             optional advanced filters, a sortable table with per-column filters,
-            and paging in the footer. Loading swaps rows for skeletons — the
+            and paging in the footer. Loading swaps rows for skeletons: the
             frame never jumps. Row click opens the record; the actions menu owns
             everything destructive.
           </>
@@ -485,7 +485,7 @@ export default function ListViewPage() {
             </Button>
             <Button
               size="sm"
-              onClick={() => toast.success("New lead — prototype only")}
+              onClick={() => toast.success("New lead: prototype only")}
             >
               <Plus data-icon="inline-start" />
               New lead
@@ -621,7 +621,7 @@ export default function ListViewPage() {
                 <TableRow
                   key={row.id}
                   className="even:bg-muted/20 cursor-pointer"
-                  onClick={() => toast.info(`Open ${row.id} — prototype only`)}
+                  onClick={() => toast.info(`Open ${row.id}: prototype only`)}
                 >
                   <TableCell className="px-3 py-2.5">
                     <div className="font-medium">{row.name}</div>
@@ -770,7 +770,7 @@ export default function ListViewPage() {
       </Dialog>
 
       <Note title="Rules for list screens">
-        Filters are additive and always visible once set — a filtered list must
+        Filters are additive and always visible once set: a filtered list must
         never look like an empty one, so the empty state offers{" "}
         <Code>Clear filters</Code>. Sorting and paging reset to page 1. Keep the
         row click for “open”, never for a destructive action, and put every

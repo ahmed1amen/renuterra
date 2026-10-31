@@ -183,7 +183,7 @@ export default function Fleet() {
             size="sm"
             onClick={() =>
               toast.info("Add truck", {
-                description: "Prototype — trucks come from the fleet master.",
+                description: "Prototype: trucks come from the fleet master.",
               })
             }
           >
@@ -342,7 +342,7 @@ export default function Fleet() {
                       </TableCell>
                       <TableCell className="text-sm">
                         <span className="block whitespace-nowrap">
-                          {type?.name ?? "—"}
+                          {type?.name ?? "-"}
                         </span>
                         <span className="text-muted-foreground text-xs whitespace-nowrap">
                           <span className="font-mono">{v.truckTypeId}</span> ·{" "}
@@ -413,7 +413,7 @@ export default function Fleet() {
                             ))}
                           </span>
                         ) : (
-                          <span className="text-muted-foreground">—</span>
+                          <span className="text-muted-foreground">-</span>
                         )}
                       </TableCell>
                     </TableRow>

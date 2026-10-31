@@ -170,7 +170,7 @@ export function SelectedAppointmentCard({
       </div>
       {!canMove && isMovable(appointment) ? (
         <p className="text-muted-foreground mt-2 text-xs">
-          The route instance is confirmed — reopen it to move this stop.
+          The route instance is confirmed: reopen it to move this stop.
         </p>
       ) : null}
       {!isMovable(appointment) ? (

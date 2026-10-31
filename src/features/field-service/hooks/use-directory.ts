@@ -23,8 +23,8 @@ import { useServicePoints } from "./use-service-points";
 import { useTechnicians } from "./use-technicians";
 
 /**
- * Id lookups for the records appointments point at — customers, service
- * points, service pros, routes, vehicles, service items and containers — so list rows can
+ * Id lookups for the records appointments point at: customers, service
+ * points, service pros, routes, vehicles, service items and containers: so list rows can
  * resolve names without a query each.
  */
 export function useDirectory() {

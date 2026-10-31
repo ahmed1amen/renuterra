@@ -85,7 +85,7 @@ export function DefaultScheduleCard({
   function save() {
     saveSchedule(pro.id, draft);
     toast.success("Default schedule saved", {
-      description: "Prototype — saved for this session only.",
+      description: "Prototype: saved for this session only.",
     });
   }
 

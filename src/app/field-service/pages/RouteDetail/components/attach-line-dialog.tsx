@@ -38,7 +38,7 @@ import {
  * Attach a contracted service line to the route. Only lines at sites in the
  * route's city are offered (R7); R8–R11 run live. A line already on another
  * active route moves here (R10 transfer). R11's capacity block can be
- * overridden by the route owner with a reason (§8.5 rule 1).
+ * overridden by the route owner with a reason (section 8.5 rule 1).
  */
 export function AttachLineDialog({
   open,

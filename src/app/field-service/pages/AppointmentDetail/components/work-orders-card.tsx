@@ -51,9 +51,9 @@ export function WorkOrdersCard({
   onAdd,
 }: {
   workOrders: WorkOrder[];
-  /** The visit is in progress — work orders can be recorded. */
+  /** The visit is in progress: work orders can be recorded. */
   onSite: boolean;
-  /** The visit isn't closed — work orders can be added, deferred or cancelled. */
+  /** The visit isn't closed: work orders can be added, deferred or cancelled. */
   editable: boolean;
   onRecord: (wo: WorkOrder) => void;
   onDefer: (wo: WorkOrder) => void;
@@ -69,7 +69,7 @@ export function WorkOrdersCard({
         <CardDescription>
           {closed} of {workOrders.length} closed
           {onSite && closed < workOrders.length
-            ? " — record each one to complete the visit."
+            ? ": record each one to complete the visit."
             : "."}
         </CardDescription>
         {editable ? (
@@ -189,7 +189,7 @@ function WorkOrderRow({
         <div className="space-y-1.5">
           <dt className="text-muted-foreground text-xs">Done / planned</dt>
           <dd className="font-mono tabular-nums">
-            {wo.countDone ?? "—"} /{" "}
+            {wo.countDone ?? "-"} /{" "}
             {formatCountUnit(wo.countPlanned, wo.countUnit)}
           </dd>
           {wo.countDone !== null ? (
@@ -202,8 +202,8 @@ function WorkOrderRow({
         <div className="space-y-0.5">
           <dt className="text-muted-foreground text-xs">Weight / estimate</dt>
           <dd className="font-mono tabular-nums">
-            {wo.weightKg === null ? "—" : formatKg(wo.weightKg)} /{" "}
-            {wo.weightEstKg ? formatKg(wo.weightEstKg) : "—"}
+            {wo.weightKg === null ? "-" : formatKg(wo.weightKg)} /{" "}
+            {wo.weightEstKg ? formatKg(wo.weightEstKg) : "-"}
           </dd>
           {wo.weightSource ? (
             <dd
@@ -217,8 +217,8 @@ function WorkOrderRow({
         <div className="space-y-0.5">
           <dt className="text-muted-foreground text-xs">Start – end</dt>
           <dd className="font-mono tabular-nums">
-            {wo.startedAt ? formatTime(wo.startedAt) : "—"} –{" "}
-            {wo.completedAt ? formatTime(wo.completedAt) : "—"}
+            {wo.startedAt ? formatTime(wo.startedAt) : "-"} –{" "}
+            {wo.completedAt ? formatTime(wo.completedAt) : "-"}
           </dd>
         </div>
         <div className="space-y-0.5">
@@ -243,7 +243,7 @@ function WorkOrderRow({
                 />
               </Button>
             ) : (
-              <span className="text-muted-foreground">—</span>
+              <span className="text-muted-foreground">-</span>
             )}
           </dd>
         </div>

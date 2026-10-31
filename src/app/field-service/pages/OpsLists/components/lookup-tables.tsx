@@ -76,7 +76,7 @@ export function EntitiesTable({
           ))}
           <TableRow>
             <TableCell className="text-muted-foreground font-mono text-sm">
-              —
+              -
             </TableCell>
             <TableCell className="text-muted-foreground text-sm">
               Shared pool (no entity)
@@ -85,7 +85,7 @@ export function EntitiesTable({
               {vehicles.filter((v) => v.entity === null).length}
             </TableCell>
             <TableCell className="text-muted-foreground text-right text-sm">
-              —
+              -
             </TableCell>
           </TableRow>
         </TableBody>
@@ -140,7 +140,7 @@ export function CitiesTable({ masters }: Props) {
                   )}
                 </TableCell>
                 <TableCell className="text-right text-sm tabular-nums">
-                  {sites || <span className="text-muted-foreground">—</span>}
+                  {sites || <span className="text-muted-foreground">-</span>}
                 </TableCell>
               </TableRow>
             );
@@ -281,7 +281,7 @@ export function TruckTypesTable({
                 ) : t.bodyM3 ? (
                   `${t.bodyM3} m³`
                 ) : (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">-</span>
                 )}
               </TableCell>
               <TableCell className="text-right text-sm whitespace-nowrap tabular-nums">
@@ -289,7 +289,7 @@ export function TruckTypesTable({
               </TableCell>
               <TableCell className="text-right text-sm tabular-nums">
                 {t.containerSlots ?? (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">-</span>
                 )}
               </TableCell>
               <TableCell>
@@ -370,7 +370,7 @@ export function WasteCodesTable({ masters }: Props) {
         <Alert>
           <Info aria-hidden />
           <AlertDescription>
-            Hazardous and medical never share a route — not with each other, and
+            Hazardous and medical never share a route: not with each other, and
             not with any other stream.
           </AlertDescription>
         </Alert>

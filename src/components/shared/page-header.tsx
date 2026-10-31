@@ -11,7 +11,7 @@ import {
 
 export type Crumb = {
   label: string;
-  /** Omit on the last crumb — it renders as the current page. */
+  /** Omit on the last crumb: it renders as the current page. */
   href?: string;
 };
 

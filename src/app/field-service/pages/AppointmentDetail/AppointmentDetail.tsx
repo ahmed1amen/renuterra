@@ -107,7 +107,7 @@ type DialogId =
   | { kind: "record"; workOrderId: string }
   | null;
 
-/** What happens next, by status — the one button the header leads with. */
+/** What happens next, by status: the one button the header leads with. */
 const NEXT_STEP: Partial<
   Record<
     Appointment["status"],
@@ -132,7 +132,7 @@ const NEXT_STEP: Partial<
 };
 
 /**
- * When a field action "happens" — the mock now, or the planned arrival for a
+ * When a field action "happens": the mock now, or the planned arrival for a
  * future visit, so a completed visit never predates its own slot.
  */
 function actionTime(apt: Appointment) {
@@ -400,7 +400,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
             <Alert variant="destructive">
               <OctagonAlert aria-hidden />
               <AlertTitle>
-                Failed visit — {FAILED_REASON[apt.failedReason]}
+                Failed visit: {FAILED_REASON[apt.failedReason]}
               </AlertTitle>
               <AlertDescription>
                 The service pro attended but could not collect. Billed the
@@ -412,7 +412,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
             <Alert>
               <OctagonAlert aria-hidden />
               <AlertTitle>
-                Cancelled — {CANCEL_REASON[apt.cancelReason]}
+                Cancelled: {CANCEL_REASON[apt.cancelReason]}
               </AlertTitle>
             </Alert>
           ) : null}
@@ -723,7 +723,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                 </>
               ) : (
                 <p className="text-muted-foreground">
-                  In the backlog — not on a route yet. Dispatch places it, or
+                  In the backlog: not on a route yet. Dispatch places it, or
                   pick a route below.
                 </p>
               )}
@@ -818,7 +818,7 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
           open
           onOpenChange={(open) => !open && setDialog(null)}
           appointment={apt}
-          onConfirm={(day, window, note) => {
+          onConfirm={({ day, window, reason, requestedBy, note }) => {
             const [from, to] = WINDOW_HOURS[window];
             patch(
               {
@@ -827,6 +827,12 @@ function Detail({ appointment: apt }: { appointment: Appointment }) {
                 windowEnd: dubaiDateTime(day, to),
                 plannedStart: dubaiDateTime(day, from),
                 status: "scheduled",
+                rescheduled: {
+                  reason,
+                  requestedBy,
+                  fromDay: toDubaiDayKey(apt.windowStart),
+                  at: MOCK_NOW,
+                },
                 notes: note || apt.notes,
               },
               `${apt.ref} moved to ${formatDate(dubaiDateTime(day, from))}`,
@@ -955,7 +961,7 @@ function ProofOfService({
         </CardTitle>
         <CardDescription>
           Captured by the service pro's app at{" "}
-          {apt.completedAt ? formatDateTime(apt.completedAt) : "—"}.
+          {apt.completedAt ? formatDateTime(apt.completedAt) : "-"}.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

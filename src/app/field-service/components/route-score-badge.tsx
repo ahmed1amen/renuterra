@@ -45,10 +45,10 @@ function metricTone(score: number): StatusTone {
         : "destructive";
 }
 
-/** "2.4 km", "38%", "2 trips"; "—" when there was nothing to measure. */
+/** "2.4 km", "38%", "2 trips"; "-" when there was nothing to measure. */
 export function formatMetricValue(metric: ScoreMetric) {
   const { value, unit } = metric;
-  if (value === null) return "—";
+  if (value === null) return "-";
   if (unit === "km") return `${value.toFixed(1)} km`;
   if (unit === "ratio") return `${Math.round(value * 100)}%`;
   return `${value} ${value === 1 ? "trip" : "trips"}`;
@@ -59,17 +59,26 @@ function driveSummary(score: RouteScore) {
   return `${score.stops} ${score.stops === 1 ? "stop" : "stops"} · ~${formatDuration(score.driveMinutes)} drive (${score.driveKm} km)`;
 }
 
+/** What a score is of: one day's run, or the Route's design. */
+export const SCORE_SCOPE = {
+  run: "This run: its real stop order and times on the day",
+  design: "Route design: on its busiest day next week",
+};
+
 /**
  * A route or instance score as a pill: "77 · Good", tinted by grade. Hover or
- * focus opens the breakdown. `compact` shows the number only (timeline lanes).
- * `null` while the scoring inputs load.
+ * focus opens the breakdown, headed by `scope` so a run's score and the
+ * Route's design score are never mistaken for each other. `compact` shows the
+ * number only (timeline lanes). `null` while the scoring inputs load.
  */
 export function RouteScoreBadge({
   score,
+  scope,
   compact = false,
   className,
 }: {
   score: RouteScore | null | undefined;
+  scope?: string;
   compact?: boolean;
   className?: string;
 }) {
@@ -86,7 +95,7 @@ export function RouteScoreBadge({
         className={className}
         title="Nothing to score: no stops"
       >
-        {compact ? "—" : "No stops"}
+        {compact ? "-" : "No stops"}
       </Badge>
     );
 
@@ -96,7 +105,7 @@ export function RouteScoreBadge({
       <PopoverTrigger
         openOnHover
         delay={150}
-        aria-label={`Route score ${score.total}, ${GRADE_LABEL[score.grade]}`}
+        aria-label={`Route score ${score.total}, ${GRADE_LABEL[score.grade]}${scope ? `. ${scope}` : ""}`}
         onClick={(e) => e.stopPropagation()}
         className={cn(
           "focus-visible:ring-ring/50 rounded-4xl outline-none focus-visible:ring-[3px]",
@@ -111,6 +120,9 @@ export function RouteScoreBadge({
         </StatusPill>
       </PopoverTrigger>
       <PopoverContent side="bottom" align="start" className="w-80">
+        {scope ? (
+          <p className="text-muted-foreground mb-2 text-xs">{scope}</p>
+        ) : null}
         <RouteScoreBreakdown score={score} />
       </PopoverContent>
     </Popover>

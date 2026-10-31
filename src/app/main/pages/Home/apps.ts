@@ -35,7 +35,7 @@ export type AppCategory = {
 
 /**
  * The app launcher registry. Everything except Field Service, Dashboard and
- * Styleguide is a dummy for now — cards exist so the home reflects the platform we're
+ * Styleguide is a dummy for now: cards exist so the home reflects the platform we're
  * building, and clicking one says so.
  */
 export const APP_CATEGORIES: AppCategory[] = [

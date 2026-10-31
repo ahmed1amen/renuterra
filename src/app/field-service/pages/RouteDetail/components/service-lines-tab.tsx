@@ -23,14 +23,23 @@ import {
 } from "@/components/ui/table";
 import {
   detachServiceLine,
+  type FillSuggestion,
+  fillObservations,
+  fillRateOf,
   findLine,
   formatAmount,
+  limitLabel,
   lineConsumption,
   plannedUtilisation,
   type RouteContext,
+  suggestFillRate,
+  useAppointments,
   useCustomers,
   useRouteStore,
+  useServiceLineStore,
+  useVisitHistory,
 } from "@/features/field-service";
+import { cn } from "@/lib/utils";
 import type { Route, ServiceLine } from "@/mocks";
 import {
   FREQUENCY_LABEL,
@@ -62,6 +71,8 @@ export function ServiceLinesTab({
 }) {
   const patchRoute = useRouteStore((s) => s.patchRoute);
   const customers = useCustomers();
+  const history = useVisitHistory();
+  const appointments = useAppointments();
   const [attaching, setAttaching] = useState(false);
   const [dialogKey, setDialogKey] = useState(0);
   const readOnly = route.status === "retired";
@@ -116,9 +127,9 @@ export function ServiceLinesTab({
           <span className="text-end">
             <UtilisationBar pct={util.pct} />
             <span className="text-muted-foreground block text-[11px]">
-              {formatAmount(util.consumed, unit)} of{" "}
-              {formatAmount(util.capacity.perShift, unit)}
-              {util.consumed ? `, ${formatShortDay(util.day)}` : ""}
+              {util.pct
+                ? `${limitLabel(util.binding)}, ${formatShortDay(util.day)}`
+                : "Nothing due this week"}
             </span>
           </span>
           {readOnly ? null : (
@@ -224,8 +235,25 @@ export function ServiceLinesTab({
                         </span>
                       ) : null}
                     </TableCell>
-                    <TableCell className="text-end font-mono text-xs tabular-nums">
-                      {formatAmount(lineConsumption(route, line, ctx), unit)}
+                    <TableCell className="text-end">
+                      <span className="block font-mono text-xs tabular-nums">
+                        {formatAmount(lineConsumption(route, line, ctx), unit)}
+                      </span>
+                      {item?.method === "empty-on-site" ? (
+                        <FillRateCell
+                          route={route}
+                          line={line}
+                          label={label}
+                          readOnly={readOnly}
+                          suggestion={suggestFillRate(
+                            fillObservations(
+                              line.id,
+                              history.data ?? [],
+                              appointments.data ?? [],
+                            ),
+                          )}
+                        />
+                      ) : null}
                     </TableCell>
                     <TableCell>
                       {readOnly ? null : (
@@ -278,5 +306,75 @@ export function ServiceLinesTab({
         />
       ) : null}
     </Card>
+  );
+}
+
+const asPct = (rate: number) => `${Math.round(rate * 100)}%`;
+
+/**
+ * The line's planned fill rate and, once it has history, the suggested one
+ * with Accept (spec section 8.2): the dispatcher decides, nothing changes by
+ * itself.
+ */
+function FillRateCell({
+  route,
+  line,
+  label,
+  readOnly,
+  suggestion,
+}: {
+  route: Route;
+  line: ServiceLine;
+  label: string;
+  readOnly: boolean;
+  suggestion: FillSuggestion | null;
+}) {
+  const setFillRate = useServiceLineStore((s) => s.setFillRate);
+  const current = fillRateOf(route, line);
+  const differs =
+    suggestion !== null && Math.abs(suggestion.rate - current.rate) >= 0.05;
+
+  const accept = () => {
+    if (!suggestion) return;
+    const before = line.fillRate;
+    setFillRate(line.id, suggestion.rate);
+    toast.success(`Fill rate set to ${asPct(suggestion.rate)}`, {
+      description: label,
+      action: { label: "Undo", onClick: () => setFillRate(line.id, before) },
+    });
+  };
+
+  return (
+    <span className="text-muted-foreground mt-0.5 flex flex-col items-end gap-1 text-[11px]">
+      <span>
+        at {asPct(current.rate)}{" "}
+        {current.source === "override" ? "override" : "standard"}
+      </span>
+      {suggestion ? (
+        <span
+          className="flex flex-col items-end gap-1"
+          title={`From the last ${suggestion.visits} visits, recent ones weighted more. Range ${asPct(suggestion.min)} to ${asPct(suggestion.max)}.`}
+        >
+          {differs ? (
+            <>
+              <span
+                className={cn(suggestion.rate > current.rate && "text-warning")}
+              >
+                History {asPct(suggestion.rate)}
+              </span>
+              {readOnly ? null : (
+                <Button size="xs" variant="outline" onClick={accept}>
+                  Accept
+                </Button>
+              )}
+            </>
+          ) : (
+            <span>Matches history</span>
+          )}
+        </span>
+      ) : (
+        <span>Not enough visits yet</span>
+      )}
+    </span>
   );
 }

@@ -249,7 +249,7 @@ export default function FormsPage() {
             initialCountry="ae"
           />
           <span className="text-muted-foreground text-xs">
-            <Code>PhoneInput</Code> — intl-tel-input, emits E.164
+            <Code>PhoneInput</Code>: intl-tel-input, emits E.164
           </span>
         </div>
         <div className="flex flex-col gap-1.5">

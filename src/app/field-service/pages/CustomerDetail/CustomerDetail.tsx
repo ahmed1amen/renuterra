@@ -200,12 +200,17 @@ function Detail({ customer }: { customer: Customer }) {
           }
         />
         <KpiCard
-          label="Upcoming visits"
+          label="Booked visits"
           value={loaded ? formatCount(stats.upcoming.length) : undefined}
           hint={
-            loaded && stats.nextDay
-              ? `Next ${formatDayKey(stats.nextDay)}`
-              : "Nothing booked"
+            loaded
+              ? [
+                  `${formatCount(stats.week.length)} more scheduled by routes this week`,
+                  stats.nextDay ? `next ${formatDayKey(stats.nextDay)}` : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")
+              : undefined
           }
         />
         <KpiCard
@@ -213,7 +218,7 @@ function Detail({ customer }: { customer: Customer }) {
           value={
             loaded
               ? stats.completionRate === null
-                ? "—"
+                ? "-"
                 : `${stats.completionRate}%`
               : undefined
           }
@@ -256,7 +261,7 @@ function Detail({ customer }: { customer: Customer }) {
                 <CardDescription>
                   {activeSites.length} active{" "}
                   {activeSites.length === 1 ? "site" : "sites"} across{" "}
-                  {[...new Set(sites.map((sp) => sp.area))].join(", ") || "—"}.
+                  {[...new Set(sites.map((sp) => sp.area))].join(", ") || "-"}.
                 </CardDescription>
                 <CardAction>
                   <Button
@@ -291,7 +296,7 @@ function Detail({ customer }: { customer: Customer }) {
               </CardHeader>
               <CardContent>
                 <dl className="space-y-3 text-sm">
-                  <Fact label="Key account manager">{kam?.name ?? "—"}</Fact>
+                  <Fact label="Key account manager">{kam?.name ?? "-"}</Fact>
                   <Fact label="Payment terms">{customer.paymentTerms}</Fact>
                   <Fact label="Credit limit">
                     {formatAed(customer.creditLimit)}

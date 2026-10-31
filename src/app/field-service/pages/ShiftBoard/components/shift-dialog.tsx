@@ -35,7 +35,7 @@ export type ShiftTarget = { pro: Technician; date: string };
 /**
  * Add or edit one pro's shift on one day. Pick a template or set the type and
  * times by hand; training shifts take a trainer. Setting leave or removing
- * the shift while the pro is on a route warns but is allowed — the board then
+ * the shift while the pro is on a route warns but is allowed: the board then
  * shows the conflict.
  *
  * Prototype-grade: saves patch the session shift store only.
@@ -149,7 +149,7 @@ function ShiftForm({
       `${firstName(pro)} · ${dayLabel}: ${SHIFT_TYPE[type].label.toLowerCase()} ${isLeave ? "" : formatShiftWindow(next)}`.trim(),
       {
         description: showRouteWarning
-          ? "Still on a route that day — the board flags the conflict."
+          ? "Still on a route that day: the board flags the conflict."
           : shift
             ? "Shift updated."
             : "Shift added.",
@@ -166,7 +166,7 @@ function ShiftForm({
     onDone();
     toast.success(`Removed ${firstName(pro)}'s shift on ${dayLabel}`, {
       description: onRoute
-        ? "Still on a route that day — the board flags the conflict."
+        ? "Still on a route that day: the board flags the conflict."
         : undefined,
     });
   }
@@ -191,7 +191,7 @@ function ShiftForm({
             hint={
               templateId
                 ? undefined
-                : "Custom — the type and times below are set by hand."
+                : "Custom: the type and times below are set by hand."
             }
           >
             <Combobox

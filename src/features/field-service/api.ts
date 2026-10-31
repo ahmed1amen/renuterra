@@ -2,7 +2,7 @@
  * Field Service data access used by the prototype screens.
  *
  * Today every function resolves from `@/mocks`. To point the screens at the
- * real backend, swap these bodies for `Api.*` calls — the hooks and screens
+ * real backend, swap these bodies for `Api.*` calls: the hooks and screens
  * that consume them stay untouched.
  */
 import {
@@ -35,6 +35,8 @@ import {
   type Technician,
   VEHICLES,
   type Vehicle,
+  VISIT_HISTORY,
+  type VisitRecord,
 } from "@/mocks";
 
 export const fieldServiceApi = {
@@ -67,6 +69,8 @@ export const fieldServiceApi = {
     mockFetch(ROUTE_ASSIGNMENTS),
 
   getOpsMasters: (): Promise<OpsMasters> => mockFetch(OPS_MASTERS),
+
+  listVisitHistory: (): Promise<VisitRecord[]> => mockFetch(VISIT_HISTORY),
 
   listVehicles: (): Promise<Vehicle[]> => mockFetch(VEHICLES),
 

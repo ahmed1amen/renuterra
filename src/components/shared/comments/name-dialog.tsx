@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 
 /**
  * First-comment identity prompt. The name lands in localStorage and is pure
- * attribution — no auth behind it.
+ * attribution: no auth behind it.
  */
 export function NameDialog({
   open,

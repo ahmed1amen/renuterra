@@ -6,7 +6,7 @@ import { CheckIcon, ChevronDownIcon, SearchIcon, XIcon } from "lucide-react";
 import { type ReactNode, useMemo, useRef } from "react";
 
 /**
- * Searchable select built on Base UI Combobox — the replacement for
+ * Searchable select built on Base UI Combobox: the replacement for
  * `NativeSelect`. Options are plain `{ value, label }` records; values are
  * strings and `""` means "nothing selected", so it drops into state that
  * used to hold a `<select>` value.
@@ -16,7 +16,7 @@ export type ComboboxOption = {
   label: string;
   /** Secondary line under the label (address, code, owner…). */
   description?: string;
-  /** Leading visual — an icon, avatar or `StreamTag` swatch. */
+  /** Leading visual: an icon, avatar or `StreamTag` swatch. */
   icon?: ReactNode;
   /** Options sharing a group render under one heading, in first-seen order. */
   group?: string;
@@ -196,7 +196,7 @@ type ComboboxProps = SharedProps & {
   onValueChange: (value: string) => void;
   /** Show an × that resets the value to `""`. */
   clearable?: boolean;
-  /** Hide the search box — for short, fixed lists. Defaults to on past 6 options. */
+  /** Hide the search box: for short, fixed lists. Defaults to on past 6 options. */
   searchable?: boolean;
 };
 

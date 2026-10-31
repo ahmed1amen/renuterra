@@ -5,7 +5,7 @@ import { create } from "zustand";
 import type { DayOfWeek, Shift, ShiftTemplate, Technician } from "@/mocks";
 import { useShiftsQuery } from "./hooks/use-shifts-query";
 
-/** One shift per service pro per day — the key everything is looked up by. */
+/** One shift per service pro per day: the key everything is looked up by. */
 export const shiftKey = (serviceProId: string, date: string) =>
   `${serviceProId}|${date}`;
 
@@ -19,7 +19,7 @@ const WEEKDAYS: DayOfWeek[] = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 export const weekdayOf = (date: string) =>
   WEEKDAYS[new Date(`${date}T00:00:00Z`).getUTCDay()];
 
-/** A shift on `date` from a template — what Autofill and "apply template" create. */
+/** A shift on `date` from a template: what Autofill and "apply template" create. */
 export function shiftFromTemplate(
   serviceProId: string,
   date: string,
@@ -73,7 +73,7 @@ export const useShiftStore = create<ShiftState>((set) => ({
 }));
 
 /**
- * Every shift — fixtures plus this session's edits — with a `shiftOf(pro,
+ * Every shift (fixtures plus this session's edits) with a `shiftOf(pro,
  * day)` lookup for the board, Dispatch and the New route dialog.
  */
 export function useShifts() {

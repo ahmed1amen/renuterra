@@ -4,15 +4,15 @@ import { RADII, SPACING } from "../data";
 
 const ELEVATION = [
   {
-    label: "Ring — cards, table shells",
+    label: "Ring: cards, table shells",
     className: "ring-1 ring-foreground/10",
   },
   {
-    label: "Popover — menus, tooltips",
+    label: "Popover: menus, tooltips",
     className: "bg-popover ring-1 ring-foreground/10 shadow-md",
   },
   {
-    label: "Dialog — modals, sheets",
+    label: "Dialog: modals, sheets",
     className:
       "bg-popover ring-1 ring-foreground/10 shadow-[0_16px_40px_rgba(20,23,15,.16)]",
   },

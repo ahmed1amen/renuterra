@@ -54,7 +54,7 @@ export function ContainerTypeDialog({
 
   function save() {
     toast.success(`${name.trim()} added`, {
-      description: "Prototype — container types aren't saved yet.",
+      description: "Prototype: container types aren't saved yet.",
     });
     onOpenChange(false);
   }

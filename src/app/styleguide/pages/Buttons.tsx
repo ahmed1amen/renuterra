@@ -54,7 +54,7 @@ export default function ButtonsPage() {
           <>
             Variants map 1:1 to <Code>button.tsx</Code>. Height 32px default,
             28px sm, 36px lg; radius 10px; 14px/500. Navy primary takes white
-            text — <Code>--primary-foreground</Code> is #FFFFFF.
+            text: <Code>--primary-foreground</Code> is #FFFFFF.
           </>
         }
       />
@@ -81,7 +81,7 @@ export default function ButtonsPage() {
         </div>
       </Demo>
 
-      <Demo title="Pill buttons" hint="rounded-full — filters and chips only">
+      <Demo title="Pill buttons" hint="rounded-full: filters and chips only">
         <div className="flex flex-wrap items-center gap-3">
           {PILL.map((b) => (
             <Button key={b.label} variant={b.variant} className="rounded-full">
@@ -246,9 +246,9 @@ export default function ButtonsPage() {
 
       <Note title="Picking a variant">
         Navy <Code>default</Code> is the single primary action on a screen. The
-        <Code>navy</Code> variant is the same colour by hand — prefer{" "}
+        <Code>navy</Code> variant is the same colour by hand: prefer{" "}
         <Code>default</Code>. Gray/outline carries everything else.{" "}
-        <Code>danger</Code> is for irreversible actions only — the soft{" "}
+        <Code>danger</Code> is for irreversible actions only: the soft{" "}
         <Code>destructive</Code> variant covers ordinary deletes. Warning and
         success solids are for status-driven actions, not decoration.
       </Note>

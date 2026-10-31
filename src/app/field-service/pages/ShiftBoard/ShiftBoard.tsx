@@ -169,7 +169,7 @@ export default function ShiftBoard() {
         shiftOf,
       ),
       "Autofilled",
-      "Nothing to fill — every service pro with a default schedule already has this week's shifts.",
+      "Nothing to fill: every service pro with a default schedule already has this week's shifts.",
     );
   }
 
@@ -179,7 +179,7 @@ export default function ShiftBoard() {
       for (const day of days) {
         if (shiftOf(pro.id, day)) continue;
         const prev = shiftOf(pro.id, toDayKey(addDays(parseDayKey(day), -7)));
-        // Leave is personal — it doesn't roll over to the next week.
+        // Leave is personal: it doesn't roll over to the next week.
         if (!prev || prev.type === "leave") continue;
         created.push({
           ...prev,
@@ -191,7 +191,7 @@ export default function ShiftBoard() {
     announce(
       created,
       "Copied",
-      "Nothing to copy — every cell that had a shift last week is already filled.",
+      "Nothing to copy: every cell that had a shift last week is already filled.",
     );
   }
 

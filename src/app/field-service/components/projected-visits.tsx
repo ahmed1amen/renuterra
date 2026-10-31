@@ -30,7 +30,7 @@ export function describeProjection(visit: ProjectedVisit, dir: Directory) {
     site,
     line,
     item,
-    window: line ? formatTimeWindow(line.timeWindow) : "—",
+    window: line ? formatTimeWindow(line.timeWindow) : "-",
   };
 }
 
@@ -44,7 +44,7 @@ export function ProjectionBadge({ visit }: { visit: ProjectedVisit }) {
 }
 
 /**
- * Projected visits as muted, read-only rows — they aren't appointments yet,
+ * Projected visits as muted, read-only rows: they aren't appointments yet,
  * so there's nothing to open. Mirrors `AppointmentsTable`'s columns.
  */
 export function ProjectedVisitsTable({
@@ -90,7 +90,7 @@ export function ProjectedVisitsTable({
               <TableCell className="max-w-64">
                 {showCustomer ? (
                   <span className="block truncate text-sm">
-                    {customer?.name ?? "—"}
+                    {customer?.name ?? "-"}
                   </span>
                 ) : null}
                 <span
@@ -100,14 +100,14 @@ export function ProjectedVisitsTable({
                       : "block truncate text-sm"
                   }
                 >
-                  {site?.location ?? "—"}
+                  {site?.location ?? "-"}
                   {site ? ` · ${site.area}` : ""}
                 </span>
               </TableCell>
               <TableCell className="max-w-56">
                 {item ? <StreamTag stream={item.stream} /> : null}
                 <span className="mt-1 block truncate text-xs">
-                  {item?.name ?? "—"}
+                  {item?.name ?? "-"}
                 </span>
               </TableCell>
               <TableCell className="font-mono text-xs">

@@ -52,7 +52,7 @@ export async function fileToStoredImage(file: File): Promise<string> {
   const result = encoded.length < original.length ? encoded : original;
 
   if (result.length > MAX_IMAGE_BYTES) {
-    throw new Error("That image is too large — try a smaller crop");
+    throw new Error("That image is too large: try a smaller crop");
   }
   return result;
 }

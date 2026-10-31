@@ -122,7 +122,7 @@ export function ScheduleTab({
                         ) : null}
                       </>
                     ) : (
-                      "—"
+                      "-"
                     )}
                   </TableCell>
                   <TableCell>
@@ -149,7 +149,7 @@ export function ScheduleTab({
                       : null}
                   </TableCell>
                   <TableCell className="font-mono text-xs">
-                    {instance ? (truck?.plate ?? "—") : null}
+                    {instance ? (truck?.plate ?? "-") : null}
                   </TableCell>
                   <TableCell>
                     {instance ? (

@@ -40,7 +40,7 @@ function matches(command: Command, query: string) {
 }
 
 /**
- * ⌘K / Ctrl+K jump-to-page palette. Prototype scope: navigation only —
+ * ⌘K / Ctrl+K jump-to-page palette. Prototype scope: navigation only:
  * records search can plug in as another command source later.
  */
 export function CommandPalette() {

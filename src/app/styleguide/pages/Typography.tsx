@@ -16,7 +16,7 @@ export default function TypographyPage() {
             renuterra Aa
           </div>
           <p className="text-muted-foreground mt-3 text-[13px]">
-            Headings, UI labels, body. Weights 400 / 500 / 600 only — 700 is
+            Headings, UI labels, body. Weights 400 / 500 / 600 only: 700 is
             reserved for KPI numerals. Headings track −0.02em above 24px.
           </p>
         </div>

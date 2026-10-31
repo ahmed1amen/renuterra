@@ -19,7 +19,7 @@ import {
 
 /**
  * Month grid behind the date bar's month button. Hand-rolled rather than
- * pulling in a datepicker dependency — it is a 6×7 grid and two buttons.
+ * pulling in a datepicker dependency: it is a 6×7 grid and two buttons.
  */
 export function MonthCalendar({
   value,

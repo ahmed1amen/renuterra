@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import type { ServicePoint } from "@/mocks";
 import { OsmMap } from "./osm-map";
 
-/** Centre of a set of points — good enough at city scale. */
+/** Centre of a set of points: good enough at city scale. */
 function centreOf(points: ServicePoint[]) {
   if (!points.length) return { lat: 25.2, lng: 55.27 };
   return {

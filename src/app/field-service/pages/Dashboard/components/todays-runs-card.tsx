@@ -131,7 +131,7 @@ export function TodaysRunsCard({ runs }: { runs: RunRow[] | null }) {
                         {run.instance.flags.length}
                       </Badge>
                     ) : (
-                      <span className="text-muted-foreground text-xs">—</span>
+                      <span className="text-muted-foreground text-xs">-</span>
                     )}
                   </TableCell>
                 </TableRow>

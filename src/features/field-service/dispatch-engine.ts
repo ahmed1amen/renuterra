@@ -1,12 +1,12 @@
 /**
- * The dispatch engine (spec §4.3, §6): turns Active Routes into Route
- * Instances for the days asked — copies the stops that are due, fills truck,
+ * The dispatch engine (spec sections 4.3 and 6): turns Active Routes into Route
+ * Instances for the days asked: copies the stops that are due, fills truck,
  * driver and helpers (primary → backups by rank → pool → Unstaffed), orders
  * stops by time window then proximity, and flags anything a dispatcher must
  * look at.
  *
  * Pure: give it the data, get instances + their stops (appointments) + a
- * summary back. Prototype-grade — travel is straight-line, durations are
+ * summary back. Prototype-grade: travel is straight-line, durations are
  * estimates, and nothing is persisted (the caller writes session state).
  */
 import type {
@@ -24,13 +24,15 @@ import type {
 } from "@/mocks";
 import { MOCK_NOW } from "@/mocks";
 import {
+  addLoads,
   assignmentChecks,
   findLine,
   isLineDue,
   isRouteDue,
-  lineConsumption,
+  lineLoad,
   type RouteContext,
   routeCapacity,
+  utilisation,
   weekdayOfDay,
 } from "./route-rules";
 import { newWorkOrder } from "./work-orders";
@@ -39,7 +41,7 @@ export type EngineInput = RouteContext & {
   /** Dubai day keys to generate, e.g. `["2026-09-05"]`. */
   days: string[];
   shiftOf: (serviceProId: string, day: string) => Shift | undefined;
-  /** Instances that already exist — never generated twice, and their assets are taken. */
+  /** Instances that already exist: never generated twice, and their assets are taken. */
   existing: RouteInstance[];
 };
 
@@ -54,7 +56,7 @@ export type GenerationSummary = {
   outsideWindow: number;
   contractsSkipped: number;
   stops: number;
-  /** Routes due that day with no service line due — no instance is made. */
+  /** Routes due that day with no service line due: no instance is made. */
   nothingDue: number;
 };
 
@@ -119,7 +121,7 @@ export function generateInstances(input: EngineInput) {
     nothingDue: 0,
   };
 
-  // Assets already out per day + shift — from existing instances and this run.
+  // Assets already out per day + shift: from existing instances and this run.
   const busy = new Map<string, Set<string>>();
   const taken = (day: string, shiftId: string) => {
     const key = `${day}|${shiftId}`;
@@ -179,10 +181,30 @@ export function generateInstances(input: EngineInput) {
         return works(input.shiftOf(assetId, day), route);
       };
 
-      /** §4.3: primary, then backups by rank, then an eligible pool asset. */
+      /** The first blocking eligibility check an asset fails today (R4, R5, section 4.2). */
+      const blocker = (kind: "truck" | "driver" | "helper", assetId: string) =>
+        assignmentChecks(route, kind, assetId, "backup", [wd], input).find(
+          (c) => !c.ok && c.severity === "block",
+        );
+
+      /**
+       * section 4.3: primary, then backups by rank, then an eligible pool
+       * asset. Assigned assets are re-checked each night (R5): an expired
+       * licence or permit skips them, with a flag saying why.
+       */
       const fill = (kind: "truck" | "driver" | "helper", slot: string) => {
         for (const a of assigned(kind)) {
           if (!available(kind, a.assetId)) continue;
+          const failed = blocker(kind, a.assetId);
+          if (failed) {
+            flags.push({
+              kind: "ineligible",
+              slot,
+              assetId: a.assetId,
+              reason: failed.detail ?? failed.label,
+            });
+            continue;
+          }
           used.add(a.assetId);
           staffing[slot] = a.role === "primary" ? "primary" : "backup";
           if (a.role !== "primary") {
@@ -228,7 +250,7 @@ export function generateInstances(input: EngineInput) {
         if (helper) crew.push({ serviceProId: helper, role: "secondary" });
       }
 
-      // Stops: lines due today with an active contract (§6.2 rule 7, R15).
+      // Stops: lines due today with an active contract (section 6.2 rule 7, R15).
       const depot = input.masters.depots.find((d) => d.id === route.depotId);
       type Due = { line: ServiceLine; sp: ServicePoint; win: [number, number] };
       const dueLines: Due[] = [];
@@ -359,15 +381,16 @@ export function generateInstances(input: EngineInput) {
       // R16: capacity against the truck actually dispatched.
       const truck = input.vehicles.find((v) => v.id === truckId);
       const capacity = routeCapacity(route, input.masters, truck?.truckTypeId);
-      const consumed = ordered.reduce(
-        (sum, d) => sum + lineConsumption(route, d.line, input),
-        0,
+      const use = utilisation(
+        capacity,
+        addLoads(ordered.map((d) => lineLoad(route, d.line, input))),
       );
-      const utilisation = capacity.perShift
-        ? Math.round((consumed / capacity.perShift) * 100)
-        : 0;
-      if (utilisation > 100) {
-        flags.push({ kind: "over-capacity", utilisation });
+      if (use.pct > 100) {
+        flags.push({
+          kind: "over-capacity",
+          utilisation: use.pct,
+          limit: use.binding.kind,
+        });
         summary.overCapacity++;
       }
 

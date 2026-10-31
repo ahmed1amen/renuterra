@@ -69,7 +69,7 @@ export default function ServicePros() {
   const today = toDayKey(TODAY);
   const all = useMemo(() => pros.data ?? [], [pros.data]);
 
-  /** Today's route per pro — as primary or as crew. */
+  /** Today's route per pro: as primary or as crew. */
   const routeToday = useMemo(() => {
     const map = new Map<string, RouteInstance>();
     for (const route of routes.data ?? []) {
@@ -128,7 +128,7 @@ export default function ServicePros() {
             size="sm"
             onClick={() =>
               toast.info("New service pro", {
-                description: "Prototype — onboarding isn't built yet.",
+                description: "Prototype: onboarding isn't built yet.",
               })
             }
           >
@@ -308,7 +308,7 @@ export default function ServicePros() {
                             </span>
                           </>
                         ) : (
-                          <span className="text-muted-foreground">—</span>
+                          <span className="text-muted-foreground">-</span>
                         )}
                       </TableCell>
                       <TableCell>

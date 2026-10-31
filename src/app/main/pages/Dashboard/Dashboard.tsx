@@ -116,7 +116,7 @@ export default function Dashboard() {
         actions={
           <Button
             size="sm"
-            onClick={() => toast.success("Lead created — prototype only")}
+            onClick={() => toast.success("Lead created: prototype only")}
           >
             <Plus data-icon="inline-start" />
             New lead

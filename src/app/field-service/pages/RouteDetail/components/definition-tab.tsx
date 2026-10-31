@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import {
   formatAmount,
+  LIMIT_NAME,
   plannedUtilisation,
   type RouteContext,
   type RouteScore,
@@ -32,7 +33,7 @@ const BASIS_LABEL = {
   weight: "Weight (kg)",
 };
 
-/** Every Route attribute from spec §3 and §8.4, grouped the way planners think. */
+/** Every Route attribute from spec sections 3 and 8.4, grouped the way planners think. */
 export function DefinitionTab({
   route,
   ctx,
@@ -76,7 +77,7 @@ export function DefinitionTab({
             </Fact>
             <Fact label="City / emirate">{city?.name ?? route.city}</Fact>
             <Fact label="Zone / area">{route.zone ?? "Whole city"}</Fact>
-            <Fact label="Owner">{findUser(route.ownerId)?.name ?? "—"}</Fact>
+            <Fact label="Owner">{findUser(route.ownerId)?.name ?? "-"}</Fact>
             <Fact label="Valid">
               {formatDay(route.validFrom)} –{" "}
               {route.validTo ? formatDay(route.validTo) : "open-ended"}
@@ -201,15 +202,15 @@ export function DefinitionTab({
                 ? `Every 2nd day from ${formatDay(route.schedule.anchorDate ?? route.validFrom)}`
                 : route.schedule.pattern === "weekly" ||
                     route.schedule.pattern === "custom"
-                  ? formatDays(route.schedule.days) || "—"
+                  ? formatDays(route.schedule.days) || "-"
                   : scheduleLabel(route)}
             </Fact>
-            <Fact label="Start depot">{depot?.name ?? "—"}</Fact>
+            <Fact label="Start depot">{depot?.name ?? "-"}</Fact>
             <Fact label="Required helpers">
               {route.helpers}{" "}
               <span className="text-muted-foreground">
                 ({route.serviceType} default{" "}
-                {serviceType?.defaultHelpers ?? "—"})
+                {serviceType?.defaultHelpers ?? "-"})
               </span>
             </Fact>
           </dl>
@@ -264,10 +265,17 @@ function CapacityCard({ route, ctx }: { route: Route; ctx: RouteContext }) {
               ? (route.plannedVisits ?? 6)
               : route.plannedTrips}
           </Fact>
-          <Fact label="Fill-rate assumption">
-            {cap.basis === "volume"
-              ? `${Math.round(route.fillRate * 100)}%`
-              : "n/a"}
+          <Fact label="Fill-rate standard">
+            {cap.basis === "volume" ? (
+              <>
+                {Math.round(route.fillRate * 100)}%
+                <span className="text-muted-foreground block text-xs">
+                  Overrides and suggestions per line: Service lines tab
+                </span>
+              </>
+            ) : (
+              "n/a"
+            )}
           </Fact>
           <Fact label="Capacity / shift">
             <span className="font-semibold">
@@ -277,12 +285,43 @@ function CapacityCard({ route, ctx }: { route: Route; ctx: RouteContext }) {
           <Fact label="Planned utilisation">
             <UtilisationBar pct={util.pct} />
             <span className="text-muted-foreground block text-xs">
-              {util.consumed
-                ? `${formatAmount(util.consumed, cap.unit)} on ${formatShortDay(util.day)}`
+              {util.pct
+                ? `${LIMIT_NAME[util.binding.kind]} binds, ${formatShortDay(util.day)}`
                 : "Nothing due this week"}
             </span>
           </Fact>
         </dl>
+        <div>
+          <p className="text-muted-foreground mb-1.5 text-xs">
+            Every limit of the truck, on the busiest day. The tightest one
+            decides utilisation and the R11 / R16 checks.
+          </p>
+          <ul className="space-y-1.5">
+            {util.limits.map((limit) => (
+              <li key={limit.kind} className="flex items-center gap-3 text-sm">
+                <span className="w-36">
+                  {limit.perLoad
+                    ? "Heaviest container"
+                    : LIMIT_NAME[limit.kind].replace(/^./, (c) =>
+                        c.toUpperCase(),
+                      )}
+                </span>
+                <span className="text-muted-foreground w-44 font-mono text-xs tabular-nums">
+                  {formatAmount(limit.consumed, limit.unit)} /{" "}
+                  {formatAmount(
+                    limit.perLoad ? limit.perTrip : limit.perShift,
+                    limit.unit,
+                  )}
+                </span>
+                <UtilisationBar pct={limit.pct} />
+                {limit.kind === util.binding.kind &&
+                limit.perLoad === util.binding.perLoad ? (
+                  <Badge variant="secondary">Binding</Badge>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </div>
         {alternates.length ? (
           <div className="bg-muted/50 rounded-lg px-3 py-2 text-sm">
             <p className="text-muted-foreground mb-1 text-xs">

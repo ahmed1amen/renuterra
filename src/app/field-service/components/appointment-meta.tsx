@@ -17,6 +17,7 @@ import type {
   ArrivalWindow,
   CancelReason,
   FailedReason,
+  RescheduleReason,
 } from "@/mocks";
 
 /** One tone per meaning, shared by every appointment UI. */
@@ -44,7 +45,7 @@ export const APPOINTMENT_STATUS_ORDER: AppointmentStatus[] = [
   "cancelled",
 ];
 
-/** Statuses that close an appointment — no further field actions. */
+/** Statuses that close an appointment: no further field actions. */
 export const CLOSED_STATUSES: AppointmentStatus[] = [
   "completed",
   "failed",
@@ -96,6 +97,15 @@ export const WINDOW_HOURS: Record<ArrivalWindow, [number, number]> = {
   PM: [14, 18],
   night: [21, 24],
   AT: [7, 17],
+};
+
+export const RESCHEDULE_REASON: Record<RescheduleReason, string> = {
+  customer_request: "Customer request",
+  access_issue: "Access issue",
+  vehicle_full: "Vehicle full",
+  ran_out_of_shift: "Ran out of shift",
+  weather: "Weather",
+  ops_decision: "Operations decision",
 };
 
 export const FAILED_REASON: Record<FailedReason, string> = {

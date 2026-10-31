@@ -2,7 +2,7 @@
   {
     "id": "si_rel_1100_gen",
     "code": "REL-1100-GEN",
-    "name": "1100L bin collection — general",
+    "name": "1100L bin collection: general",
     "stream": "general",
     "method": "empty-on-site",
     "containerTypeId": "ct_bin_1100",
@@ -20,7 +20,7 @@
   {
     "id": "si_rel_660_gen",
     "code": "REL-660-GEN",
-    "name": "660L bin collection — general",
+    "name": "660L bin collection: general",
     "stream": "general",
     "method": "empty-on-site",
     "containerTypeId": "ct_bin_660",
@@ -38,7 +38,7 @@
   {
     "id": "si_rec_1100",
     "code": "REC-1100",
-    "name": "1100L bin collection — recyclables",
+    "name": "1100L bin collection: recyclables",
     "stream": "recyclable",
     "method": "empty-on-site",
     "containerTypeId": "ct_bin_1100",
@@ -56,7 +56,7 @@
   {
     "id": "si_rec_660",
     "code": "REC-660",
-    "name": "660L bin collection — recyclables",
+    "name": "660L bin collection: recyclables",
     "stream": "recyclable",
     "method": "empty-on-site",
     "containerTypeId": "ct_bin_660",
@@ -92,7 +92,7 @@
   {
     "id": "si_comp_15_gen",
     "code": "COMP-15-GEN",
-    "name": "15 CBM compactor tip & return — general",
+    "name": "15 CBM compactor tip & return: general",
     "stream": "general",
     "method": "exchange",
     "containerTypeId": "ct_comp_15",
@@ -110,7 +110,7 @@
   {
     "id": "si_comp_15_rec",
     "code": "COMP-15-REC",
-    "name": "15 CBM compactor tip & return — recyclables",
+    "name": "15 CBM compactor tip & return: recyclables",
     "stream": "recyclable",
     "method": "exchange",
     "containerTypeId": "ct_comp_15",
@@ -128,7 +128,7 @@
   {
     "id": "si_comp_20_gen",
     "code": "COMP-20-GEN",
-    "name": "20 CBM compactor tip & return — general",
+    "name": "20 CBM compactor tip & return: general",
     "stream": "general",
     "method": "exchange",
     "containerTypeId": "ct_comp_20",
@@ -146,7 +146,7 @@
   {
     "id": "si_roro_30_cd",
     "code": "RORO-30-CD",
-    "name": "30 CBM RORO exchange — C&D",
+    "name": "30 CBM RORO exchange: C&D",
     "stream": "cd",
     "method": "exchange",
     "containerTypeId": "ct_roro_30",
@@ -164,7 +164,7 @@
   {
     "id": "si_roro_30_food",
     "code": "RORO-30-FOOD",
-    "name": "30 CBM RORO exchange — food waste",
+    "name": "30 CBM RORO exchange: food waste",
     "stream": "food",
     "method": "exchange",
     "containerTypeId": "ct_roro_30",
@@ -182,7 +182,7 @@
   {
     "id": "si_roro_40_rec",
     "code": "RORO-40-REC",
-    "name": "40 CBM RORO exchange — recyclables",
+    "name": "40 CBM RORO exchange: recyclables",
     "stream": "recyclable",
     "method": "exchange",
     "containerTypeId": "ct_roro_40",
@@ -200,7 +200,7 @@
   {
     "id": "si_skip_10_gen",
     "code": "SKIP-10-GEN",
-    "name": "10 CBM skip exchange — general",
+    "name": "10 CBM skip exchange: general",
     "stream": "general",
     "method": "exchange",
     "containerTypeId": "ct_skip_10",
@@ -218,7 +218,7 @@
   {
     "id": "si_skip_10_rec",
     "code": "SKIP-10-REC",
-    "name": "10 CBM skip exchange — recyclables",
+    "name": "10 CBM skip exchange: recyclables",
     "stream": "recyclable",
     "method": "exchange",
     "containerTypeId": "ct_skip_10",
@@ -236,7 +236,7 @@
   {
     "id": "si_skip_20_cd",
     "code": "SKIP-20-CD",
-    "name": "20 CBM skip exchange — C&D",
+    "name": "20 CBM skip exchange: C&D",
     "stream": "cd",
     "method": "exchange",
     "containerTypeId": "ct_skip_20",
@@ -398,7 +398,7 @@
   {
     "id": "si_rel_240_gen",
     "code": "REL-240-GEN",
-    "name": "240L bin collection — general (legacy)",
+    "name": "240L bin collection: general (legacy)",
     "stream": "general",
     "method": "empty-on-site",
     "containerTypeId": "ct_bin_240",

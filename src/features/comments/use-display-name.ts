@@ -4,7 +4,7 @@ import { STORAGE_KEYS } from "@/constants";
 import { useLocalStorage } from "@/hooks";
 
 /**
- * Reviewer identity: a display name kept in localStorage. No auth — this is an
+ * Reviewer identity: a display name kept in localStorage. No auth: this is an
  * internal review tool and the name is purely attribution.
  */
 export function useDisplayName() {

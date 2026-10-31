@@ -7,7 +7,7 @@ import { useAppointmentStore, useAppointments } from "./appointment-store";
 import { useRouteInstancesQuery } from "./hooks/use-route-instances-query";
 
 /**
- * Dispatch changes made during this session — stops moved between routes,
+ * Dispatch changes made during this session: stops moved between routes,
  * locks, vehicle and crew swaps. Prototype-grade like the appointment store:
  * fixtures stay untouched and everything resets on reload.
  */
@@ -89,7 +89,7 @@ export function useDispatchActions() {
   const updateAppointment = useAppointmentStore((s) => s.update);
 
   /**
-   * Routes as the store holds them right now — not as of the last render — so
+   * Routes as the store holds them right now (not as of the last render) so
    * several moves in one handler (Auto-plan) build on each other.
    */
   const current = useCallback(() => {

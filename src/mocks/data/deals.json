@@ -40,7 +40,7 @@
   },
   {
     "id": "deal_04",
-    "name": "Kiyo plant sensors — phase 1",
+    "name": "Kiyo plant sensors: phase 1",
     "company": "Kiyo Manufacturing",
     "contactId": "ct_04",
     "value": 128000,
@@ -118,7 +118,7 @@
   },
   {
     "id": "deal_10",
-    "name": "Kiyo plant sensors — phase 2",
+    "name": "Kiyo plant sensors: phase 2",
     "company": "Kiyo Manufacturing",
     "contactId": "ct_07",
     "value": 205000,

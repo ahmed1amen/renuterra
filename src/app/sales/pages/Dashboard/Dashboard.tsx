@@ -248,7 +248,7 @@ export default function Dashboard() {
         <CardHeader>
           <CardTitle>Biggest open deals</CardTitle>
           <CardDescription>
-            Where the quarter is won or lost — largest value first.
+            Where the quarter is won or lost: largest value first.
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -124,7 +124,7 @@ export function agreementMonthly(lines: AgreementLine[]) {
   return lines.reduce((sum, line) => sum + lineMonthly(line), 0);
 }
 
-/** What the whole term is worth — the number a rep is measured on. */
+/** What the whole term is worth: the number a rep is measured on. */
 export function agreementValue(draft: AgreementDraft) {
   return agreementMonthly(draft.lines) * draft.terms.termMonths;
 }

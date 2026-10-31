@@ -33,7 +33,7 @@ export type BookingInput = {
 
 let bookingSeq = 30000;
 
-/** A new appointment from a booking — fake refs, one work order for the service line. */
+/** A new appointment from a booking: fake refs, one work order for the service line. */
 function toAppointment(input: BookingInput): Appointment {
   const seq = bookingSeq++;
   const line = input.serviceLine;
@@ -83,7 +83,7 @@ type AppointmentState = {
   patches: Record<string, Partial<Appointment>>;
   /** Adds the booking and returns the appointment it became. */
   book: (input: BookingInput) => Appointment;
-  /** Adds appointments made elsewhere — e.g. stops the dispatch engine generated. */
+  /** Adds appointments made elsewhere: e.g. stops the dispatch engine generated. */
   addMany: (appointments: Appointment[]) => void;
   update: (id: string, patch: Partial<Appointment>) => void;
 };

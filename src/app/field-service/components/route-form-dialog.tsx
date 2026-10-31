@@ -764,7 +764,7 @@ export function RouteFormDialog({
                 <Field
                   label="Helpers"
                   htmlFor={`${id}-helpers`}
-                  hint={`${form.serviceType} default: ${serviceType?.defaultHelpers ?? "—"}.`}
+                  hint={`${form.serviceType} default: ${serviceType?.defaultHelpers ?? "-"}.`}
                 >
                   <Input
                     id={`${id}-helpers`}

@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { isApiError } from "@/lib/api/errors";
 
 /**
- * One client per browser session, one per server request — never shared.
+ * One client per browser session, one per server request: never shared.
  * Always construct through this factory so defaults stay consistent.
  */
 export function createQueryClient() {

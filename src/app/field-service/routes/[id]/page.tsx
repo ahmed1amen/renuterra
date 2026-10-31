@@ -8,11 +8,16 @@ export const metadata: Metadata = {
 
 export default async function Page({
   params,
+  searchParams,
 }: PageProps<"/field-service/routes/[id]">) {
   const { id } = await params;
+  const { tab } = await searchParams;
   return (
     <AppLayout>
-      <RouteDetail id={id} />
+      <RouteDetail
+        id={id}
+        initialTab={typeof tab === "string" ? tab : undefined}
+      />
     </AppLayout>
   );
 }

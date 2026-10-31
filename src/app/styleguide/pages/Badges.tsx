@@ -53,7 +53,7 @@ const TONES: {
   {
     tone: "warning",
     title: "Amber · waiting on someone",
-    meaning: "Blocked on a client, a driver or an approval — chase it.",
+    meaning: "Blocked on a client, a driver or an approval: chase it.",
   },
   {
     tone: "destructive",
@@ -99,7 +99,7 @@ const TABLE_ROWS = [
   },
   {
     id: "COL-10429",
-    site: "Emaar Square — Tower 3",
+    site: "Emaar Square: Tower 3",
     tone: "info" as StatusTone,
     status: "En route",
     weight: "860 kg",
@@ -110,7 +110,7 @@ const TABLE_ROWS = [
     site: "Al Quoz Industrial 4",
     tone: "warning" as StatusTone,
     status: "Awaiting client",
-    weight: "—",
+    weight: "-",
     date: "11 Sep 2026",
   },
   {
@@ -118,7 +118,7 @@ const TABLE_ROWS = [
     site: "Northwind Farms",
     tone: "destructive" as StatusTone,
     status: "Missed",
-    weight: "—",
+    weight: "-",
     date: "11 Sep 2026",
   },
 ];
@@ -141,7 +141,7 @@ export default function BadgesPage() {
         description={
           <>
             Pill, 20px tall, 12px/500, width follows the content. One tone per
-            meaning across every module — a badge is a status, never decoration.
+            meaning across every module: a badge is a status, never decoration.
             Reach for <Code>StatusPill</Code> for record state and{" "}
             <Code>StreamTag</Code> for waste streams; raw <Code>Badge</Code>{" "}
             variants are for counts and chips.
@@ -149,7 +149,7 @@ export default function BadgesPage() {
         }
       />
 
-      <Demo title="Semantic tones" hint="the whole vocabulary — nothing else">
+      <Demo title="Semantic tones" hint="the whole vocabulary: nothing else">
         <div className="space-y-2">
           {TONES.map((t) => (
             <div
@@ -203,7 +203,7 @@ export default function BadgesPage() {
 
       <Demo
         title="Icon only"
-        hint="acceptable in dense tables — tooltip and aria-label required"
+        hint="acceptable in dense tables: tooltip and aria-label required"
       >
         <TooltipProvider>
           <div className="flex flex-wrap gap-2">
@@ -241,10 +241,7 @@ export default function BadgesPage() {
         </div>
       </Demo>
 
-      <Demo
-        title="Filter chips"
-        hint="dismissible — mirrors the active filters"
-      >
+      <Demo title="Filter chips" hint="dismissible: mirrors the active filters">
         <div className="flex min-h-8 flex-wrap items-center gap-2">
           {filters.length === 0 ? (
             <span className="text-muted-foreground text-sm">
@@ -426,7 +423,7 @@ export default function BadgesPage() {
       </div>
 
       <Note title="Writing badge labels">
-        Sentence case, one or two words, the same word the domain uses — a
+        Sentence case, one or two words, the same word the domain uses: a
         collection is “Missed”, never “Failure”. Keep a status out of two tones
         at once: if a record is both overdue and unpaid, badge the state the
         reader can act on. Counts go in a neutral badge next to the label, not

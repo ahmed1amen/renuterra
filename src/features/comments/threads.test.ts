@@ -67,7 +67,7 @@ describe("filterThreads", () => {
 });
 
 describe("openThreadCount", () => {
-  it("counts unresolved roots only — replies never count", () => {
+  it("counts unresolved roots only: replies never count", () => {
     expect(openThreadCount([root1, root2, replyEarly, replyLate])).toBe(1);
   });
 });

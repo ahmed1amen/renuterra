@@ -17,4 +17,5 @@ export const fieldServiceKeys = {
   vehicles: () => [...fieldServiceKeys.all, "vehicles"] as const,
   shifts: () => [...fieldServiceKeys.all, "shifts"] as const,
   shiftTemplates: () => [...fieldServiceKeys.all, "shift-templates"] as const,
+  visitHistory: () => [...fieldServiceKeys.all, "visit-history"] as const,
 };

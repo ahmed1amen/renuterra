@@ -3,11 +3,11 @@
 import { useMemo } from "react";
 import {
   assignmentChecks,
-  findLine,
+  instanceLoad,
   isRouteDue,
-  lineConsumption,
+  LIMIT_NAME,
+  overCapacityOptions,
   type RouteContext,
-  routeCapacity,
   useAppointments,
   useContainerTypes,
   useDirectory,
@@ -22,6 +22,7 @@ import {
   useTechnicians,
   useVehicles,
   weekdayOfDay,
+  withExtraTrips,
 } from "@/features/field-service";
 import type { Appointment, Route, RouteInstance, Shift } from "@/mocks";
 import {
@@ -29,6 +30,7 @@ import {
   CLOSED_STATUSES,
   confirmBlockers,
   type DefaultRoute,
+  type EligibilityIssue,
   fitsVehicle,
   type OpenSlot,
   PLANNABLE_STATUSES,
@@ -37,6 +39,7 @@ import {
   type SlotKind,
   type StaffOption,
   slotKind,
+  slotLabel,
   VEHICLE_CLASS,
 } from "../../../components";
 import { TODAY, toDayKey, toDubaiDayKey } from "../../../utils";
@@ -46,32 +49,65 @@ const TODAY_KEY = toDayKey(TODAY);
 const isOpen = (apt: Appointment) => !CLOSED_STATUSES.includes(apt.status);
 
 /**
- * The instance's planned work in its Route's capacity basis, on the truck it
- * actually has (when that's one of the Route's types). Stops without a
- * service line (one-offs) count a visit, or their estimated weight.
+ * The run's load on the truck it actually has (when that's one of the
+ * Route's types; otherwise the Route's required type).
  */
-function instanceCapacity(
+function planLoad(
   template: Route | undefined,
   vehicleTruckType: string | undefined,
-  active: Appointment[],
+  stops: Appointment[],
   ctx: RouteContext | null,
+  extra = 0,
 ) {
   if (!template || !ctx) return null;
   const truckTypeId =
     vehicleTruckType && template.truckTypeIds.includes(vehicleTruckType)
       ? vehicleTruckType
       : undefined;
-  const capacity = routeCapacity(template, ctx.masters, truckTypeId);
-  const consumed = active.reduce((sum, apt) => {
-    const found = apt.serviceLineId
-      ? findLine(ctx.servicePoints, apt.serviceLineId)
-      : undefined;
-    if (found) return sum + lineConsumption(template, found.line, ctx);
-    if (capacity.basis === "visits") return sum + 1;
-    if (capacity.basis === "weight") return sum + appointmentLoadKg(apt);
-    return sum;
-  }, 0);
-  return { ...capacity, consumed };
+  return instanceLoad(withExtraTrips(template, extra), truckTypeId, stops, ctx);
+}
+
+/**
+ * Re-check whoever is on the instance now against the Route's rules for the
+ * day: a licence or permit can expire after the run was generated (R5).
+ */
+function eligibilityOf(
+  instance: RouteInstance,
+  template: Route | undefined,
+  ctx: RouteContext | null,
+  names: (id: string) => string,
+): EligibilityIssue[] {
+  if (!template || !ctx) return [];
+  const wd = weekdayOfDay(instance.date);
+  const slots: ["truck" | "driver" | "helper", string, string | null][] = [
+    ["truck", "truck", instance.vehicleId],
+    ["driver", "driver", instance.primaryServiceProId],
+    ...instance.crew.map(
+      (c, i) =>
+        ["helper", `helper-${i + 1}`, c.serviceProId] as [
+          "helper",
+          string,
+          string,
+        ],
+    ),
+  ];
+  return slots.flatMap(([kind, slot, id]) => {
+    if (!id) return [];
+    const failed = assignmentChecks(template, kind, id, "backup", [wd], ctx);
+    const issue =
+      failed.find((c) => !c.ok && c.severity === "block") ??
+      failed.find((c) => !c.ok);
+    return issue
+      ? [
+          {
+            slot,
+            name: names(id),
+            reason: issue.detail ?? issue.label,
+            severity: issue.severity,
+          },
+        ]
+      : [];
+  });
 }
 
 /** Can a person work this instance's shift (on leave / wrong shift = no)? */
@@ -222,19 +258,42 @@ export function useDispatchDay(dayKey: string) {
         );
     };
 
-    return today.map((route) => {
+    const built = today.map((route) => {
       const template = routes.data?.find((r) => r.id === route.routeId);
       const stops = route.appointmentIds
         .map((id) => byId.get(id))
         .filter((a): a is Appointment => a !== undefined);
       const active = stops.filter((a) => a.status !== "cancelled");
       const vehicle = directory.vehicle(route.vehicleId);
-      const locked = route.lockedAt !== null;
+      const closed = Boolean(route.closure);
+      const locked = route.lockedAt !== null || closed;
+      // Close run applies once the run's day has come and work began, or the
+      // day is over (spec section 6.1): never to a run still ahead of its shift.
+      const closable =
+        !closed &&
+        route.status !== "cancelled" &&
+        stops.length > 0 &&
+        (route.date < TODAY_KEY ||
+          (route.date === TODAY_KEY &&
+            ["in-progress", "completed", "partial"].includes(route.status)));
       const plannable = PLANNABLE_STATUSES.includes(route.status);
       // Crew fill the filled helper slots in order, so each knows its source.
       const helperSlots = Object.keys(route.staffing)
         .filter((slot) => slotKind(slot) === "helper")
         .sort((a, b) => order(a) - order(b));
+      // Only runs still ahead of their shift can be fixed, so only those are checked.
+      const eligibility = plannable
+        ? eligibilityOf(
+            route,
+            template,
+            ctx,
+            (id) =>
+              directory.vehicle(id)?.plate ??
+              directory.servicePro(id)?.name ??
+              id,
+          )
+        : [];
+      const ineligible = eligibility.filter((e) => e.severity === "block");
       const openSlots: OpenSlot[] = unstaffedSlots(route).map((slot) => ({
         slot,
         kind: slotKind(slot),
@@ -264,17 +323,72 @@ export function useDispatchDay(dayKey: string) {
         vehicle,
         stops,
         activeStops: active.length,
+        doneStops: active.filter(
+          (a) => a.status === "completed" || a.status === "failed",
+        ).length,
         loadKg: active.reduce((sum, a) => sum + appointmentLoadKg(a), 0),
-        capacity: instanceCapacity(template, vehicle?.truckTypeId, active, ctx),
+        load: planLoad(
+          template,
+          vehicle?.truckTypeId,
+          stops,
+          ctx,
+          route.extraTrips?.count ?? 0,
+        ),
         score: instanceScore(route),
         mismatches: active.filter(
           (a) => isOpen(a) && !fitsVehicle(a, vehicle?.vehicleClass),
         ).length,
         locked,
+        closed,
+        closable,
         plannable,
         openSlots,
-        blockers: confirmBlockers(route),
+        blockers: [
+          ...confirmBlockers(route, { liveCapacity: Boolean(template) }),
+          ...(ineligible.length
+            ? [
+                `Ineligible: ${ineligible.map((e) => slotLabel(e.slot)).join(", ")}`,
+              ]
+            : []),
+        ],
+        eligibility,
+        overCapacity: null,
       };
+    });
+
+    // Live Over capacity (R16): judged on the current load, with the two
+    // fixes the spec allows, against the day's other runs that can change.
+    if (!ctx) return built;
+    const asRun = (p: RoutePlan) =>
+      p.template
+        ? {
+            id: p.route.id,
+            name: p.route.name,
+            template: withExtraTrips(
+              p.template,
+              p.route.extraTrips?.count ?? 0,
+            ),
+            truckTypeId: p.load?.truckTypeId,
+            stops: p.stops,
+          }
+        : null;
+    const open = built.filter((p) => p.plannable && !p.locked);
+    const candidates = open.flatMap((p) => asRun(p) ?? []);
+    return built.map((p) => {
+      const run = p.plannable && !p.locked ? asRun(p) : null;
+      const overCapacity = run
+        ? overCapacityOptions(run, candidates, ctx)
+        : null;
+      return overCapacity
+        ? {
+            ...p,
+            overCapacity,
+            blockers: [
+              ...p.blockers,
+              `Over capacity ${overCapacity.pct}% (${LIMIT_NAME[overCapacity.limit]})`,
+            ],
+          }
+        : p;
     });
   }, [
     instances.data,
@@ -293,7 +407,7 @@ export function useDispatchDay(dayKey: string) {
     );
     return {
       backlog: unrouted.filter((a) => toDubaiDayKey(a.plannedStart) === dayKey),
-      // Earlier days that never got a route — only meaningful from today on.
+      // Earlier days that never got a route: only meaningful from today on.
       overdue: unrouted.filter((a) => {
         const day = toDubaiDayKey(a.plannedStart);
         return day < dayKey && day < TODAY_KEY;
@@ -322,7 +436,7 @@ export function useDispatchDay(dayKey: string) {
     return map;
   }, [backlog, overdue, routes.data, plans]);
 
-  /** Active Routes due this day — "Not generated yet" when none has an instance. */
+  /** Active Routes due this day: "Not generated yet" when none has an instance. */
   const dueRoutes = useMemo(
     () => (routes.data ?? []).filter((r) => isRouteDue(r, dayKey)),
     [routes.data, dayKey],

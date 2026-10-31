@@ -37,6 +37,7 @@ import {
   RouteFormDialog,
   RouteScoreBadge,
   RouteStatusPill,
+  SCORE_SCOPE,
   TODAY_KEY,
   useRouteContext,
 } from "../../components";
@@ -44,6 +45,7 @@ import {
   ActivateDialog,
   DefinitionTab,
   HistoryTab,
+  PerformanceTab,
   ResourcesTab,
   RouteFacts,
   ScheduleTab,
@@ -55,9 +57,26 @@ type Tab =
   | "resources"
   | "service-lines"
   | "schedule"
+  | "performance"
   | "history";
 
-export default function RouteDetail({ id }: { id: string }) {
+const TABS: Tab[] = [
+  "definition",
+  "resources",
+  "service-lines",
+  "schedule",
+  "performance",
+  "history",
+];
+
+export default function RouteDetail({
+  id,
+  initialTab,
+}: {
+  id: string;
+  /** From `?tab=`, so a report can link straight to e.g. Performance. */
+  initialTab?: string;
+}) {
   const { ctx, isPending, error, refetch } = useRouteContext();
 
   if (isPending) return <DetailSkeleton />;
@@ -84,15 +103,31 @@ export default function RouteDetail({ id }: { id: string }) {
     );
   }
 
-  return <Detail route={route} ctx={ctx} />;
+  return (
+    <Detail
+      route={route}
+      ctx={ctx}
+      initialTab={
+        TABS.includes(initialTab as Tab) ? (initialTab as Tab) : "definition"
+      }
+    />
+  );
 }
 
-function Detail({ route, ctx }: { route: Route; ctx: RouteContext }) {
+function Detail({
+  route,
+  ctx,
+  initialTab,
+}: {
+  route: Route;
+  ctx: RouteContext;
+  initialTab: Tab;
+}) {
   const patchRoute = useRouteStore((s) => s.patchRoute);
   const allInstances = useRouteInstances();
   // Derived from the live route, so attaching / detaching a line re-scores it.
   const score = useRouteScoring().routeScore(route);
-  const [tab, setTab] = useState<Tab>("definition");
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [dialog, setDialog] = useState<"edit" | "activate" | "retire" | null>(
     null,
   );
@@ -201,7 +236,7 @@ function Detail({ route, ctx }: { route: Route; ctx: RouteContext }) {
       <div className="-mt-3 mb-5 flex flex-wrap items-center gap-1.5">
         <span className="me-1 font-mono text-sm font-medium">{route.code}</span>
         <RouteStatusPill status={route.status} />
-        <RouteScoreBadge score={score} />
+        <RouteScoreBadge score={score} scope={SCORE_SCOPE.design} />
         <Badge variant="outline" title={entity?.name}>
           {route.entity}
         </Badge>
@@ -253,6 +288,7 @@ function Detail({ route, ctx }: { route: Route; ctx: RouteContext }) {
               </span>
             </TabsTrigger>
             <TabsTrigger value="schedule">Schedule</TabsTrigger>
+            <TabsTrigger value="performance">Performance</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
 
@@ -270,6 +306,13 @@ function Detail({ route, ctx }: { route: Route; ctx: RouteContext }) {
               <Skeleton className="h-96 w-full" />
             ) : (
               <ScheduleTab route={route} ctx={ctx} instances={instances} />
+            )}
+          </TabsContent>
+          <TabsContent value="performance" className="pt-4">
+            {allInstances.isPending ? (
+              <Skeleton className="h-96 w-full" />
+            ) : (
+              <PerformanceTab route={route} ctx={ctx} instances={instances} />
             )}
           </TabsContent>
           <TabsContent value="history" className="pt-4">

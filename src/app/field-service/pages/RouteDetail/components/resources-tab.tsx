@@ -172,7 +172,7 @@ export function ResourcesTab({
                   <span className={short ? "text-warning" : undefined}>
                     {route.helpers} required · {primaries} primary assigned
                     {short
-                      ? " — instances stay Unstaffed until every slot is filled."
+                      ? ": instances stay Unstaffed until every slot is filled."
                       : ""}
                   </span>
                 ) : type === "truck" ? (

@@ -1,7 +1,7 @@
 import type { StatusTone } from "@/components/shared";
 import type { RouteCrewRole, RouteInstance, Technician } from "@/mocks";
 
-/** Cell tint per shift tone — the badge palette, as a block. */
+/** Cell tint per shift tone: the badge palette, as a block. */
 export const TONE_BLOCK: Record<StatusTone, string> = {
   info: "bg-info-bg text-info",
   neutral: "bg-muted text-foreground",
@@ -44,7 +44,7 @@ export function seatsByProDay(routes: RouteInstance[]) {
 
 const MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" ");
 
-/** "30 Aug" — spelled out by hand; en-GB would say "Sept". */
+/** "30 Aug": spelled out by hand; en-GB would say "Sept". */
 const dayMonth = {
   format: (d: Date) => `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`,
 };
@@ -58,7 +58,7 @@ export function formatWeekRange(start: Date, end: Date) {
   return `${(sameYear ? dayMonth : dayMonthYear).format(start)} – ${dayMonthYear.format(end)}`;
 }
 
-/** "Sun 30 Aug" for a `2026-08-30` day key — the dialog's heading. */
+/** "Sun 30 Aug" for a `2026-08-30` day key: the dialog's heading. */
 export function formatDayKey(day: string) {
   const date = new Date(`${day}T00:00:00Z`);
   const weekday = new Intl.DateTimeFormat("en-GB", {

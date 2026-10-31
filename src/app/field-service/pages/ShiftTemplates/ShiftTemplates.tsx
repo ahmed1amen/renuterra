@@ -162,7 +162,7 @@ export default function ShiftTemplates() {
                         {used ? (
                           used
                         ) : (
-                          <span className="text-muted-foreground">—</span>
+                          <span className="text-muted-foreground">-</span>
                         )}
                       </TableCell>
                       <TableCell>

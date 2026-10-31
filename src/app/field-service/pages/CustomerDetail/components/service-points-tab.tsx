@@ -60,7 +60,7 @@ export function ServicePointsTab({
   servicePoints: ServicePoint[];
   /** The customer's projected visits, soonest first. */
   projected: ProjectedVisit[];
-  /** False when the customer is on hold — booking is hidden. */
+  /** False when the customer is on hold: booking is hidden. */
   bookable: boolean;
 }) {
   const openBooking = useBookAppointmentModal((s) => s.openModal);
@@ -188,7 +188,7 @@ export function ServicePointsTab({
             <CardHeader>
               <CardTitle>Services</CardTitle>
               <CardDescription>
-                Contracted collections — recurring visits are generated from
+                Contracted collections: recurring visits are generated from
                 these.
               </CardDescription>
             </CardHeader>
@@ -343,7 +343,7 @@ export function ServicePointsTab({
                           <TableCell className="text-muted-foreground text-sm">
                             {c.lastServicedAt
                               ? formatDate(c.lastServicedAt)
-                              : "—"}
+                              : "-"}
                           </TableCell>
                         </TableRow>
                       );

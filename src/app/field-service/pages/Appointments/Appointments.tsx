@@ -1,7 +1,8 @@
 "use client";
 
-import { CalendarPlus, Search, SearchX } from "lucide-react";
-import { useMemo, useState } from "react";
+import { CalendarPlus, Search, SearchX, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useMemo, useState } from "react";
 import {
   EmptyState,
   ErrorState,
@@ -79,16 +80,45 @@ function inPeriod(apt: Appointment, period: Period) {
   return true;
 }
 
+const STATUS_VALUES = new Set<string>(STATUS_OPTIONS.map((o) => o.value));
+const PERIOD_VALUES = new Set<string>(PERIODS.map((p) => p.id));
+
+// `useSearchParams` needs a Suspense boundary for the route to prerender.
 export default function Appointments() {
+  return (
+    <Suspense fallback={null}>
+      <AppointmentsList />
+    </Suspense>
+  );
+}
+
+/**
+ * Filters start from the link (`?period=past&status=failed`, `?backlog=1`,
+ * `?view=work-orders`), so a dashboard number opens the rows behind it.
+ */
+function AppointmentsList() {
+  const params = useSearchParams();
   const appointments = useAppointments();
   const directory = useDirectory();
   const openBooking = useBookAppointmentModal((s) => s.openModal);
   /** Next 14 days of route-scheduled visits, dispatched or not. */
   const projected = useProjectedVisits();
 
-  const [view, setView] = useState<View>("appointments");
-  const [period, setPeriod] = useState<Period>("today");
-  const [status, setStatus] = useState<AppointmentStatus | "all">("all");
+  const [view, setView] = useState<View>(
+    params.get("view") === "work-orders" ? "work-orders" : "appointments",
+  );
+  const [period, setPeriod] = useState<Period>(() => {
+    const p = params.get("period");
+    return p && PERIOD_VALUES.has(p) ? (p as Period) : "today";
+  });
+  const [status, setStatus] = useState<AppointmentStatus | "all">(() => {
+    const s = params.get("status");
+    return s && STATUS_VALUES.has(s) ? (s as AppointmentStatus) : "all";
+  });
+  /** Only appointments not on a route instance yet. */
+  const [backlogOnly, setBacklogOnly] = useState(params.get("backlog") === "1");
+  /** En route or on site (two statuses, so not the status filter). */
+  const [inFieldOnly, setInFieldOnly] = useState(false);
   const [stream, setStream] = useState<WasteStreamId | "all">("all");
   const [query, setQuery] = useState("");
   const [limit, setLimit] = useState(PAGE_SIZE);
@@ -103,6 +133,7 @@ export default function Appointments() {
     return {
       today: today.length,
       todayDone: today.filter((a) => a.status === "completed").length,
+      todayUnrouted: today.filter((a) => !a.routeInstanceId).length,
       inField: all.filter(
         (a) => a.status === "en-route" || a.status === "in-progress",
       ).length,
@@ -129,6 +160,15 @@ export default function Appointments() {
       .filter((a) => inPeriod(a, period))
       .filter((a) => status === "all" || a.status === status)
       .filter((a) => stream === "all" || a.stream === stream)
+      .filter(
+        (a) =>
+          !backlogOnly ||
+          (!a.routeInstanceId && !CLOSED_STATUSES.includes(a.status)),
+      )
+      .filter(
+        (a) =>
+          !inFieldOnly || a.status === "en-route" || a.status === "in-progress",
+      )
       .filter((a) => {
         if (!term) return true;
         const customer = directory.customer(a.customerId)?.name ?? "";
@@ -137,7 +177,7 @@ export default function Appointments() {
       });
     // Past work reads newest first; everything else soonest first.
     return period === "past" ? rows.reverse() : rows;
-  }, [all, period, status, stream, query, directory]);
+  }, [all, period, status, stream, query, directory, backlogOnly, inFieldOnly]);
 
   const inSelectedPeriod = useMemo(() => {
     const rows = all.filter((a) => inPeriod(a, period));
@@ -166,8 +206,50 @@ export default function Appointments() {
   const showProjected = period === "upcoming" && notGenerated.length > 0;
   const projectedWeek = (projected ?? []).filter((v) => v.date < WEEK_END_KEY);
 
-  const filtered = status !== "all" || stream !== "all" || query !== "";
+  /** Each KPI tile sets the filters that show the rows behind its number. */
+  type Kpi = "today" | "in-field" | "failed" | "backlog" | "upcoming";
+  const applyKpi = (next: Kpi) => {
+    setView("appointments");
+    setStream("all");
+    setQuery("");
+    setStatus(next === "failed" ? "failed" : "all");
+    setBacklogOnly(next === "backlog");
+    setInFieldOnly(next === "in-field");
+    // Failed visits include today's, and can't be in the future.
+    setPeriod(
+      next === "failed" || next === "backlog"
+        ? "all"
+        : next === "upcoming"
+          ? "upcoming"
+          : "today",
+    );
+  };
+  const kpi: Kpi | null =
+    stream !== "all" || query !== ""
+      ? null
+      : backlogOnly && status === "all" && period === "all"
+        ? "backlog"
+        : inFieldOnly && status === "all" && period === "today"
+          ? "in-field"
+          : status === "failed" && period === "all" && !backlogOnly
+            ? "failed"
+            : status === "all" && !backlogOnly && !inFieldOnly
+              ? period === "today"
+                ? "today"
+                : period === "upcoming"
+                  ? "upcoming"
+                  : null
+              : null;
+
+  const filtered =
+    status !== "all" ||
+    stream !== "all" ||
+    query !== "" ||
+    backlogOnly ||
+    inFieldOnly;
   const clearFilters = () => {
+    setBacklogOnly(false);
+    setInFieldOnly(false);
     setStatus("all");
     setStream("all");
     setQuery("");
@@ -182,7 +264,7 @@ export default function Appointments() {
           { label: "Appointments" },
         ]}
         title="Appointments"
-        description="Every booked visit to a customer's service points — recurring and on request."
+        description="Every booked visit to a customer's service points: recurring and on request."
         actions={
           <Button size="sm" onClick={() => openBooking()}>
             <CalendarPlus data-icon="inline-start" />
@@ -197,9 +279,11 @@ export default function Appointments() {
           value={appointments.isSuccess ? formatCount(stats.today) : undefined}
           hint={
             appointments.isSuccess
-              ? `${stats.todayDone} completed so far`
+              ? `${stats.todayDone} completed${stats.todayUnrouted ? ` · ${stats.todayUnrouted} not on a route yet` : ""}`
               : undefined
           }
+          onClick={() => applyKpi("today")}
+          active={kpi === "today"}
         />
         <KpiCard
           label="In the field"
@@ -207,6 +291,8 @@ export default function Appointments() {
             appointments.isSuccess ? formatCount(stats.inField) : undefined
           }
           hint="En route or on site"
+          onClick={() => applyKpi("in-field")}
+          active={kpi === "in-field"}
         />
         <KpiCard
           label="Failed visits"
@@ -214,6 +300,8 @@ export default function Appointments() {
             appointments.isSuccess ? formatCount(stats.failedWeek) : undefined
           }
           hint="Last 7 days"
+          onClick={() => applyKpi("failed")}
+          active={kpi === "failed"}
         />
         <KpiCard
           label="In backlog"
@@ -221,6 +309,8 @@ export default function Appointments() {
             appointments.isSuccess ? formatCount(stats.unassigned) : undefined
           }
           hint="Not on a route yet"
+          onClick={() => applyKpi("backlog")}
+          active={kpi === "backlog"}
         />
         <KpiCard
           label="Projected next 7 days"
@@ -230,6 +320,8 @@ export default function Appointments() {
               ? `${formatCount(projectedWeek.filter((v) => !v.instanceId).length)} not generated yet`
               : undefined
           }
+          onClick={() => applyKpi("upcoming")}
+          active={kpi === "upcoming"}
         />
       </div>
 
@@ -273,6 +365,28 @@ export default function Appointments() {
 
             {view === "appointments" ? (
               <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+                {backlogOnly ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setBacklogOnly(false)}
+                    aria-label="Remove the backlog filter"
+                  >
+                    Backlog only
+                    <X data-icon="inline-end" />
+                  </Button>
+                ) : null}
+                {inFieldOnly ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setInFieldOnly(false)}
+                    aria-label="Remove the in-the-field filter"
+                  >
+                    In the field
+                    <X data-icon="inline-end" />
+                  </Button>
+                ) : null}
                 <Combobox
                   size="sm"
                   className="w-40"
@@ -355,7 +469,7 @@ export default function Appointments() {
                 <AppointmentsTable appointments={visible.slice(0, limit)} />
               ) : (
                 <p className="text-muted-foreground py-4 text-center text-sm">
-                  No appointments booked yet — only route-scheduled visits.
+                  No appointments booked yet: only route-scheduled visits.
                 </p>
               )}
               {visible.length > limit ? (

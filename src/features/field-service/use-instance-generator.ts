@@ -17,7 +17,7 @@ import { useShifts } from "./shift-store";
 
 /**
  * Runs the dispatch engine on everything currently loaded (session edits
- * included) and writes the result into session state — the prototype's
+ * included) and writes the result into session state: the prototype's
  * stand-in for the nightly D-1 20:00 job.
  */
 export function useInstanceGenerator() {

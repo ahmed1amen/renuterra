@@ -70,7 +70,7 @@ export function ShiftTemplateDialog({
     toast.success(
       template ? `${name.trim()} updated` : `${name.trim()} added`,
       {
-        description: "Prototype — saved for this session only.",
+        description: "Prototype: saved for this session only.",
       },
     );
     onOpenChange(false);

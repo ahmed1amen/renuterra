@@ -7,6 +7,7 @@ export { Dashboard } from "./Dashboard";
 export { Dispatch } from "./Dispatch";
 export { Fleet } from "./Fleet";
 export { OpsLists } from "./OpsLists";
+export { Reports } from "./Reports";
 export { RouteDetail } from "./RouteDetail";
 export { Routes } from "./Routes";
 export { ServiceItems } from "./ServiceItems";

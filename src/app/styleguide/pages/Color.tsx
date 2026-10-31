@@ -83,9 +83,9 @@ export default function ColorPage() {
       </div>
 
       <div className="space-y-3">
-        <div className="text-sm font-semibold">Navy ramp — primary</div>
+        <div className="text-sm font-semibold">Navy ramp: primary</div>
         <Ramp steps={NAVY_RAMP} cols={8} />
-        <div className="pt-2 text-sm font-semibold">Lime ramp — accent</div>
+        <div className="pt-2 text-sm font-semibold">Lime ramp: accent</div>
         <Ramp steps={LIME_RAMP} cols={10} />
       </div>
 
@@ -149,7 +149,7 @@ export default function ColorPage() {
           <div className="text-sm font-semibold">
             Waste streams{" "}
             <span className="text-muted-foreground font-normal">
-              — fixed per stream, everywhere
+              (fixed per stream, everywhere)
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2.5">
@@ -187,7 +187,7 @@ export default function ColorPage() {
             </li>
             <li>
               Lime for success, the "recyclable" stream and the second chart
-              series — it is the accent now, not the action colour.
+              series: it is the accent now, not the action colour.
             </li>
             <li>Ivory/snow surfaces so navy reads deep, never flat black.</li>
           </ul>
@@ -199,7 +199,7 @@ export default function ColorPage() {
           </div>
           <ul className="text-muted-foreground flex list-disc flex-col gap-1.5 pl-4 text-[13px]">
             <li>
-              No dark text on navy — <Code>--primary-foreground</Code> is white.
+              No dark text on navy: <Code>--primary-foreground</Code> is white.
             </li>
             <li>
               No lime solids for primary actions; lime survives as success and

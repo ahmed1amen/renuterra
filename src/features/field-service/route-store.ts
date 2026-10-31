@@ -94,7 +94,7 @@ export function useRouteAssignments() {
 
 /**
  * Apply an edit to a route. On an Active route a change to a matching
- * attribute bumps the version (R13) — returned so the caller can say so.
+ * attribute bumps the version (R13): returned so the caller can say so.
  */
 export function editRoute(route: Route, changes: Partial<Route>) {
   const versioned =
@@ -112,7 +112,7 @@ export function editRoute(route: Route, changes: Partial<Route>) {
 }
 
 /**
- * Move a service line onto a route (R10: one Active route per line — a
+ * Move a service line onto a route (R10: one Active route per line; a
  * transfer takes it off the old one).
  */
 export function attachServiceLine(

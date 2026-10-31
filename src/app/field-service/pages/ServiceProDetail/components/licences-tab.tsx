@@ -117,7 +117,7 @@ export function LicencesTab({ pro }: { pro: Technician }) {
                             onClick={() =>
                               toast.success(`${name} renewal requested`, {
                                 description:
-                                  "Prototype — HR would upload the renewed evidence.",
+                                  "Prototype: HR would upload the renewed evidence.",
                               })
                             }
                           >

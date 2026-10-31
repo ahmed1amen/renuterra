@@ -34,7 +34,7 @@ import { APPOINTMENT_STATUS } from "./appointment-meta";
 import { isMovable, type RoutePlan, SHIFT_LABEL } from "./dispatch-meta";
 import { flagChips } from "./instance-flags";
 import { InstanceStatusPill } from "./route-meta";
-import { RouteScoreBadge } from "./route-score-badge";
+import { RouteScoreBadge, SCORE_SCOPE } from "./route-score-badge";
 import { RouteCode } from "./route-sidebar";
 
 const LANE_WIDTH = 288;
@@ -422,7 +422,7 @@ export function RouteTimeline({
                 ))}
                 {backlog.length === 0 ? (
                   <p className="text-muted-foreground sticky left-0 flex h-10 items-center px-3 text-xs">
-                    Nothing waiting — every appointment is on a route.
+                    Nothing waiting: every appointment is on a route.
                   </p>
                 ) : null}
               </div>
@@ -470,9 +470,11 @@ function Lane({
 }) {
   const { route, pro, vehicle, colors, locked } = plan;
   // Substitutes are fine; only what a dispatcher must act on gets the icon.
-  const attention = flagChips(route.flags).filter(
-    (c) => !c.key.startsWith("substitute"),
-  );
+  const attention = flagChips(
+    plan.load
+      ? route.flags.filter((f) => f.kind !== "over-capacity")
+      : route.flags,
+  ).filter((c) => !c.key.startsWith("substitute"));
 
   return (
     <div
@@ -553,9 +555,12 @@ function Lane({
                 />
               </span>
             ) : null}
-            {plan.activeStops}/{route.maxStops}
+            <span title="Stops done / planned">
+              {plan.doneStops}/{plan.activeStops}
+            </span>
             <RouteScoreBadge
               score={plan.score}
+              scope={SCORE_SCOPE.run}
               compact
               className="pointer-events-auto ml-0.5"
             />
@@ -668,7 +673,7 @@ function AppointmentBlock({
   );
 }
 
-/** A run to the disposal facility to empty the truck — not a customer stop. */
+/** A run to the disposal facility to empty the truck: not a customer stop. */
 function TippingBlock({
   trip,
   x,

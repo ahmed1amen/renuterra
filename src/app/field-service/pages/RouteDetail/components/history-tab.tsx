@@ -22,7 +22,7 @@ const EMPTY: RouteEvent[] = [];
 
 /**
  * A minimal audit trail (R19): this session's edits on top of what the
- * fixtures imply — the route going live and each assignment starting.
+ * fixtures imply: the route going live and each assignment starting.
  */
 export function HistoryTab({
   route,

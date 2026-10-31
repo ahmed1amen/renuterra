@@ -18,3 +18,4 @@ export {
 export { useServicePoints } from "./use-service-points";
 export { useShiftsQuery, useShiftTemplatesQuery } from "./use-shifts-query";
 export { useTechnicians } from "./use-technicians";
+export { useVisitHistory } from "./use-visit-history";

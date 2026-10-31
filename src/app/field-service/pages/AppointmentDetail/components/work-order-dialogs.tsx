@@ -73,8 +73,8 @@ function fakeSeals(count: number) {
 
 /**
  * Close out one work order on site. The fields follow the item's handling
- * method — lifted bins for empty-on-site, weighbridge ticket for an exchange,
- * seals and a consignment note for packaged waste — and the outcome
+ * method: lifted bins for empty-on-site, weighbridge ticket for an exchange,
+ * seals and a consignment note for packaged waste: and the outcome
  * (completed / partial / not done) follows from what was done.
  *
  * Prototype-grade: values are pre-filled as the service pro's app would send
@@ -90,7 +90,7 @@ export function RecordWorkOrderDialog({
 }: DialogProps & {
   workOrder: WorkOrder;
   item: ServiceItem | undefined;
-  /** When the record is made — closes the work order. */
+  /** When the record is made: closes the work order. */
   at: string;
   onConfirm: (changes: Partial<WorkOrder>) => void;
 }) {
@@ -363,7 +363,7 @@ export function RecordWorkOrderDialog({
                   {formatKg(weightKg)}
                 </span>{" "}
                 <span className="text-muted-foreground text-xs">
-                  —{" "}
+                  -{" "}
                   {wo.method === "pump-out"
                     ? "from the tanker meter."
                     : "estimated now; replaced by the route's weighbridge ticket."}
@@ -371,7 +371,7 @@ export function RecordWorkOrderDialog({
               </p>
             ) : (
               <Field
-                label={`Net weight (kg) — ${WEIGHT_SOURCE[weightSource].label.toLowerCase()}`}
+                label={`Net weight (kg): ${WEIGHT_SOURCE[weightSource].label.toLowerCase()}`}
                 htmlFor={`${id}-kg`}
                 hint={`Estimate ${formatKg(wo.weightEstKg)}`}
               >
@@ -428,7 +428,7 @@ export function RecordWorkOrderDialog({
   );
 }
 
-/** Add a work order to the visit — planned, or picked up on site. */
+/** Add a work order to the visit: planned, or picked up on site. */
 export function AddWorkOrderDialog({
   open,
   onOpenChange,

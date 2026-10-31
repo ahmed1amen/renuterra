@@ -314,7 +314,7 @@ export default function ServiceItems() {
                             {WEIGHT_SOURCE[item.weightSource].label}
                           </span>
                         ) : (
-                          <span className="text-muted-foreground">—</span>
+                          <span className="text-muted-foreground">-</span>
                         )}
                       </TableCell>
                       <TableCell>
@@ -328,7 +328,7 @@ export default function ServiceItems() {
                           {!item.requiresSeals &&
                           !item.requiresConsignmentNote ? (
                             <span className="text-muted-foreground text-sm">
-                              —
+                              -
                             </span>
                           ) : null}
                         </span>

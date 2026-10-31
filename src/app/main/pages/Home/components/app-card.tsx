@@ -84,7 +84,7 @@ export function AppCard({
           onClick={() =>
             toast(`${app.name} isn't built yet`, {
               description:
-                "It's on the platform map — this tile is a placeholder.",
+                "It's on the platform map: this tile is a placeholder.",
             })
           }
           className="flex flex-col items-center gap-2.5 outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-3 focus-visible:after:ring-ring/50"

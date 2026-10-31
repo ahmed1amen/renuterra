@@ -104,7 +104,7 @@ export type Technician = {
   skills: string[];
   /** Drivers can be a route's primary; loaders and trainees ride along as crew. */
   role?: "driver" | "loader";
-  /** Shift template id per weekday — what Autofill generates shifts from. */
+  /** Shift template id per weekday: what Autofill generates shifts from. */
   defaultSchedule?: Partial<Record<DayOfWeek, string>>;
   licences?: { type: LicenceType; expiresOn: string }[];
   teamId?: string | null;
@@ -117,7 +117,7 @@ export type Technician = {
 export type LicenceType = "heavy_vehicle" | "hazmat" | "medical_waste";
 
 // ---------------------------------------------------------------------------
-// Field Ops — customers, service points and appointments.
+// Field Ops: customers, service points and appointments.
 // Vocabulary and shapes follow docs/product/glossary.md and domain-model.md.
 // ---------------------------------------------------------------------------
 
@@ -312,7 +312,7 @@ export type ServiceFrequency = "daily" | "weekly" | "monthly" | "on-call";
 export type ArrivalWindow = "AM" | "PM" | "night" | "AT";
 
 /**
- * One contracted service at a service point — what recurring appointments are
+ * One contracted service at a service point: what recurring appointments are
  * generated from. Prices stay on the CRM contract; Field Ops needs quantities.
  */
 export type ServiceLine = {
@@ -325,11 +325,11 @@ export type ServiceLine = {
   window: ArrivalWindow;
   /** Tracked containers this line services. */
   containerIds: string[];
-  /** Operating company that serves and bills it — medical is GGM, hazardous GGH. */
+  /** Operating company that serves and bills it: medical is GGM, hazardous GGH. */
   entity: EntityCode;
   /**
    * When the stop may happen: before / after a time, a range, or any time.
-   * Lives on the line, not the customer — one site can have several.
+   * Lives on the line, not the customer: one site can have several.
    */
   timeWindow: TimeWindow;
   /** Overrides the route's fill-rate assumption for this line (0–1). */
@@ -388,6 +388,24 @@ export type FailedReason =
   | "service_refused"
   | "bin_not_out"
   | "contaminated";
+
+/** Why a visit moved to another day: report 3 groups missed and rescheduled stops by it. */
+export type RescheduleReason =
+  | "customer_request"
+  | "access_issue"
+  | "vehicle_full"
+  | "ran_out_of_shift"
+  | "weather"
+  | "ops_decision";
+
+/** The last time a visit moved: why, who asked, and from which day. */
+export type RescheduleRecord = {
+  reason: RescheduleReason;
+  requestedBy: "customer" | "operations";
+  /** Dubai day it was on before. */
+  fromDay: string;
+  at: string;
+};
 
 export type CancelReason =
   | "customer_request"
@@ -487,6 +505,8 @@ export type Appointment = {
   completedAt: string | null;
   failedReason: FailedReason | null;
   cancelReason: CancelReason | null;
+  /** Set when the visit was moved to another day. */
+  rescheduled?: RescheduleRecord | null;
   notes?: string;
   /** Set on a reservice: the visit it follows up. */
   originalAppointmentId?: string;
@@ -540,11 +560,11 @@ export type RouteInstanceStatus =
   | "partial"
   | "cancelled";
 
-/** How an instance's truck / driver / helper slot got filled (spec §4.3). */
+/** How an instance's truck / driver / helper slot got filled (spec section 4.3). */
 export type StaffingSource = "primary" | "backup" | "pool" | "manual";
 
 /**
- * One execution of a Route on one date and shift — what the driver works,
+ * One execution of a Route on one date and shift: what the driver works,
  * dispatch monitors and billing reconciles. Generated from the Route.
  * Id: `[RouteCode]-[YYYYMMDD]-[M|N]`.
  */
@@ -558,7 +578,7 @@ export type RouteInstance = {
   date: string;
   shiftId: RouteShiftId;
   status: RouteInstanceStatus;
-  /** The driver — `null` while the slot is unstaffed. */
+  /** The driver: `null` while the slot is unstaffed. */
   primaryServiceProId: string | null;
   crew: { serviceProId: string; role: RouteCrewRole }[];
   vehicleId: string | null;
@@ -581,6 +601,56 @@ export type RouteInstance = {
   estimatedDriveMins: number;
   lockedAt: string | null;
   lockedBy: string | null;
+  /** Set when the instance is confirmed; `undefined` before that. */
+  forecastSnapshot?: CapacitySnapshot | null;
+  /** Set when the dispatcher closes the run (spec section 6.1, R17, R18). */
+  closure?: InstanceClosure | null;
+  /** Set when the run is cancelled; the record is kept, never deleted (spec section 6.2 rule 8). */
+  cancellation?: {
+    reason: RunCancelReason;
+    note: string;
+    at: string;
+    by: string;
+  } | null;
+  /** Trips (cycles) added to resolve Over capacity, and who accepted them (R16). */
+  extraTrips?: { count: number; acceptedBy: string; at: string } | null;
+};
+
+/** Why a whole run was cancelled (spec section 6.2 rules 5 and 8). */
+export type RunCancelReason =
+  | "public_holiday"
+  | "vehicle_breakdown"
+  | "weather"
+  | "customer_closure"
+  | "no_stops"
+  | "other";
+
+/** A dated correction to a closed run: closed runs are never edited (R18). */
+export type RunAdjustment = { at: string; by: string; note: string };
+
+/**
+ * Closing a run locks its actuals and releases them to billing and costing
+ * (spec section 6.1). Every stop must be completed, missed with a reason or
+ * rescheduled first (R17).
+ */
+export type InstanceClosure = {
+  at: string;
+  /** A `User` id. */
+  by: string;
+  odometerOut: number | null;
+  odometerIn: number | null;
+  /** One per disposal site tipped at: the weighbridge ticket and its net weight. */
+  tipTickets: { facility: string; ticket: string; netKg: number | null }[];
+  /** What the run actually carried per truck limit, frozen at closure. */
+  actual: {
+    kind: SnapshotLimit["kind"];
+    unit: SnapshotLimit["unit"];
+    value: number;
+  }[];
+  /** Stops missed or rescheduled in the closing sheet. */
+  resolved: { appointmentId: string; outcome: "missed" | "rescheduled" }[];
+  note: string;
+  adjustments: RunAdjustment[];
 };
 
 /** What kind of availability a shift gives. Leave = not available that day. */
@@ -617,7 +687,7 @@ export type Shift = {
 };
 
 // ---------------------------------------------------------------------------
-// Route model — docs/product/specs/route-definition.md. A Route is a standing
+// Route model: docs/product/specs/route-definition.md. A Route is a standing
 // template; instances are generated from it per dispatch day.
 // ---------------------------------------------------------------------------
 
@@ -665,6 +735,8 @@ export type DisposalSite = {
     | "wastewater";
   /** Waste codes the site accepts. */
   wasteCodes: string[];
+  lat: number;
+  lng: number;
 };
 export type ServiceTypeDef = {
   code: ServiceTypeCode;
@@ -708,7 +780,7 @@ export type RouteShift = {
   endTime: string;
 };
 
-/** Every admin-maintained lookup list the Route model depends on (spec §7). */
+/** Every admin-maintained lookup list the Route model depends on (spec section 7). */
 export type OpsMasters = {
   entities: OperatingEntity[];
   cities: City[];
@@ -782,9 +854,59 @@ export type RouteAssignment = {
   status: "active" | "suspended";
 };
 
+/**
+ * One past visit of a service line, before the live fixtures start: the
+ * history the suggested fill rate and the forecasting assistant learn from
+ * (spec section 8.2 and section 8.5 rule 4).
+ */
+export type VisitRecord = {
+  id: string;
+  serviceLineId: string;
+  servicePointId: string;
+  serviceItemId: string;
+  /** Dubai calendar day. */
+  date: string;
+  countPlanned: number;
+  countDone: number;
+  /** empty-on-site only: the driver's average fill level, in 5% steps. */
+  fillLevelPct: number | null;
+  weightKg: number | null;
+  weightSource: WeightSource | null;
+};
+
+/** One truck limit as planned when the instance was confirmed. */
+export type SnapshotLimit = {
+  kind: "volume" | "weight" | "slots" | "visits";
+  unit: "m³" | "kg" | "slots" | "visits";
+  capacity: number;
+  forecast: number;
+  worstCase: number;
+};
+
+/**
+ * The forecast frozen at Confirm, so forecast vs actual can be measured after
+ * the run even if fill rates, the truck or the stops change later.
+ */
+export type CapacitySnapshot = {
+  at: string;
+  truckTypeId: string | null;
+  limits: SnapshotLimit[];
+  /** The binding limit's forecast utilisation, %. */
+  forecastPct: number;
+  /** Fill rate used for each stop's volume (empty-on-site stops only). */
+  fillRates: Record<string, number>;
+};
+
 export type InstanceFlag =
   | { kind: "unstaffed"; slot: string }
-  | { kind: "over-capacity"; utilisation: number }
+  | {
+      kind: "over-capacity";
+      utilisation: number;
+      /** The truck limit that is exceeded (volume, payload, slots, visits). */
+      limit?: "volume" | "weight" | "slots" | "visits";
+    }
   | { kind: "outside-window"; appointmentId: string }
   | { kind: "contract-skipped"; serviceLineId: string; reason: string }
-  | { kind: "substitute"; slot: string; source: StaffingSource };
+  | { kind: "substitute"; slot: string; source: StaffingSource }
+  /** An assigned truck or person was skipped: they fail an eligibility check (R4, R5). */
+  | { kind: "ineligible"; slot: string; assetId: string; reason: string };

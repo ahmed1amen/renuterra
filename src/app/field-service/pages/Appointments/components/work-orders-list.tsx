@@ -59,7 +59,7 @@ const STREAM_OPTIONS: ComboboxOption[] = [
 ];
 
 /**
- * Every work order across the given appointments — what was planned, done and
+ * Every work order across the given appointments: what was planned, done and
  * weighed. Rows open the appointment the work order belongs to.
  */
 export function WorkOrdersList({
@@ -278,7 +278,7 @@ function WorkOrderTableRow({
       </TableCell>
       <TableCell className="max-w-48">
         <span className="block truncate text-sm font-medium">
-          {customer ?? "—"}
+          {customer ?? "-"}
         </span>
         <span className="text-muted-foreground block truncate text-xs">
           {location}
@@ -288,12 +288,12 @@ function WorkOrderTableRow({
         <WorkOrderStatusPill status={wo.status} />
       </TableCell>
       <TableCell className="text-right font-mono text-sm whitespace-nowrap tabular-nums">
-        {wo.countDone ?? "—"} / {formatCountUnit(wo.countPlanned, wo.countUnit)}
+        {wo.countDone ?? "-"} / {formatCountUnit(wo.countPlanned, wo.countUnit)}
       </TableCell>
       <TableCell className="text-right whitespace-nowrap">
         <span className="block font-mono text-sm tabular-nums">
           {wo.weightKg === null
-            ? `est. ${wo.weightEstKg ? formatKg(wo.weightEstKg) : "—"}`
+            ? `est. ${wo.weightEstKg ? formatKg(wo.weightEstKg) : "-"}`
             : formatKg(wo.weightKg)}
         </span>
         {wo.weightSource ? (

@@ -37,7 +37,7 @@ export function filterThreads(
   return threads.filter((t) => t.root.resolved === (filter === "resolved"));
 }
 
-/** Unresolved top-level comments — the number shown on badges. */
+/** Unresolved top-level comments: the number shown on badges. */
 export function openThreadCount(comments: PageComment[]): number {
   return groupThreads(comments).filter((t) => !t.root.resolved).length;
 }

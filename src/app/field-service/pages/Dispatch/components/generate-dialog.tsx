@@ -26,7 +26,7 @@ import { Field, GRADE_TONE } from "../../../components";
 import { addDays, TODAY, toDayKey } from "../../../utils";
 import type { GenerationResult } from "../hooks";
 
-/** Spec §6.2.6: D-1 by default, pre-generate up to 7 days ahead. */
+/** Spec section 6.2.6: D-1 by default, pre-generate up to 7 days ahead. */
 export const HORIZON = Array.from({ length: 7 }, (_, i) =>
   toDayKey(addDays(TODAY, i + 1)),
 );
@@ -248,7 +248,7 @@ function ResultView({
     {
       label: "Already generated",
       value: result.alreadyGenerated,
-      hint: "Skipped — an instance existed",
+      hint: "Skipped: an instance existed",
     },
     {
       label: "Stops",
@@ -287,7 +287,7 @@ function ResultView({
     {
       label: "Nothing due",
       value: result.nothingDue,
-      hint: "Routes due with no service line due — no instance made",
+      hint: "Routes due with no service line due: no instance made",
     },
   ];
 

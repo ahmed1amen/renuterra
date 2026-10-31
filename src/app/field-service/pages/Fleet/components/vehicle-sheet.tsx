@@ -116,13 +116,13 @@ function SheetBody({ row }: { row: FleetRow }) {
           <h3 className="text-sm font-semibold">Truck</h3>
           <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
             <Fact label="Truck type">
-              {truckType?.name ?? "—"}
+              {truckType?.name ?? "-"}
               <span className="text-muted-foreground ms-1.5 font-mono text-xs whitespace-nowrap">
                 {vehicle.truckTypeId}
               </span>
             </Fact>
             <Fact label="Service types">
-              {truckType?.serviceTypes.join(", ") ?? "—"}
+              {truckType?.serviceTypes.join(", ") ?? "-"}
             </Fact>
             <Fact label="Payload">{formatKg(vehicle.capacityKg)}</Fact>
             {body ? (
@@ -266,7 +266,7 @@ function SheetBody({ row }: { row: FleetRow }) {
               `Registration renewal requested for ${vehicle.plate}`,
               {
                 description:
-                  "Prototype — the fleet team would upload the new Mulkiya.",
+                  "Prototype: the fleet team would upload the new Mulkiya.",
               },
             )
           }

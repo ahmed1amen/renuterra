@@ -46,7 +46,7 @@ export function RouteFacts({
       </CardHeader>
       <CardContent>
         <dl className="space-y-3">
-          <Fact label="Owner">{owner?.name ?? "—"}</Fact>
+          <Fact label="Owner">{owner?.name ?? "-"}</Fact>
           <Fact label="Entity">
             {m.entities.find((e) => e.code === route.entity)?.name ??
               route.entity}
@@ -58,7 +58,7 @@ export function RouteFacts({
             ) : null}
           </Fact>
           <Fact label="Start depot">
-            {m.depots.find((d) => d.id === route.depotId)?.name ?? "—"}
+            {m.depots.find((d) => d.id === route.depotId)?.name ?? "-"}
           </Fact>
           <Fact label="Disposal sites">
             {route.disposalSiteIds.length ? (
@@ -83,7 +83,7 @@ export function RouteFacts({
                 })}
               </ul>
             ) : (
-              "—"
+              "-"
             )}
           </Fact>
           <Fact label="Valid">

@@ -190,7 +190,7 @@ function Detail({ pro }: { pro: Technician }) {
               size="sm"
               onClick={() =>
                 toast.info(`Edit ${pro.name}`, {
-                  description: "Prototype — profile editing isn't built yet.",
+                  description: "Prototype: profile editing isn't built yet.",
                 })
               }
             >
@@ -240,7 +240,7 @@ function Detail({ pro }: { pro: Technician }) {
         />
         <KpiCard
           label="Licence status"
-          value={worst ? LICENCE_KPI[worst.state.tone] : "—"}
+          value={worst ? LICENCE_KPI[worst.state.tone] : "-"}
           hint={
             worst
               ? worst.state.tone !== "success"
@@ -365,7 +365,7 @@ function Detail({ pro }: { pro: Technician }) {
                 {pro.employeeId ? (
                   <span className="font-mono">{pro.employeeId}</span>
                 ) : (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">-</span>
                 )}
               </Fact>
               <Fact label="Entity">
@@ -377,7 +377,7 @@ function Detail({ pro }: { pro: Technician }) {
                     </span>
                   </>
                 ) : (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">-</span>
                 )}
               </Fact>
               <Fact label="Zone">{pro.zone}</Fact>

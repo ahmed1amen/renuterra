@@ -176,7 +176,7 @@ export function CustomerStep({
   );
 }
 
-/** Where the crew actually goes — the service point this agreement covers. */
+/** Where the crew actually goes: the service point this agreement covers. */
 export function SiteStep({ draft, update }: StepProps) {
   const id = useId();
 
@@ -483,25 +483,25 @@ export function ReviewStep({ draft }: { draft: AgreementDraft }) {
   return (
     <div className="space-y-4">
       <dl className="grid gap-3 sm:grid-cols-2">
-        <Detail label="Customer" value={draft.customer.company || "—"} />
-        <Detail label="Contact" value={draft.customer.contactName || "—"} />
+        <Detail label="Customer" value={draft.customer.company || "-"} />
+        <Detail label="Contact" value={draft.customer.contactName || "-"} />
         <Detail
           label="Site"
           value={
-            draft.site.name ? `${draft.site.name} · ${draft.site.zone}` : "—"
+            draft.site.name ? `${draft.site.name} · ${draft.site.zone}` : "-"
           }
         />
-        <Detail label="Address" value={draft.site.address || "—"} />
+        <Detail label="Address" value={draft.site.address || "-"} />
         <Detail
           label="Starts"
-          value={draft.schedule.startDate || "—"}
+          value={draft.schedule.startDate || "-"}
           hint={`${WEEKDAYS[draft.schedule.preferredDay]}s, ${draft.schedule.window}`}
         />
         <Detail
           label="Billing"
           value={
             BILLING_CYCLES.find((c) => c.id === draft.terms.billing)?.label ??
-            "—"
+            "-"
           }
           hint={draft.terms.poNumber ? `PO ${draft.terms.poNumber}` : undefined}
         />

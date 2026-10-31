@@ -123,7 +123,7 @@ export function RunsWeekCard({ days }: { days: DayCount[] | null }) {
                   />
                 </div>
                 <span className="text-end font-mono text-xs tabular-nums">
-                  {d.count || (d.day > TODAY_KEY ? "—" : "0")}
+                  {d.count || (d.day > TODAY_KEY ? "-" : "0")}
                 </span>
               </li>
             ))}

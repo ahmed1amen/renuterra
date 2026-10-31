@@ -16,7 +16,7 @@ import { type NavAction, type NavItem, navForPath } from "./nav";
 const CURRENT_USER = USERS[0];
 
 /**
- * Desktop navigation rail. The nav swaps per app — `navForPath` picks the
+ * Desktop navigation rail. The nav swaps per app: `navForPath` picks the
  * entry that owns the current pathname, so entering an app replaces the
  * platform links with that app's own. Collapses to icons only; the choice
  * persists in localStorage (prototype-grade persistence, no backend).
@@ -193,7 +193,7 @@ export function AppSidebar() {
 }
 
 /**
- * The app's primary action, sitting above its nav — full width when the rail
+ * The app's primary action, sitting above its nav: full width when the rail
  * is open, an icon square when it is collapsed.
  */
 function ActionButton({
@@ -252,7 +252,7 @@ function ActionButton({
       onClick={() =>
         toast(`${action.label} isn't built yet`, {
           description:
-            "It's on the platform map — this button is a placeholder.",
+            "It's on the platform map: this button is a placeholder.",
         })
       }
       className={className}

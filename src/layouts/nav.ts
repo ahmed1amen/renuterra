@@ -31,7 +31,7 @@ export type NavItem = {
 export type NavGroup = { label?: string; items: NavItem[] };
 
 /**
- * The app's primary action, pinned above its nav — the thing the sidebar is
+ * The app's primary action, pinned above its nav: the thing the sidebar is
  * there to start. Without an `href` it explains itself instead, like the
  * launcher's placeholder tiles.
  */
@@ -74,7 +74,7 @@ export const PLATFORM_NAV: AppNav = {
 
 /**
  * One entry per app that owns its own sidebar. Order matters only for
- * overlapping base paths — the first match wins.
+ * overlapping base paths: the first match wins.
  */
 export const APP_NAVS: AppNav[] = [
   {
@@ -105,6 +105,11 @@ export const APP_NAVS: AppNav[] = [
             label: "Shift board",
             href: "/field-service/shift-board",
             icon: CalendarRange,
+          },
+          {
+            label: "Reports",
+            href: "/field-service/reports",
+            icon: BarChart3,
           },
         ],
       },

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Inbox, Info, Layers } from "lucide-react";
+import { ChevronDown, Factory, Inbox, Info, Layers } from "lucide-react";
 import {
   cloneElement,
   type ReactElement,
@@ -8,20 +8,25 @@ import {
   useState,
 } from "react";
 import { StreamSwatch, WASTE_STREAMS } from "@/components/shared";
-import { useDirectory } from "@/features/field-service";
+import { useDirectory, useOpsMasters } from "@/features/field-service";
 import { cn } from "@/lib/utils";
 import type { Appointment, WasteStreamId } from "@/mocks";
 import {
+  DepotIcon,
+  DISPOSAL_KIND,
+  FacilityMarker,
   MapLegend,
   OsmMap,
   type RouteLine,
   RouteLines,
   type RoutePlan,
   StopPin,
+  type TipLeg,
+  TipLegs,
   VehicleMarker,
 } from "../../../components";
 
-/** Dubai — where the service points in the fixtures are. */
+/** Dubai: where the service points in the fixtures are. */
 const MAP_CENTER = { lat: 25.14, lng: 55.23 };
 
 const OPEN_ON_ROUTE = ["scheduled", "confirmed", "en-route", "in-progress"];
@@ -57,7 +62,14 @@ export function DispatchMap({
   onSelectAppointment: (appointmentId: string | null) => void;
 }) {
   const directory = useDirectory();
+  const masters = useOpsMasters().data;
   const [legendOpen, setLegendOpen] = useState(false);
+  const [showSites, setShowSites] = useState(true);
+  const selectedPlan = plans.find((p) => p.route.id === selectedRouteId);
+  /** The selected route's depot and disposal sites stand out; the rest dim. */
+  const isOwnSite = (id: string) =>
+    selectedPlan?.template?.depotId === id ||
+    Boolean(selectedPlan?.template?.disposalSiteIds.includes(id));
   const isDimmed = (routeId: string | null) =>
     selectedRouteId !== null && routeId !== null && routeId !== selectedRouteId;
 
@@ -99,6 +111,30 @@ export function DispatchMap({
             };
           });
 
+        // Each tipping trip: from the stop before it to the facility.
+        const legs = plans.flatMap<TipLeg>((plan) =>
+          plan.route.tippingTrips.flatMap((trip) => {
+            const after = plan.stops.find(
+              (a) => a.id === trip.afterAppointmentId,
+            );
+            const site = masters?.disposalSites.find(
+              (s) => s.name === trip.facility,
+            );
+            const from = after ? at(after) : null;
+            return from && site
+              ? [
+                  {
+                    id: trip.id,
+                    stroke: plan.colors.stroke,
+                    from,
+                    to: toScreen(site),
+                    dimmed: isDimmed(plan.route.id),
+                  },
+                ]
+              : [];
+          }),
+        );
+
         const pin = (apt: Appointment, plan?: RoutePlan, stop?: number) => {
           const point = at(apt);
           if (!point) return null;
@@ -133,6 +169,43 @@ export function DispatchMap({
           <>
             {/* The planned run for each route, drawn beneath the pins. */}
             <RouteLines lines={lines} />
+            {showSites ? <TipLegs legs={legs} /> : null}
+
+            {showSites && masters
+              ? [
+                  ...masters.depots.map((depot) => (
+                    <span
+                      key={depot.id}
+                      className="pointer-events-auto absolute"
+                      style={toPosition(toScreen(depot))}
+                    >
+                      <FacilityMarker
+                        icon={DepotIcon}
+                        label={`${depot.name} · Depot`}
+                        highlighted={isOwnSite(depot.id)}
+                        dimmed={Boolean(selectedPlan) && !isOwnSite(depot.id)}
+                      />
+                    </span>
+                  )),
+                  ...masters.disposalSites.map((site) => {
+                    const kind = DISPOSAL_KIND[site.kind];
+                    return (
+                      <span
+                        key={site.id}
+                        className="pointer-events-auto absolute"
+                        style={toPosition(toScreen(site))}
+                      >
+                        <FacilityMarker
+                          icon={kind.icon}
+                          label={`${site.name} · ${kind.label} · accepts ${site.wasteCodes.join(", ")}`}
+                          highlighted={isOwnSite(site.id)}
+                          dimmed={Boolean(selectedPlan) && !isOwnSite(site.id)}
+                        />
+                      </span>
+                    );
+                  }),
+                ]
+              : null}
 
             {isToday
               ? plans.map((plan) => {
@@ -191,6 +264,22 @@ export function DispatchMap({
                     {pinCount === 1 ? "stop" : "stops"}
                   </span>
                 </MapPill>
+                <MapPill
+                  render={
+                    <button
+                      type="button"
+                      aria-pressed={showSites}
+                      onClick={() => setShowSites((v) => !v)}
+                    />
+                  }
+                  className={cn(
+                    "hover:bg-muted",
+                    !showSites && "text-muted-foreground",
+                  )}
+                >
+                  <Factory className="size-4" />
+                  Sites
+                </MapPill>
               </div>
               <MapPill
                 render={<button type="button" onClick={onShowBacklog} />}
@@ -238,10 +327,15 @@ export function DispatchMap({
   );
 }
 
+const toPosition = (point: { x: number; y: number }) => ({
+  left: point.x,
+  top: point.y,
+});
+
 const pillSurface =
   "border-border bg-card/95 pointer-events-auto border shadow-md backdrop-blur";
 
-/** Floating surface for a map control — same height as a compact button. */
+/** Floating surface for a map control: same height as a compact button. */
 function MapPill({
   className,
   children,

@@ -67,7 +67,7 @@ export function ActivateDialog({
         <RuleCheckList checks={checks} />
         {route.serviceLineIds.length === 0 ? (
           <p className="text-warning text-sm">
-            No service lines attached yet — instances will have no stops.
+            No service lines attached yet: instances will have no stops.
           </p>
         ) : null}
         <DialogFooter>

@@ -107,7 +107,7 @@ function BookingForm({
   const [arrivalWindow, setArrivalWindow] = useState<ArrivalWindow | null>(
     null,
   );
-  /** `null` until the user picks — then the default route's run is proposed. */
+  /** `null` until the user picks: then the default route's run is proposed. */
   const [routeChoice, setRouteChoice] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
 
@@ -337,14 +337,14 @@ function BookingForm({
             htmlFor={`${id}-route`}
             hint={
               defaultInstance && defaultRoute
-                ? `Default route ${defaultRoute.code} runs this day — add to its run.`
+                ? `Default route ${defaultRoute.code} runs this day: add to its run.`
                 : defaultRun && defaultRoute
-                  ? `Default route ${defaultRoute.code}'s run is locked — pick another or leave it in the backlog.`
+                  ? `Default route ${defaultRoute.code}'s run is locked: pick another or leave it in the backlog.`
                   : defaultRoute
-                    ? `Default route ${defaultRoute.code} isn't generated for this day — it waits in the backlog.`
+                    ? `Default route ${defaultRoute.code} isn't generated for this day: it waits in the backlog.`
                     : dayRoutes.length
                       ? "Leave it in the backlog to let dispatch place it."
-                      : "No routes that day yet — it goes to the backlog."
+                      : "No routes that day yet: it goes to the backlog."
             }
           >
             <Combobox

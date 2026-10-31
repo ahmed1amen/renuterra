@@ -58,7 +58,7 @@ export function WorkOrderStatusPill({ status }: { status: WorkOrderStatus }) {
   );
 }
 
-/** What each handling method means on the ground — shown in the catalogue and on work orders. */
+/** What each handling method means on the ground: shown in the catalogue and on work orders. */
 export const HANDLING_METHOD: Record<
   HandlingMethod,
   { label: string; icon: LucideIcon; description: string }

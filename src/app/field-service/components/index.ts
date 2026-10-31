@@ -6,6 +6,7 @@ export {
   CANCEL_REASON,
   CLOSED_STATUSES,
   FAILED_REASON,
+  RESCHEDULE_REASON,
   SERVICE_TYPE_LABEL,
   SOURCE_LABEL,
   WINDOW_HOURS,
@@ -25,20 +26,26 @@ export { DateStrip } from "./date-strip";
 export {
   appointmentLoadKg,
   type BoardActions,
+  CANCELLABLE_STATUSES,
+  type CloseRunInput,
   CREW_ROLE_LABEL,
   canOptimize,
   confirmBlockers,
   type DefaultRoute,
+  type EligibilityIssue,
   fitsVehicle,
   isMovable,
   METHOD_VEHICLE_CLASSES,
   type OpenSlot,
   PLANNABLE_STATUSES,
+  RESOLVED_STATUSES,
   type RoutePlan,
+  RUN_CANCEL_REASON,
   requiredClasses,
   SHIFT_LABEL,
   type SlotKind,
   type StaffOption,
+  type StopResolution,
   slotKind,
   slotLabel,
   withoutSlotFlags,
@@ -46,10 +53,15 @@ export {
 export { ChoiceChips, Field } from "./form-field";
 export { flagChips, InstanceFlagChips } from "./instance-flags";
 export {
+  DepotIcon,
+  DISPOSAL_KIND,
+  FacilityMarker,
   MapLegend,
   type RouteLine,
   RouteLines,
   StopPin,
+  type TipLeg,
+  TipLegs,
   VehicleMarker,
 } from "./map-markers";
 export { MonthCalendar } from "./month-calendar";
@@ -60,6 +72,12 @@ export {
   ProjectedVisitsTable,
   ProjectionBadge,
 } from "./projected-visits";
+export {
+  BarList,
+  BulletColumns,
+  type BulletRow,
+  Columns,
+} from "./report-charts";
 export { RouteFormDialog } from "./route-form-dialog";
 export {
   logRouteEvent,
@@ -96,6 +114,7 @@ export {
   GRADE_TONE,
   RouteScoreBadge,
   RouteScoreBreakdown,
+  SCORE_SCOPE,
 } from "./route-score-badge";
 export {
   AssignRouteMenu,

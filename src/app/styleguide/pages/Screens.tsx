@@ -366,7 +366,7 @@ function QuoteDetail() {
         <div>
           <div className="flex items-center gap-2.5">
             <h3 className="text-2xl font-semibold tracking-[-.02em]">
-              Sparklo — Recyclable collection, 12 RVM sites
+              Sparklo: Recyclable collection, 12 RVM sites
             </h3>
             <StatusPill tone="warning" dot>
               Awaiting client
@@ -540,8 +540,7 @@ function QuoteDetail() {
             <Leaf className="mt-px size-4 shrink-0" aria-hidden />
             <div>
               <span className="font-semibold">Est. 38 t/year diverted</span>{" "}
-              from landfill if accepted — shows on the client's impact
-              dashboard.
+              from landfill if accepted: shows on the client's impact dashboard.
             </div>
           </div>
         </div>

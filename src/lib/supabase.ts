@@ -5,7 +5,7 @@ let client: SupabaseClient | null | undefined;
 
 /**
  * Browser Supabase client for prototype commenting. Returns `null` when the
- * env vars are missing — callers hide the comment UI and the app behaves as if
+ * env vars are missing: callers hide the comment UI and the app behaves as if
  * the feature does not exist.
  */
 export function getSupabase(): SupabaseClient | null {

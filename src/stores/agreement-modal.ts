@@ -5,7 +5,7 @@ import { create } from "zustand";
 /**
  * Whether the new-agreement wizard is open. It lives outside the Sales app so
  * the sidebar's primary action can open it without the layout importing a
- * screen — the Sales pages mount the modal itself.
+ * screen: the Sales pages mount the modal itself.
  */
 type AgreementModalState = {
   open: boolean;

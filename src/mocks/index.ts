@@ -1,7 +1,7 @@
 /**
  * Typed fake data for the app screens and tests.
  *
- * Every fixture is a JSON file in `./data` — edit those, not this. Nothing here
+ * Every fixture is a JSON file in `./data`: edit those, not this. Nothing here
  * talks to the network; `mockFetch` only adds latency and honours the active
  * `MockScenario` so screens can demo their loading/empty/error UI.
  */
@@ -31,3 +31,4 @@ export { findTechnician, TECHNICIANS } from "./technicians";
 export type * from "./types";
 export { findUser, USERS } from "./users";
 export { VEHICLES } from "./vehicles";
+export { VISIT_HISTORY } from "./visit-history";

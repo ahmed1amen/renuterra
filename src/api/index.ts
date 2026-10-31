@@ -1,5 +1,5 @@
 /**
- * Api — typed API client surface.
+ * Api: typed API client surface.
  *
  * Usage:
  *   import { Api } from '@/api';

@@ -22,13 +22,13 @@ export default function BreadcrumbsPage() {
             The trail back up the hierarchy, 14px, muted links with a{" "}
             <Code>ChevronRight</Code> separator; the last crumb is the current
             page and never a link. Pass <Code>breadcrumbs</Code> to{" "}
-            <Code>PageHeader</Code> — it sits above the title and inherits the
+            <Code>PageHeader</Code>: it sits above the title and inherits the
             page gutters.
           </>
         }
       />
 
-      <Demo title="Default" hint="two levels — the Dashboard recipe">
+      <Demo title="Default" hint="two levels: the Dashboard recipe">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -81,9 +81,7 @@ export default function BreadcrumbsPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">
-                Site 4 — Al Quoz
-              </BreadcrumbLink>
+              <BreadcrumbLink href="/dashboard">Site 4: Al Quoz</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -93,7 +91,7 @@ export default function BreadcrumbsPage() {
         </Breadcrumb>
       </Demo>
 
-      <Demo title="Custom separator" hint="slash — use sparingly, one per app">
+      <Demo title="Custom separator" hint="slash: use sparingly, one per app">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -118,8 +116,8 @@ export default function BreadcrumbsPage() {
       </Demo>
 
       <Note title="When to use">
-        Show breadcrumbs on any screen more than one level below a section root
-        — detail pages, nested settings, drill-downs from a table. Skip them on
+        Show breadcrumbs on any screen more than one level below a section root:
+        detail pages, nested settings, drill-downs from a table. Skip them on
         top-level screens, where the sidebar already answers “where am I”. Keep
         labels the same words as the item they point at, and never make the
         current page clickable.

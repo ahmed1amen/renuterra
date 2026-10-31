@@ -6,10 +6,20 @@ import { Suspense, useCallback, useState } from "react";
 import { EmptyState, ErrorState } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import type { Appointment, WasteStreamId } from "@/mocks";
-import { canOptimize, RouteSidebar, RouteTimeline } from "../../components";
+import {
+  CANCELLABLE_STATUSES,
+  canOptimize,
+  RESOLVED_STATUSES,
+  RouteSidebar,
+  RouteTimeline,
+} from "../../components";
 import { parseDayKey, TODAY, toDayKey } from "../../utils";
 import {
+  AdjustmentDialog,
   BoardSkeleton,
+  CancelRunDialog,
+  type CancelTarget,
+  CloseRunSheet,
   DispatchHeader,
   DispatchMap,
   formatDayKey,
@@ -60,8 +70,14 @@ function Board() {
     string | null
   >(null);
   const [selectedRouteId, setSelectedRoute] = useState<string | null>(null);
-  const [tab, setTab] = useState<"routes" | "backlog">("routes");
+  const [tab, setTab] = useState<"routes" | "backlog">(
+    searchParams.get("tab") === "backlog" ? "backlog" : "routes",
+  );
   const [generating, setGenerating] = useState(false);
+  /** The run whose closing sheet is open, and the closed run being adjusted. */
+  const [closingId, setClosingId] = useState<string | null>(null);
+  const [adjustingId, setAdjustingId] = useState<string | null>(null);
+  const [cancelTarget, setCancelTarget] = useState<CancelTarget | null>(null);
   const [result, setResult] = useState<GenerationResult | null>(null);
 
   const dayKey = toDayKey(date);
@@ -94,6 +110,26 @@ function Board() {
   const ready = plans.filter(
     (p) => p.plannable && !p.locked && p.blockers.length === 0,
   ).length;
+  const readyToClose = plans.filter((p) => p.closable).length;
+  const cancellable = plans.filter(
+    (p) => !p.closed && CANCELLABLE_STATUSES.includes(p.route.status),
+  );
+  const openStopsOf = (list: typeof plans) =>
+    list.reduce(
+      (n, p) =>
+        n + p.stops.filter((a) => !RESOLVED_STATUSES.includes(a.status)).length,
+      0,
+    );
+  const cancelRun = (routeId: string) => {
+    const plan = plans.find((p) => p.route.id === routeId);
+    if (plan)
+      setCancelTarget({
+        kind: "run",
+        routeIds: [routeId],
+        name: plan.route.name,
+        openStops: openStopsOf([plan]),
+      });
+  };
 
   const selectedPlan = plans.find((p) =>
     p.stops.some((a) => a.id === selectedAppointmentId),
@@ -210,11 +246,24 @@ function Board() {
               actions={actions}
               defaultRoutes={defaultRoutes}
               routesEmpty={emptyDay}
+              onCloseRun={setClosingId}
+              onAdjust={setAdjustingId}
+              onCancelRun={cancelRun}
               top={
                 <>
                   <SidebarActions
                     routes={plans.length}
                     ready={ready}
+                    readyToClose={readyToClose}
+                    cancellable={cancellable.length}
+                    onCancelDay={() =>
+                      setCancelTarget({
+                        kind: "day",
+                        routeIds: cancellable.map((p) => p.route.id),
+                        dayLabel: formatDayKey(dayKey),
+                        openStops: openStopsOf(cancellable),
+                      })
+                    }
                     backlog={backlog.length}
                     optimizable={plans.filter(canOptimize).length}
                     onPlaceBacklog={placeBacklog}
@@ -237,6 +286,26 @@ function Board() {
             />
           </div>
 
+          <CloseRunSheet
+            plan={plans.find((p) => p.route.id === closingId) ?? null}
+            onOpenChange={(open) => !open && setClosingId(null)}
+            onClose={actions.closeRun}
+          />
+          <CancelRunDialog
+            key={
+              cancelTarget
+                ? `${cancelTarget.kind}-${cancelTarget.routeIds.join()}`
+                : "none"
+            }
+            target={cancelTarget}
+            onOpenChange={(open) => !open && setCancelTarget(null)}
+            onConfirm={actions.cancelRuns}
+          />
+          <AdjustmentDialog
+            plan={plans.find((p) => p.route.id === adjustingId) ?? null}
+            onOpenChange={(open) => !open && setAdjustingId(null)}
+            onAdd={actions.addAdjustment}
+          />
           <GenerateDialog
             open={generating}
             onOpenChange={(open) => {

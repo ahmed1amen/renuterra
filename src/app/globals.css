@@ -115,12 +115,12 @@
   /* Interactive */
   --primary: #051683; /* brand navy */
   --primary-hover: #030d4d;
-  --primary-foreground: #ffffff; /* white on navy — 13:1 */
+  --primary-foreground: #ffffff; /* white on navy: 13:1 */
   --secondary: #f0f1ed; /* brand whitesmoke */
   --secondary-foreground: #404040;
   --muted: #f0f1ed;
   --muted-foreground: #737870;
-  --accent: #e4e5f4; /* lavender — navy tint for hovers, selected rows */
+  --accent: #e4e5f4; /* lavender: navy tint for hovers, selected rows */
   --accent-foreground: #051683;
   --destructive: #d9463e;
   --destructive-bg: #fbe4e2;
@@ -129,7 +129,7 @@
   --ring: #051683;
 
   /* Charts */
-  --chart-1: #051683; /* brand navy — primary series */
+  --chart-1: #051683; /* brand navy: primary series */
   --chart-2: #68c828; /* brand limegreen */
   --chart-3: #9b97c7; /* brand lightslategray */
   --chart-4: #b8f800;
@@ -145,7 +145,7 @@
   --sidebar-border: #ececea;
   --sidebar-ring: #051683;
 
-  /* Brand ramp — lime */
+  /* Brand ramp: lime */
   --lime-50: #f6fee6;
   --lime-100: #eaf8df;
   --lime-200: #d6f5b0;
@@ -157,7 +157,7 @@
   --lime-800: #2e5a12;
   --lime-900: #1d3a0b;
 
-  /* Brand ramp — navy */
+  /* Brand ramp: navy */
   --navy-50: #eef0fa;
   --navy-100: #e4e5f4; /* brand lavender */
   --navy-200: #c9cdf5;
@@ -192,7 +192,7 @@
   --popover: #1c2016;
   --popover-foreground: #f1f2ea;
 
-  --primary: #8b97ea; /* lifted navy — #051683 disappears on a dark ground */
+  --primary: #8b97ea; /* lifted navy: #051683 disappears on a dark ground */
   --primary-hover: #9da8f0;
   --primary-foreground: #050a33;
   --secondary: #262b1f;
@@ -237,7 +237,7 @@
   --stream-cd: #9b97c7;
 }
 
-/* intl-tel-input (PhoneInput) — skin the widget with theme tokens so both
+/* intl-tel-input (PhoneInput): skin the widget with theme tokens so both
    themes stay correct. Structural rules live in the vendored stylesheet. */
 .phone-input .iti {
   width: 100%;

@@ -227,6 +227,8 @@ export function useDashboard() {
       runsToday: todayInstances.length,
       runsByStatus: countByStatus(todayInstances),
       unstaffedAhead: unstaffedAhead.length,
+      /** The first day with an unstaffed run, for the KPI's link. */
+      firstUnstaffedDay: unstaffedAhead[0]?.date ?? null,
       unstaffedToday: unstaffedAhead.filter((i) => i.date === TODAY_KEY).length,
       stopsDone: todayStops.filter(isDone).length,
       stopsPlanned: todayStops.length,

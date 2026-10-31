@@ -76,7 +76,7 @@ export default function StatesPage() {
             Permit expires in 14 days
           </AlertTitle>
           <AlertDescription className="text-current opacity-85">
-            Dubai Municipality — medical waste, site 2.
+            Dubai Municipality: medical waste, site 2.
           </AlertDescription>
         </Alert>
         <Alert className="bg-info-bg text-info border-info/25 rounded-lg px-3.5 py-3">
@@ -85,7 +85,7 @@ export default function StatesPage() {
             Route DXB-07 rescheduled
           </AlertTitle>
           <AlertDescription className="text-current opacity-85">
-            Driver change — new ETA 07:15.
+            Driver change: new ETA 07:15.
           </AlertDescription>
         </Alert>
       </div>

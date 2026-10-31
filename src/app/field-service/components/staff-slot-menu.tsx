@@ -14,7 +14,7 @@ import {
 import { type OpenSlot, slotLabel } from "./dispatch-meta";
 
 /**
- * "Staff…" for one empty slot — the spec's "resolve manually" loop. Eligible
+ * "Staff…" for one empty slot: the spec's "resolve manually" loop. Eligible
  * assets first; the rest are greyed with the reason they can't go.
  */
 export function StaffSlotMenu({

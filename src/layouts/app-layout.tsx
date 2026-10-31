@@ -14,7 +14,7 @@ export function AppLayout({
   fullWidth = false,
 }: {
   children: ReactNode;
-  /** Drop the reading-width container and page gutters — for map/board screens. */
+  /** Drop the reading-width container and page gutters: for map/board screens. */
   fullWidth?: boolean;
 }) {
   return (

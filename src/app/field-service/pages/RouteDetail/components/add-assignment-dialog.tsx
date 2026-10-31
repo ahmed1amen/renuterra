@@ -45,7 +45,7 @@ const ROLES: { id: Role; label: string }[] = [
 ];
 
 /**
- * Staff the route with one asset. The §4.2 eligibility checks run live and
+ * Staff the route with one asset. The section 4.2 eligibility checks run live and
  * a failing block-severity check stops the save, naming the rule.
  * A new primary truck or driver demotes the current one to backup rank 1.
  */

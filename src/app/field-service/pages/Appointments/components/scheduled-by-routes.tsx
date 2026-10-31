@@ -9,7 +9,7 @@ import { formatDayKey, ProjectedVisitsTable } from "../../../components";
 
 /**
  * Collapsed list of route-scheduled visits whose day hasn't been generated
- * on Dispatch — they become appointments only once it is.
+ * on Dispatch: they become appointments only once it is.
  */
 export function ScheduledByRoutes({ visits }: { visits: ProjectedVisit[] }) {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export function ScheduledByRoutes({ visits }: { visits: ProjectedVisit[] }) {
           )}
           aria-hidden
         />
-        Scheduled by routes — not generated yet
+        Scheduled by routes: not generated yet
         <span className="text-muted-foreground font-mono text-[11px] tabular-nums">
           ({visits.length})
         </span>

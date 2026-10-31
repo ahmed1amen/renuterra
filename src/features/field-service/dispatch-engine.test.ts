@@ -17,7 +17,13 @@ import { generateInstances } from "./dispatch-engine";
 import { projectVisits } from "./projected-visits";
 import { deriveInstanceStatus } from "./route-instance-store";
 import { optimizeInstance } from "./route-optimizer";
-import { activationChecks, attachChecks, isRouteDue } from "./route-rules";
+import {
+  activationChecks,
+  assignmentChecks,
+  attachChecks,
+  isRouteDue,
+  weekdayOfDay,
+} from "./route-rules";
 import { gradeOf, scoreInstance, scoreRoute } from "./route-score";
 
 const ctx = {
@@ -30,6 +36,15 @@ const ctx = {
   items: SERVICE_ITEMS,
   containerTypes: CONTAINER_TYPES,
 };
+const attachableDriverBlock = (route: Route, pro: string, day: string) =>
+  assignmentChecks(
+    route,
+    "driver",
+    pro,
+    "backup",
+    [weekdayOfDay(day)],
+    ctx,
+  ).find((c) => !c.ok && c.severity === "block");
 const shiftOf = (pro: string, day: string) =>
   SHIFTS.find((s) => s.serviceProId === pro && s.date === day);
 
@@ -41,7 +56,7 @@ function days(from: string, count: number) {
   );
 }
 
-describe("route schedules (spec §10 acceptance test)", () => {
+describe("route schedules (spec section 10 acceptance test)", () => {
   const base = ROUTES[0];
   const make = (schedule: Route["schedule"]): Route => ({
     ...base,
@@ -84,6 +99,25 @@ describe("generateInstances", () => {
     expect(run.instances.length + run.summary.nothingDue).toBe(due);
     expect(run.instances.every((i) => i.appointmentIds.length > 0)).toBe(true);
     expect(run.instances.every((i) => i.routeId?.startsWith("rt_"))).toBe(true);
+  });
+
+  it("never dispatches an assigned driver who fails a blocking check (R5)", () => {
+    for (const i of run.instances) {
+      const route = ROUTES.find((r) => r.id === i.routeId);
+      if (!route || !i.primaryServiceProId) continue;
+      const failed = attachableDriverBlock(
+        route,
+        i.primaryServiceProId,
+        i.date,
+      );
+      expect(failed, `${i.id} ${i.primaryServiceProId}`).toBeUndefined();
+    }
+    // tech_9's HGV licence expired on 15 Aug: wherever they're assigned, the
+    // engine skips them and says why.
+    const skipped = run.instances.flatMap((i) =>
+      i.flags.filter((f) => f.kind === "ineligible" && f.assetId === "tech_9"),
+    );
+    expect(skipped.length).toBeGreaterThan(0);
   });
 
   it("never double-books a truck or person in the same day and shift (R6)", () => {

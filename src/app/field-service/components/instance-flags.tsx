@@ -1,6 +1,14 @@
 import type { LucideIcon } from "lucide-react";
-import { AlertTriangle, Clock, FileX2, Gauge, Repeat } from "lucide-react";
+import {
+  AlertTriangle,
+  Clock,
+  FileX2,
+  Gauge,
+  Repeat,
+  ShieldAlert,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { LIMIT_NAME } from "@/features/field-service";
 import { cn } from "@/lib/utils";
 import type { InstanceFlag } from "@/mocks";
 import { slotKind, slotLabel } from "./dispatch-meta";
@@ -32,9 +40,19 @@ export function flagChips(flags: InstanceFlag[]): Chip[] {
       chips.push({
         key: `unstaffed-${f.slot}`,
         label: `Unstaffed: ${slotLabel(f.slot)}`,
-        title: `No eligible ${slotKind(f.slot)} was available — staff the slot before confirming.`,
+        title: `No eligible ${slotKind(f.slot)} was available: staff the slot before confirming.`,
         tone: "destructive",
         icon: AlertTriangle,
+      });
+  }
+  for (const f of flags) {
+    if (f.kind === "ineligible")
+      chips.push({
+        key: `ineligible-${f.slot}-${f.assetId}`,
+        label: `Assigned ${slotKind(f.slot)} skipped`,
+        title: `The assigned ${slotLabel(f.slot)} failed a check and was skipped: ${f.reason}`,
+        tone: "warning",
+        icon: ShieldAlert,
       });
   }
   for (const f of flags) {
@@ -44,7 +62,7 @@ export function flagChips(flags: InstanceFlag[]): Chip[] {
         label: `${STAFFING_SOURCE[f.source]} ${slotKind(f.slot)}`,
         title:
           f.source === "pool"
-            ? `The ${slotLabel(f.slot)} slot was filled from the pool — the Route's primary and backups were unavailable.`
+            ? `The ${slotLabel(f.slot)} slot was filled from the pool: the Route's primary and backups were unavailable.`
             : f.source === "backup"
               ? `The primary ${slotKind(f.slot)} was unavailable, so a ranked backup was dispatched.`
               : `The ${slotLabel(f.slot)} slot was staffed by hand.`,
@@ -56,9 +74,9 @@ export function flagChips(flags: InstanceFlag[]): Chip[] {
   if (over)
     chips.push({
       key: "over-capacity",
-      label: `Over capacity ${over.utilisation}%`,
+      label: `Over capacity ${over.utilisation}%${over.limit ? ` (${LIMIT_NAME[over.limit]})` : ""}`,
       title:
-        "Planned load is above the dispatched truck's capacity — resolve before confirming.",
+        "Planned load is above the dispatched truck's capacity: resolve before confirming.",
       tone: "destructive",
       icon: Gauge,
     });

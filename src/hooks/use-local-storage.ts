@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 /**
  * localStorage-backed state. Starts from `initialValue` on both server and
- * first client render, then hydrates from storage in an effect — reading during
+ * first client render, then hydrates from storage in an effect: reading during
  * render would produce a hydration mismatch.
  */
 export function useLocalStorage<T>(key: string, initialValue: T) {

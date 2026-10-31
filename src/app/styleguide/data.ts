@@ -13,7 +13,7 @@ export const BRAND_PALETTE = [
   {
     name: "Lavender",
     hex: "#E4E5F4",
-    use: "Accent — selected rows, info tint",
+    use: "Accent: selected rows, info tint",
   },
   { name: "Limegreen", hex: "#68C828", use: "Success, recyclable, chart-2" },
   { name: "Greenyellow", hex: "#98E810", use: "Dark-mode success" },
@@ -67,7 +67,7 @@ export const SEMANTIC_TOKENS = [
     "--primary-foreground",
     "#FFFFFF",
     "#050A33",
-    "Text on primary — white on navy, dark on lifted navy",
+    "Text on primary: white on navy, dark on lifted navy",
   ],
   ["--secondary", "#F0F1ED", "#262B1F", "Secondary button, chips"],
   ["--muted", "#F0F1ED", "#262B1F", "Table headers, skeletons, hovers"],
@@ -127,7 +127,7 @@ export const TYPE_SCALE = [
     "text-2xl",
     "24 / 32 · 600",
     "text-2xl font-semibold tracking-[-.02em]",
-    "Page titles — American Hospital Dubai",
+    "Page titles: American Hospital Dubai",
   ],
   [
     "text-xl",
@@ -151,7 +151,7 @@ export const TYPE_SCALE = [
     "text-sm",
     "14 / 20 · 400",
     "text-sm",
-    "Default UI text — table cells, buttons, form values",
+    "Default UI text: table cells, buttons, form values",
   ],
   [
     "text-xs",
@@ -398,7 +398,7 @@ export const CLIENTS: SampleClient[] = [
     sites: "1 site · Healthcare City",
     streams: ["medical", "hazardous"],
     tonnage: "2.4 t",
-    mrr: "—",
+    mrr: "-",
     status: "Churned",
     tone: "neutral",
   },
@@ -581,7 +581,7 @@ export const PIPELINE = [
 
 export const LINE_ITEMS = [
   {
-    service: "Recyclable collection — RVM sites",
+    service: "Recyclable collection: RVM sites",
     freq: "Twice weekly",
     qty: "12",
     unit: "AED 2,400 / site / yr",
@@ -653,8 +653,8 @@ export const QUOTE_STEPS = [
   { label: "Created", date: "1 Sep", state: "done" },
   { label: "Sent", date: "1 Sep", state: "done" },
   { label: "Viewed by client", date: "4 Sep", state: "done" },
-  { label: "Accepted", date: "—", state: "current" },
-  { label: "Contract signed", date: "—", state: "todo" },
+  { label: "Accepted", date: "-", state: "current" },
+  { label: "Contract signed", date: "-", state: "todo" },
 ] as const;
 
 export const CRM_NAV = [

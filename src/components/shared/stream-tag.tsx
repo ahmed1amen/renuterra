@@ -78,7 +78,7 @@ export function StreamSwatch({
   );
 }
 
-/** Outline tag with the stream swatch — never a fill. */
+/** Outline tag with the stream swatch: never a fill. */
 export function StreamTag({
   stream,
   className,

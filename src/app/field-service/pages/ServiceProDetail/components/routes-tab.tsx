@@ -126,7 +126,7 @@ export function RoutesTab({
                           </span>
                         </>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">-</span>
                       )}
                     </TableCell>
                     <TableCell className="text-right font-mono text-sm tabular-nums">

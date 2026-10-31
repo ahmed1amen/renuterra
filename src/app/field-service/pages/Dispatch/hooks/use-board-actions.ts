@@ -3,23 +3,48 @@
 import { useMemo } from "react";
 import { toast } from "sonner";
 import {
+  addLoads,
+  captureSnapshot,
+  stopLoad,
   useAppointmentStore,
+  useContainerTypes,
   useDirectory,
   useDispatchActions,
   useOptimizer,
   useRouteInstanceStore,
+  useServiceItems,
+  useServicePoints,
+  utilisation,
 } from "@/features/field-service";
-import type { Appointment, RouteInstance } from "@/mocks";
+import {
+  type Appointment,
+  type InstanceClosure,
+  MOCK_NOW,
+  type Route,
+  type RouteInstance,
+} from "@/mocks";
+import { dubaiDateTime } from "../../../utils";
+
+/** The calendar day after `dayKey`. */
+const nextDayKey = (dayKey: string) =>
+  new Date(Date.parse(`${dayKey}T00:00:00Z`) + 86_400_000)
+    .toISOString()
+    .slice(0, 10);
+
 import {
   type BoardActions,
+  CANCELLABLE_STATUSES,
   canOptimize,
   type DefaultRoute,
   fitsVehicle,
   isMovable,
+  RESOLVED_STATUSES,
   type RoutePlan,
+  RUN_CANCEL_REASON,
   slotKind,
   slotLabel,
   VEHICLE_CLASS,
+  WINDOW_HOURS,
   withoutSlotFlags,
 } from "../../../components";
 
@@ -31,7 +56,7 @@ function insertIndex(plan: RoutePlan, appointment: Appointment) {
   return index === -1 ? plan.stops.length : index;
 }
 
-/** "RWC-DXB-REL-001" — the Route code reads better in a toast than the name. */
+/** "RWC-DXB-REL-001": the Route code reads better in a toast than the name. */
 const codeOf = (plan: RoutePlan) => plan.template?.code ?? plan.route.name;
 
 /** The instance as the store holds it right now, so chained patches stack. */
@@ -42,7 +67,7 @@ function latest(plan: RoutePlan): RouteInstance {
 
 /**
  * The board's fake dispatch actions. Each one patches session state through
- * `useDispatchActions` and confirms with a toast — nothing is persisted.
+ * `useDispatchActions` and confirms with a toast: nothing is persisted.
  */
 export function useBoardActions(
   plans: RoutePlan[],
@@ -53,6 +78,9 @@ export function useBoardActions(
   const updateAppointment = useAppointmentStore((s) => s.update);
   const directory = useDirectory();
   const { optimize: runOptimizer } = useOptimizer();
+  const servicePoints = useServicePoints().data;
+  const items = useServiceItems().data;
+  const containerTypes = useContainerTypes().data;
 
   return useMemo(() => {
     const planOf = (routeId: string) =>
@@ -61,13 +89,218 @@ export function useBoardActions(
       plans.flatMap((p) => p.stops).find((a) => a.id === id) ??
       backlog.find((a) => a.id === id);
 
-    /** Confirm = the old lock, plus the instance status (spec §6.1). */
+    /**
+     * Confirm = the old lock, plus the instance status (spec section 6.1),
+     * plus the forecast frozen for forecast-vs-actual later (section 8.5).
+     */
     const confirm = (plan: RoutePlan) => {
       dispatch.setLocked(plan.route.id, true);
-      dispatch.patch(plan.route.id, { status: "confirmed" });
+      dispatch.patch(plan.route.id, {
+        status: "confirmed",
+        forecastSnapshot:
+          plan.load && plan.template && servicePoints
+            ? captureSnapshot(
+                plan.load,
+                plan.template,
+                plan.load.truckTypeId,
+                plan.stops,
+                { servicePoints },
+                MOCK_NOW,
+              )
+            : null,
+      });
     };
 
     const actions: BoardActions = {
+      closeRun: (routeId, input) => {
+        const plan = planOf(routeId);
+        if (!plan || plan.closed) return;
+        const resolved: InstanceClosure["resolved"] = [];
+        for (const [id, resolution] of Object.entries(input.resolutions)) {
+          const apt = plan.stops.find((a) => a.id === id);
+          if (!apt || RESOLVED_STATUSES.includes(apt.status)) continue;
+          if (resolution.outcome === "missed") {
+            // Missed with a reason: a failed visit, its open work orders not done.
+            updateAppointment(id, {
+              status: "failed",
+              failedReason: resolution.reason,
+              startedAt: apt.startedAt ?? MOCK_NOW,
+              completedAt: MOCK_NOW,
+              workOrders: apt.workOrders.map((wo) =>
+                ["completed", "partial", "not-done", "cancelled"].includes(
+                  wo.status,
+                )
+                  ? wo
+                  : {
+                      ...wo,
+                      status: "not-done",
+                      countDone: 0,
+                      reason: resolution.reason,
+                      completedAt: MOCK_NOW,
+                    },
+              ),
+            });
+            resolved.push({ appointmentId: id, outcome: "missed" });
+          } else {
+            // Rescheduled: back to the backlog on the next day, same window.
+            const next = nextDayKey(plan.route.date);
+            const [from, to] = WINDOW_HOURS[apt.window];
+            dispatch.move(id, null);
+            updateAppointment(id, {
+              status: "scheduled",
+              rescheduled: {
+                reason: "ran_out_of_shift",
+                requestedBy: "operations",
+                fromDay: plan.route.date,
+                at: MOCK_NOW,
+              },
+              windowStart: dubaiDateTime(next, from),
+              windowEnd: dubaiDateTime(next, to),
+              plannedStart: dubaiDateTime(next, from),
+            });
+            resolved.push({ appointmentId: id, outcome: "rescheduled" });
+          }
+        }
+        // Actuals after the decisions: a stop marked missed may already have
+        // recorded part of its work, and that load was carried.
+        const missed = new Set(
+          resolved
+            .filter((r) => r.outcome === "missed")
+            .map((r) => r.appointmentId),
+        );
+        const carried = plan.stops.filter(
+          (a) =>
+            missed.has(a.id) ||
+            a.status === "completed" ||
+            a.status === "failed",
+        );
+        const actual =
+          plan.load && plan.template && servicePoints && items && containerTypes
+            ? utilisation(
+                plan.load.capacity,
+                addLoads(
+                  carried.map((a) =>
+                    stopLoad(plan.template as Route, a, "actual", {
+                      servicePoints,
+                      items,
+                      containerTypes,
+                    }),
+                  ),
+                ),
+              ).limits.map((l) => ({
+                kind: l.kind,
+                unit: l.unit,
+                value: l.consumed,
+              }))
+            : [];
+        dispatch.patch(routeId, {
+          closure: {
+            at: MOCK_NOW,
+            by: "usr_1",
+            odometerOut: input.odometerOut,
+            odometerIn: input.odometerIn,
+            tipTickets: input.tipTickets,
+            actual,
+            resolved,
+            note: input.note,
+            adjustments: [],
+          },
+        });
+        toast.success(`${plan.route.name} closed`, {
+          description: resolved.length
+            ? `${resolved.length} open ${resolved.length === 1 ? "stop" : "stops"} resolved. Actuals are locked; corrections go in as adjustments.`
+            : "Actuals are locked; corrections go in as adjustments.",
+        });
+      },
+
+      addAdjustment: (routeId, note) => {
+        const plan = planOf(routeId);
+        const closure = plan && latest(plan).closure;
+        if (!plan || !closure) return;
+        dispatch.patch(routeId, {
+          closure: {
+            ...closure,
+            adjustments: [
+              ...closure.adjustments,
+              { at: MOCK_NOW, by: "usr_1", note },
+            ],
+          },
+        });
+        toast.success("Adjustment added", { description: note });
+      },
+
+      moveStops: (appointmentIds, toRouteId) => {
+        const to = planOf(toRouteId);
+        if (!to || to.locked || !appointmentIds.length) return;
+        const from = plans.find((p) =>
+          p.stops.some((a) => a.id === appointmentIds[0]),
+        );
+        for (const id of appointmentIds) dispatch.move(id, toRouteId);
+        // The stale generation flag goes with the split that resolves it.
+        if (from)
+          dispatch.patch(from.route.id, {
+            flags: latest(from).flags.filter((f) => f.kind !== "over-capacity"),
+          });
+        toast.success(
+          `${appointmentIds.length} ${appointmentIds.length === 1 ? "stop" : "stops"} moved to ${to.route.name}`,
+          { description: "Over capacity resolved by splitting the run." },
+        );
+      },
+
+      cancelRuns: (routeIds, reason, note) => {
+        const targets = routeIds
+          .map(planOf)
+          .filter(
+            (p): p is RoutePlan =>
+              p !== undefined &&
+              !p.closed &&
+              CANCELLABLE_STATUSES.includes(p.route.status),
+          );
+        let returned = 0;
+        for (const plan of targets) {
+          // The run's record stays (rule 8); its open stops wait in the backlog.
+          for (const apt of plan.stops) {
+            if (RESOLVED_STATUSES.includes(apt.status)) continue;
+            dispatch.move(apt.id, null);
+            returned++;
+          }
+          dispatch.patch(plan.route.id, {
+            status: "cancelled",
+            cancellation: { reason, note, at: MOCK_NOW, by: "usr_1" },
+          });
+        }
+        if (!targets.length) return;
+        toast.success(
+          targets.length === 1
+            ? `${targets[0].route.name} cancelled`
+            : `${targets.length} runs cancelled`,
+          {
+            description: `${RUN_CANCEL_REASON[reason]}. ${returned} open ${returned === 1 ? "stop" : "stops"} back in the backlog.`,
+          },
+        );
+      },
+
+      acceptExtraTrips: (routeId, count) => {
+        const plan = planOf(routeId);
+        if (!plan || plan.locked) return;
+        const current = latest(plan);
+        dispatch.patch(routeId, {
+          extraTrips: {
+            count: (current.extraTrips?.count ?? 0) + count,
+            acceptedBy: "usr_1",
+            at: MOCK_NOW,
+          },
+          flags: current.flags.filter((f) => f.kind !== "over-capacity"),
+        });
+        toast.success(
+          `${count} extra ${count === 1 ? "trip" : "trips"} accepted on ${plan.route.name}`,
+          {
+            description:
+              "Recorded with your name; the capacity bar now counts it.",
+          },
+        );
+      },
+
       assign: (appointmentId, routeId) => {
         const apt = appointmentOf(appointmentId);
         const ref = apt?.ref ?? "Appointment";
@@ -83,7 +316,7 @@ export function useBoardActions(
         toast.success(`${ref} moved to ${plan.route.name}`, {
           description:
             apt && !fitsVehicle(apt, plan.vehicle?.vehicleClass)
-              ? `Stop ${index + 1} — check the vehicle, this work needs a different truck.`
+              ? `Stop ${index + 1}: check the vehicle, this work needs a different truck.`
               : `Stop ${index + 1} of ${plan.stops.length + 1}.`,
         });
       },
@@ -215,8 +448,8 @@ export function useBoardActions(
           });
           return;
         }
-        const before = result.before?.total ?? "—";
-        const after = result.after?.total ?? "—";
+        const before = result.before?.total ?? "-";
+        const after = result.after?.total ?? "-";
         // Re-timed but no better: say so rather than claim a gain.
         const same = before === after;
         toast.success(
@@ -382,7 +615,7 @@ export function useBoardActions(
       const avg = (key: "before" | "after") =>
         gains.length
           ? Math.round(gains.reduce((n, g) => n + g[key], 0) / gains.length)
-          : "—";
+          : "-";
       toast.success(
         `${improved} optimised, avg ${avg("before")} → ${avg("after")}${unchanged ? `, ${unchanged} unchanged` : ""}`,
         {
@@ -410,5 +643,8 @@ export function useBoardActions(
     updateAppointment,
     directory,
     runOptimizer,
+    servicePoints,
+    items,
+    containerTypes,
   ]);
 }

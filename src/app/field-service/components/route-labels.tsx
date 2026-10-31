@@ -127,7 +127,7 @@ export function isBlocked(checks: RuleCheck[]) {
   return checks.some((c) => !c.ok && c.severity === "block");
 }
 
-/** Each rule as pass / warn / block, naming the rule and why (spec §9). */
+/** Each rule as pass / warn / block, naming the rule and why (spec section 9). */
 export function RuleCheckList({
   checks,
   className,

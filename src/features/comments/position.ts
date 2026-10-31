@@ -14,7 +14,7 @@ export function clampPercent(value: number): number {
   return Math.min(100, Math.max(0, value));
 }
 
-/** Round to 2 decimals — plenty for pin placement, keeps rows tidy. */
+/** Round to 2 decimals: plenty for pin placement, keeps rows tidy. */
 export function roundPercent(value: number): number {
   return Math.round(value * 100) / 100;
 }

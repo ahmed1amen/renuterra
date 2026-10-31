@@ -3,9 +3,9 @@ import { Code, Note, SectionHeader } from "../components";
 
 const ASSUMPTIONS = [
   "Colors from the brand list: greens #B8F800 / #98E810 / #68C828, charcoal #404040, navy #051683, lavender #E4E5F4, snow/ivory/whitesmoke.",
-  "Lime is bright, so primary buttons take dark text — white on lime fails contrast.",
+  "Lime is bright, so primary buttons take dark text: white on lime fails contrast.",
   "Type: Plus Jakarta Sans (matches the rounded wordmark) + Geist Mono for IDs and figures.",
-  "Used by staff and clients — same tokens, the client portal just hides internal modules.",
+  "Used by staff and clients: same tokens, the client portal just hides internal modules.",
 ];
 
 export default function BrandPage() {
@@ -20,9 +20,9 @@ export default function BrandPage() {
             One identity, from the website to the workspace.
           </h2>
           <p className="text-muted-foreground max-w-[60ch] text-base text-pretty">
-            This guide translates renuterra.com's brand — lime-green leaf mark,
-            charcoal wordmark, navy and lavender accents — into the token set
-            the CRM reads. Every token keeps the shadcn/ui name wired into{" "}
+            This guide translates renuterra.com's brand (lime-green leaf mark,
+            charcoal wordmark, navy and lavender accents) into the token set the
+            CRM reads. Every token keeps the shadcn/ui name wired into{" "}
             <Code>globals.css</Code>, so components pick it up without changes.
           </p>
         </div>
@@ -60,7 +60,7 @@ export default function BrandPage() {
           </Note>
           <Note title="Wordmark">
             Charcoal #404040, "renu" light, "terra" italic. Only as the supplied
-            image — the UI type approximates it, never redraws it.
+            image: the UI type approximates it, never redraws it.
           </Note>
           <Note title="Clear space">
             Keep one leaf-height around the logo. Minimum height 22px in the top

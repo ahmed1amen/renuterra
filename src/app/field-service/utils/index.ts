@@ -19,7 +19,7 @@ export function formatDuration(minutes: number) {
   return m ? `${h}h ${m}m` : `${h}h`;
 }
 
-/** Minutes from the fixed mock "now" — negative once the slot has passed. */
+/** Minutes from the fixed mock "now": negative once the slot has passed. */
 export function minutesFromNow(iso: string, now = MOCK_NOW) {
   return Math.round(
     (new Date(iso).getTime() - new Date(now).getTime()) / 60_000,
@@ -39,7 +39,7 @@ export function formatCount(value: number) {
   return new Intl.NumberFormat("en-US").format(value);
 }
 
-/** ISO calendar day (`2026-09-04`) — the key the dispatch board is scoped by. */
+/** ISO calendar day (`2026-09-04`): the key the dispatch board is scoped by. */
 export function toDayKey(date: Date) {
   return date.toISOString().slice(0, 10);
 }
@@ -86,7 +86,7 @@ export function formatMonthYear(date: Date) {
   return monthYear.format(date);
 }
 
-/** "Friday, September 18, 2026" — the accessible label for a day button. */
+/** "Friday, September 18, 2026": the accessible label for a day button. */
 export function formatLongDate(date: Date) {
   return longDate.format(date);
 }
@@ -115,7 +115,7 @@ export function isSameMonth(a: Date, b: Date) {
 }
 
 /**
- * "Today" for the prototype is the fixed mock clock, not the wall clock — the
+ * "Today" for the prototype is the fixed mock clock, not the wall clock: the
  * fixtures are all dated to it, and a constant keeps the server and client
  * renders identical.
  */
@@ -127,7 +127,7 @@ const monthLong = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
-/** "September 2026" — the calendar popover's heading. */
+/** "September 2026": the calendar popover's heading. */
 export function formatMonthLong(date: Date) {
   return monthLong.format(date);
 }
@@ -149,7 +149,7 @@ const hourMinute = new Intl.DateTimeFormat("en-GB", {
 });
 
 /**
- * Minutes since midnight in the service region's clock — what the timeline
+ * Minutes since midnight in the service region's clock: what the timeline
  * positions appointment blocks by.
  */
 export function minutesOfDay(iso: string) {
@@ -157,7 +157,7 @@ export function minutesOfDay(iso: string) {
   return Number(hours) * 60 + Number(minutes);
 }
 
-/** "5 AM", "12 PM", "5 PM" — the timeline's hour ruler. */
+/** "5 AM", "12 PM", "5 PM": the timeline's hour ruler. */
 export function formatHour(hour: number) {
   const h = hour % 24;
   const suffix = h < 12 ? "AM" : "PM";
@@ -195,12 +195,12 @@ const dubaiDayKey = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Asia/Dubai",
 });
 
-/** `2026-09-04` — the Dubai calendar day an instant falls on. */
+/** `2026-09-04`: the Dubai calendar day an instant falls on. */
 export function toDubaiDayKey(iso: string) {
   return dubaiDayKey.format(new Date(iso));
 }
 
-/** Dubai is UTC+4 all year — no daylight saving. */
+/** Dubai is UTC+4 all year: no daylight saving. */
 const DUBAI_OFFSET_HOURS = 4;
 
 /** ISO instant for a Dubai calendar day (`2026-09-04`) at a local hour. */

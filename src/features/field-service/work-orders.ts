@@ -15,7 +15,7 @@ export function isWorkOrderClosed(wo: WorkOrder) {
   return CLOSED_WORK_ORDER_STATUSES.includes(wo.status);
 }
 
-/** A fresh work order for a service item — fake ref, planned weight from the item's estimate. */
+/** A fresh work order for a service item: fake ref, planned weight from the item's estimate. */
 export function newWorkOrder(
   item: ServiceItem,
   count: number,

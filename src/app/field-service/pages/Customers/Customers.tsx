@@ -99,7 +99,7 @@ export default function Customers() {
   const all = useMemo(() => customers.data ?? [], [customers.data]);
 
   /**
-   * Per-customer rollups: sites, streams handled and the next visit — the
+   * Per-customer rollups: sites, streams handled and the next visit; the
    * earliest of an open appointment and the route schedule's projection.
    */
   const rollup = useMemo(() => {
@@ -174,7 +174,7 @@ export default function Customers() {
             size="sm"
             onClick={() =>
               toast.info("New customers come from signed contracts", {
-                description: "Prototype — onboarding lives in Sales.",
+                description: "Prototype: onboarding lives in Sales.",
               })
             }
           >
@@ -393,7 +393,7 @@ export default function Customers() {
                             </span>
                           </>
                         ) : (
-                          <span className="text-muted-foreground">—</span>
+                          <span className="text-muted-foreground">-</span>
                         )}
                       </TableCell>
                       <TableCell>

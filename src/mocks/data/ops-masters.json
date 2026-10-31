@@ -86,56 +86,72 @@
       "name": "Dubai Investment Park Landfill",
       "city": "DXB",
       "kind": "landfill",
-      "wasteCodes": ["GEN"]
+      "wasteCodes": ["GEN"],
+      "lat": 24.9862,
+      "lng": 55.175
     },
     {
       "id": "ds_warsan",
       "name": "Warsan Organics Facility",
       "city": "DXB",
       "kind": "organics",
-      "wasteCodes": ["FOOD", "GREEN"]
+      "wasteCodes": ["FOOD", "GREEN"],
+      "lat": 25.1652,
+      "lng": 55.4128
     },
     {
       "id": "ds_qusais_mrf",
       "name": "Al Qusais MRF",
       "city": "DXB",
       "kind": "mrf",
-      "wasteCodes": ["MDR", "CARD", "PET"]
+      "wasteCodes": ["MDR", "CARD", "PET"],
+      "lat": 25.2866,
+      "lng": 55.3897
     },
     {
       "id": "ds_lusaily",
       "name": "Al Lusaily C&D Facility",
       "city": "DXB",
       "kind": "cnd",
-      "wasteCodes": ["CND", "METAL"]
+      "wasteCodes": ["CND", "METAL"],
+      "lat": 24.8957,
+      "lng": 55.4772
     },
     {
       "id": "ds_ggm",
       "name": "GGM Treatment Facility",
       "city": "DXB",
       "kind": "treatment",
-      "wasteCodes": ["MED"]
+      "wasteCodes": ["MED"],
+      "lat": 25.0158,
+      "lng": 55.1335
     },
     {
       "id": "ds_ggh",
       "name": "GGH Hazardous Facility",
       "city": "DXB",
       "kind": "treatment",
-      "wasteCodes": ["HAZ-S", "HAZ-L"]
+      "wasteCodes": ["HAZ-S", "HAZ-L"],
+      "lat": 24.9781,
+      "lng": 55.0978
     },
     {
       "id": "ds_sajaa",
       "name": "Bee'ah Al Sajaa Complex",
       "city": "SHJ",
       "kind": "transfer",
-      "wasteCodes": ["GEN", "MDR", "CND"]
+      "wasteCodes": ["GEN", "MDR", "CND"],
+      "lat": 25.3188,
+      "lng": 55.6347
     },
     {
       "id": "ds_ajm_ggh",
       "name": "GGH Ajman Transfer",
       "city": "AJM",
       "kind": "transfer",
-      "wasteCodes": ["HAZ-L", "HAZ-S"]
+      "wasteCodes": ["HAZ-L", "HAZ-S"],
+      "lat": 25.4096,
+      "lng": 55.5206
     }
   ],
   "serviceTypes": [

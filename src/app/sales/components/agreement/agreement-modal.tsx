@@ -34,7 +34,7 @@ import {
 
 /**
  * The new-agreement wizard: customer, site, services, schedule, terms, review.
- * Mirrors the sales flow it is modelled on, but in our language — an agreement
+ * Mirrors the sales flow it is modelled on, but in our language: an agreement
  * here is a waste service contract for one site, priced per stream.
  *
  * Prototype-grade throughout: the draft lives in component state, nothing is
@@ -88,7 +88,7 @@ function AgreementWizard({
     toast.success("Agreement sent for signature", {
       description: `${draft.customer.company || "Customer"} · ${formatCurrency(
         agreementMonthly(draft.lines),
-      )}/mo — prototype only.`,
+      )}/mo: prototype only.`,
     });
     onDone();
   };
@@ -106,7 +106,7 @@ function AgreementWizard({
       </DialogHeader>
 
       <div className="flex min-h-0 flex-col sm:flex-row">
-        {/* Step rail — every step is reachable; completion is advisory. */}
+        {/* Step rail: every step is reachable; completion is advisory. */}
         <nav
           aria-label="Agreement steps"
           className="border-border bg-muted/30 shrink-0 border-b p-3 sm:w-44 sm:border-r sm:border-b-0"

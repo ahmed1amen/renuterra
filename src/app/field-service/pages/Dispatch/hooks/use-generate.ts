@@ -13,6 +13,7 @@ const ATTENTION = new Set([
   "over-capacity",
   "outside-window",
   "contract-skipped",
+  "ineligible",
 ]);
 
 export type GenerationResult = GenerationSummary & {

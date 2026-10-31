@@ -2,9 +2,12 @@
 
 import {
   AlertTriangle,
+  Ban,
   CalendarX2,
   CheckCircle2,
   CornerDownRight,
+  FilePen,
+  Gauge,
   Inbox,
   Lock,
   LockOpen,
@@ -36,24 +39,35 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  type CapacityLimit,
+  type CapacityLimitKind,
   formatAmount,
+  type InstanceLoad,
   isWorkingShift,
+  LIMIT_NAME,
   useDirectory,
   useShifts,
   useTechnicians,
   useVehicles,
 } from "@/features/field-service";
 import { cn } from "@/lib/utils";
-import type { Appointment, StaffingSource } from "@/mocks";
+import type {
+  Appointment,
+  CapacitySnapshot,
+  InstanceClosure,
+  StaffingSource,
+} from "@/mocks";
 import {
   formatDate,
   formatDuration,
   formatKg,
+  formatTime,
   formatWindowRange,
 } from "../utils";
 import { WINDOW_LABEL } from "./appointment-meta";
 import {
   type BoardActions,
+  CANCELLABLE_STATUSES,
   CREW_ROLE_LABEL,
   canOptimize,
   type DefaultRoute,
@@ -61,12 +75,13 @@ import {
   isMovable,
   type OpenSlot,
   type RoutePlan,
+  RUN_CANCEL_REASON,
   SHIFT_LABEL,
   slotLabel,
 } from "./dispatch-meta";
 import { InstanceFlagChips } from "./instance-flags";
 import { InstanceStatusPill, STAFFING_SOURCE } from "./route-meta";
-import { RouteScoreBadge } from "./route-score-badge";
+import { RouteScoreBadge, SCORE_SCOPE } from "./route-score-badge";
 import { StaffSlotMenu } from "./staff-slot-menu";
 import { VEHICLE_CLASS } from "./work-order-meta";
 
@@ -76,8 +91,6 @@ import { VEHICLE_CLASS } from "./work-order-meta";
  * for its pins, `stroke` for its line. Fixed rather than theme tokens, like
  * the waste streams: a route has to hold its colour against the basemap.
  */
-/** Capacity bar label per basis. */
-const BASIS_LABEL = { volume: "Volume", visits: "Visits", weight: "Weight" };
 
 const ROUTE_COLORS = [
   {
@@ -145,6 +158,9 @@ export function RouteSidebar({
   defaultRoutes,
   routesEmpty,
   top,
+  onCloseRun,
+  onAdjust,
+  onCancelRun,
 }: {
   plans: RoutePlan[];
   backlog: Appointment[];
@@ -161,6 +177,12 @@ export function RouteSidebar({
   /** Shown when the day has no instances (e.g. "Not generated yet"). */
   routesEmpty?: ReactNode;
   top?: ReactNode;
+  /** Open the closing sheet for a run (R17). */
+  onCloseRun: (routeId: string) => void;
+  /** Open the adjustment dialog for a closed run (R18). */
+  onAdjust: (routeId: string) => void;
+  /** Open the cancel dialog for a run (spec section 6.2 rule 8). */
+  onCancelRun: (routeId: string) => void;
 }) {
   return (
     <aside className="border-border bg-background flex w-96 shrink-0 flex-col border-l">
@@ -216,6 +238,9 @@ export function RouteSidebar({
                       )
                     }
                     actions={actions}
+                    onCloseRun={() => onCloseRun(plan.route.id)}
+                    onAdjust={() => onAdjust(plan.route.id)}
+                    onCancel={() => onCancelRun(plan.route.id)}
                   />
                 </li>
               ))}
@@ -284,12 +309,18 @@ function RouteCard({
   selected,
   onSelect,
   actions,
+  onCloseRun,
+  onAdjust,
+  onCancel,
 }: {
   plan: RoutePlan;
   plans: RoutePlan[];
   selected: boolean;
   onSelect: () => void;
   actions: BoardActions;
+  onCloseRun: () => void;
+  onAdjust: () => void;
+  onCancel: () => void;
 }) {
   const { route, template, pro, crew, vehicle, colors, locked } = plan;
   const vehicles = useVehicles();
@@ -383,6 +414,12 @@ function RouteCard({
         <div className="flex shrink-0 flex-col items-end gap-1">
           <div className="flex items-center gap-1">
             <InstanceStatusPill status={route.status} />
+            {plan.closed ? (
+              <Badge variant="secondary" className="gap-1">
+                <Lock className="size-3" aria-hidden />
+                Closed
+              </Badge>
+            ) : null}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -397,7 +434,26 @@ function RouteCard({
                 <MoreVertical aria-hidden />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
-                {confirmed || locked ? (
+                {plan.closed ? (
+                  <DropdownMenuItem onClick={onAdjust}>
+                    <FilePen aria-hidden />
+                    Add adjustment…
+                  </DropdownMenuItem>
+                ) : plan.closable ? (
+                  <DropdownMenuItem
+                    onClick={onCloseRun}
+                    className="items-start"
+                  >
+                    <Lock className="mt-0.5" aria-hidden />
+                    <span className="min-w-0">
+                      <span className="block">Close run…</span>
+                      <span className="text-muted-foreground block text-xs">
+                        Resolve open stops, lock the actuals
+                      </span>
+                    </span>
+                  </DropdownMenuItem>
+                ) : null}
+                {plan.closed ? null : confirmed || locked ? (
                   <DropdownMenuItem
                     onClick={() => actions.setConfirmed(route.id, false)}
                   >
@@ -441,11 +497,13 @@ function RouteCard({
                   <span className="min-w-0">
                     <span className="block">Optimize stop order</span>
                     <span className="text-muted-foreground block text-xs">
-                      {!canOptimize(plan)
-                        ? "Reopen the instance to re-sequence it"
-                        : openStops < 2
-                          ? "Needs two or more open stops"
-                          : "By window, then nearest stop"}
+                      {plan.closed
+                        ? "Closed runs are read-only"
+                        : !canOptimize(plan)
+                          ? "Reopen the instance to re-sequence it"
+                          : openStops < 2
+                            ? "Needs two or more open stops"
+                            : "By window, then nearest stop"}
                     </span>
                   </span>
                 </DropdownMenuItem>
@@ -532,18 +590,35 @@ function RouteCard({
                   <Undo2 aria-hidden />
                   Send open stops to backlog
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  variant="destructive"
+                  disabled={
+                    plan.closed || !CANCELLABLE_STATUSES.includes(route.status)
+                  }
+                  onClick={onCancel}
+                >
+                  <Ban aria-hidden />
+                  Cancel run…
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
           <RouteScoreBadge
             score={plan.score}
+            scope={SCORE_SCOPE.run}
             className="pointer-events-auto mr-7"
           />
         </div>
       </div>
 
       <InstanceFlagChips
-        flags={route.flags}
+        // With a live load the card judges capacity itself (Over capacity
+        // box below), so the generation-time flag would only go stale.
+        flags={
+          plan.load
+            ? route.flags.filter((f) => f.kind !== "over-capacity")
+            : route.flags
+        }
         className="pointer-events-auto relative mt-2"
       />
 
@@ -618,21 +693,18 @@ function RouteCard({
       ) : null}
 
       <div className="pointer-events-none relative mt-3 grid grid-cols-2 gap-3">
+        {/* Progress, not capacity: the truck's real limit is the bar beside it. */}
         <CapacityBar
-          label="Stops"
-          value={plan.activeStops}
-          max={route.maxStops}
-          display={`${plan.activeStops}/${route.maxStops}`}
+          label="Stops done"
+          value={plan.doneStops}
+          max={plan.activeStops}
+          display={`${plan.doneStops}/${plan.activeStops}`}
+          progress
         />
-        {plan.capacity ? (
-          // In the Route's own basis: m³ for REL, visits for SKIP/HOOK, kg
-          // for MED/HAZ/WWT — not truck payload, which misleads on exchanges.
-          <CapacityBar
-            label={BASIS_LABEL[plan.capacity.basis]}
-            value={plan.capacity.consumed}
-            max={plan.capacity.perShift}
-            display={`${formatAmount(plan.capacity.consumed, plan.capacity.unit)} / ${formatAmount(plan.capacity.perShift, plan.capacity.unit)}`}
-          />
+        {plan.load ? (
+          // The binding limit of the truck it actually has: volume, payload,
+          // slots or visits, whichever is closest to full.
+          <LoadBar load={plan.load} />
         ) : (
           // One-off instance with no Route: estimated weight on the truck.
           <CapacityBar
@@ -647,6 +719,46 @@ function RouteCard({
           />
         )}
       </div>
+
+      {plan.overCapacity ? (
+        <OverCapacityBox plan={plan} actions={actions} />
+      ) : null}
+      {route.extraTrips ? (
+        <p className="text-muted-foreground pointer-events-none relative mt-2 text-[11px]">
+          +{route.extraTrips.count} extra{" "}
+          {route.extraTrips.count === 1 ? "trip" : "trips"} accepted{" "}
+          {formatTime(route.extraTrips.at)}
+        </p>
+      ) : null}
+      {plan.load ? (
+        <LoadNotes load={plan.load} snapshot={route.forecastSnapshot} />
+      ) : null}
+
+      {route.closure ? <ClosureSummary closure={route.closure} /> : null}
+      {route.cancellation ? (
+        <p className="text-muted-foreground pointer-events-none relative mt-2 flex items-center gap-1.5 text-[11px]">
+          <Ban className="size-3 shrink-0" aria-hidden />
+          Cancelled {formatTime(route.cancellation.at)}:{" "}
+          {RUN_CANCEL_REASON[route.cancellation.reason].toLowerCase()}
+          {route.cancellation.note ? ` · ${route.cancellation.note}` : ""}
+        </p>
+      ) : null}
+
+      {plan.eligibility.map((issue) => (
+        <p
+          key={`${issue.slot}-${issue.name}`}
+          className={cn(
+            "pointer-events-none relative mt-2 flex items-start gap-1.5 text-xs font-medium",
+            issue.severity === "block" ? "text-destructive" : "text-warning",
+          )}
+        >
+          <ShieldAlert className="mt-px size-3.5 shrink-0" aria-hidden />
+          <span>
+            {issue.name} ({slotLabel(issue.slot)}): {issue.reason}
+            {issue.severity === "block" ? " Change before confirming." : ""}
+          </span>
+        </p>
+      ))}
 
       {offShift.length ? (
         <p className="text-destructive pointer-events-none relative mt-2 flex items-center gap-1.5 text-xs font-medium">
@@ -717,6 +829,106 @@ export function RouteCode({
 }
 
 /** Where a filled slot came from, when it wasn't the Route's primary. */
+/**
+ * Live Over capacity (R16, spec section 8.5 rule 3) with the two fixes the
+ * spec allows: split stops to the run with the most room, or accept extra
+ * trips. Confirm stays blocked until one is chosen (or overridden).
+ */
+function OverCapacityBox({
+  plan,
+  actions,
+}: {
+  plan: RoutePlan;
+  actions: BoardActions;
+}) {
+  const over = plan.overCapacity;
+  if (!over) return null;
+  const refs = over.move?.stopIds
+    .map((id) => plan.stops.find((a) => a.id === id)?.ref)
+    .filter(Boolean)
+    .join(", ");
+  return (
+    <div className="border-destructive/40 bg-destructive-bg/40 pointer-events-auto relative mt-2 space-y-2 rounded-md border p-2">
+      <p className="text-destructive flex items-center gap-1.5 text-xs font-medium">
+        <Gauge className="size-3.5" aria-hidden />
+        Over capacity {over.pct}% ({LIMIT_NAME[over.limit]}): split the run or
+        add a trip
+      </p>
+      <div className="flex flex-col gap-1.5">
+        {over.move ? (
+          <Button
+            size="xs"
+            variant="outline"
+            className="h-auto justify-start py-1 text-left whitespace-normal"
+            onClick={() =>
+              over.move &&
+              actions.moveStops(over.move.stopIds, over.move.toRouteId)
+            }
+          >
+            <span>
+              Move {over.move.stopIds.length}{" "}
+              {over.move.stopIds.length === 1 ? "stop" : "stops"} ({refs}) to{" "}
+              {over.move.toName}
+              <span className="text-muted-foreground block text-[11px] font-normal">
+                This run {over.pct}% → {over.move.after}% · {over.move.toName}{" "}
+                {over.move.toBefore}% → {over.move.toAfter}%
+              </span>
+            </span>
+          </Button>
+        ) : (
+          <p className="text-muted-foreground text-[11px]">
+            No other run of this type has room for the stops today.
+          </p>
+        )}
+        {over.extraTrips ? (
+          <Button
+            size="xs"
+            variant="outline"
+            className="justify-start"
+            onClick={() =>
+              over.extraTrips &&
+              actions.acceptExtraTrips(plan.route.id, over.extraTrips)
+            }
+          >
+            Accept {over.extraTrips} extra{" "}
+            {over.extraTrips === 1 ? "trip" : "trips"} (+
+            {over.extraTrips} tip{over.extraTrips === 1 ? "" : "s"})
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+/** What closing recorded: when, the weighbridge vs the stops, adjustments. */
+function ClosureSummary({ closure }: { closure: InstanceClosure }) {
+  const weighed = closure.tipTickets.reduce((n, t) => n + (t.netKg ?? 0), 0);
+  const recorded = closure.actual.find((a) => a.kind === "weight")?.value ?? 0;
+  const parts = [
+    `Closed ${formatTime(closure.at)}`,
+    closure.resolved.length
+      ? `${closure.resolved.length} resolved at closing`
+      : null,
+    weighed
+      ? `weighbridge ${formatKg(weighed)} vs ${formatKg(recorded)} on stops`
+      : null,
+    closure.adjustments.length
+      ? `${closure.adjustments.length} ${closure.adjustments.length === 1 ? "adjustment" : "adjustments"}`
+      : null,
+  ].filter(Boolean);
+  return (
+    <p
+      className="text-muted-foreground pointer-events-none relative mt-2 flex items-center gap-1.5 text-[11px]"
+      title={closure.adjustments
+        .map((a) => `${formatTime(a.at)}: ${a.note}`)
+        .join("\n")}
+    >
+      <Lock className="size-3 shrink-0" aria-hidden />
+      {parts.join(" · ")}
+    </p>
+  );
+}
+
 function SourceTag({ source }: { source: StaffingSource | undefined }) {
   if (!source || source === "primary") return null;
   return (
@@ -741,15 +953,23 @@ function CapacityBar({
   value,
   max,
   display,
+  progress = false,
 }: {
   label: string;
   value: number;
   max: number;
   display: string;
+  /** A progress bar (done of planned): never warns, it's not a limit. */
+  progress?: boolean;
 }) {
   const ratio = max > 0 ? value / max : 0;
-  const tone =
-    ratio > 1 ? "bg-destructive" : ratio >= 0.9 ? "bg-warning" : "bg-primary";
+  const tone = progress
+    ? "bg-primary"
+    : ratio > 1
+      ? "bg-destructive"
+      : ratio >= 0.9
+        ? "bg-warning"
+        : "bg-primary";
   return (
     <div className="min-w-0">
       <p className="flex items-baseline justify-between gap-2 text-[11px]">
@@ -757,8 +977,8 @@ function CapacityBar({
         <span
           className={cn(
             "truncate font-mono tabular-nums",
-            ratio > 1 && "text-destructive",
-            ratio >= 0.9 && ratio <= 1 && "text-warning",
+            !progress && ratio > 1 && "text-destructive",
+            !progress && ratio >= 0.9 && ratio <= 1 && "text-warning",
           )}
         >
           {display}
@@ -770,6 +990,170 @@ function CapacityBar({
           style={{ width: `${Math.min(100, ratio * 100)}%` }}
         />
       </span>
+    </div>
+  );
+}
+
+const LIMIT_LABEL: Record<CapacityLimitKind, string> = {
+  volume: "Volume",
+  weight: "Payload",
+  slots: "Slots",
+  visits: "Visits",
+};
+
+/** Flag a run once its forecast passes this share of the binding limit. */
+const FORECAST_WARN = 0.9;
+
+const pctOf = (consumed: number, max: number) =>
+  max > 0 ? (consumed / max) * 100 : 0;
+
+/** Bar-sized amounts: tonnes once a weight passes 1,000 kg. */
+function compactAmount(
+  value: number,
+  unit: CapacityLimit["unit"],
+  max: number,
+) {
+  if (unit === "kg" && max >= 1000) {
+    const t = Math.round(value / 100) / 10;
+    return `${t.toLocaleString("en-AE")} t`;
+  }
+  return formatAmount(value, unit);
+}
+
+/**
+ * The run's binding limit in three layers: worst case (every container full)
+ * in light grey, the forecast solid, and what completed stops recorded on
+ * top. Width is a share of the limit; a forecast over it turns red.
+ */
+function LoadBar({ load }: { load: InstanceLoad }) {
+  const index = load.forecast.limits.findIndex((l) => l.kind === load.binding);
+  const forecast = load.forecast.limits[index];
+  const max = forecast.perLoad ? forecast.perTrip : forecast.perShift;
+  const worst = load.worst.limits[index]?.consumed ?? forecast.consumed;
+  const actual = load.actual.limits[index]?.consumed ?? 0;
+  const ratio = max > 0 ? forecast.consumed / max : 0;
+  const tone =
+    ratio > 1
+      ? "bg-destructive"
+      : ratio >= FORECAST_WARN
+        ? "bg-warning"
+        : "bg-primary";
+  const fmt = (n: number) => compactAmount(n, forecast.unit, max);
+  // Only volume has a worst case of its own (every bin full); weights and
+  // counts are the same in both, so the note would repeat the forecast.
+  const showWorst = worst - forecast.consumed > 0.05;
+  const title = [
+    `${LIMIT_LABEL[forecast.kind]} (binding limit)`,
+    `Worst case: ${fmt(worst)}`,
+    `Forecast: ${fmt(forecast.consumed)} of ${fmt(max)}`,
+    load.doneStops
+      ? `Actual: ${fmt(actual)} after ${load.doneStops} of ${load.totalStops} stops`
+      : "No stops completed yet",
+  ].join("\n");
+  return (
+    <div className="min-w-0" title={title}>
+      <p className="flex items-baseline justify-between gap-2 text-[11px]">
+        <span className="text-muted-foreground">
+          {LIMIT_LABEL[forecast.kind]}
+        </span>
+        <span
+          className={cn(
+            "truncate font-mono tabular-nums",
+            ratio > 1 && "text-destructive",
+            ratio >= FORECAST_WARN && ratio <= 1 && "text-warning",
+          )}
+        >
+          {/* Counts read better with the unit once: "2 / 5 visits". */}
+          {forecast.unit === "visits" || forecast.unit === "slots"
+            ? `${Math.round(forecast.consumed)} / ${max} ${forecast.unit}`
+            : `${fmt(forecast.consumed)} / ${fmt(max)}`}
+        </span>
+      </p>
+      <span className="bg-muted relative mt-1 block h-1.5 overflow-hidden rounded-full">
+        <span
+          className="bg-muted-foreground/25 absolute inset-y-0 left-0 rounded-full transition-all"
+          style={{ width: `${Math.min(100, pctOf(worst, max))}%` }}
+        />
+        <span
+          className={cn(
+            "absolute inset-y-0 left-0 rounded-full opacity-45 transition-all",
+            tone,
+          )}
+          style={{ width: `${Math.min(100, ratio * 100)}%` }}
+        />
+        <span
+          className={cn(
+            "absolute inset-y-0 left-0 rounded-full transition-all",
+            tone,
+          )}
+          style={{ width: `${Math.min(100, pctOf(actual, max))}%` }}
+        />
+      </span>
+      <p className="text-muted-foreground mt-1 flex justify-between gap-2 text-[10px] tabular-nums">
+        <span>
+          {showWorst ? `Worst ${Math.round(pctOf(worst, max))}%` : null}
+        </span>
+        {load.doneStops ? (
+          <span>
+            Actual {fmt(actual)} · {load.doneStops}/{load.totalStops}
+          </span>
+        ) : null}
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Under the bars: the truck's other limit when it's within 10 points of the
+ * binding one, and a warning when actuals run ahead of the forecast.
+ */
+function LoadNotes({
+  load,
+  snapshot,
+}: {
+  load: InstanceLoad;
+  snapshot: CapacitySnapshot | null | undefined;
+}) {
+  const binding = load.forecast.binding;
+  // The other limit matters once the run is half full and it's close behind.
+  const close =
+    binding.pct >= 50
+      ? load.forecast.limits.filter(
+          (l) => l !== binding && !l.perLoad && l.pct >= binding.pct - 10,
+        )
+      : [];
+  // The plan moved since Confirm (stops, fill rates or the truck changed).
+  const drift =
+    snapshot && Math.abs(snapshot.forecastPct - load.forecast.pct) >= 5
+      ? snapshot.forecastPct
+      : null;
+  if (!close.length && !load.runningHeavy && drift === null) return null;
+  return (
+    <div className="pointer-events-none relative mt-2 flex flex-col gap-1">
+      {drift !== null ? (
+        <p className="text-muted-foreground text-[11px]">
+          Forecast at Confirm {drift}%, now {load.forecast.pct}%
+        </p>
+      ) : null}
+      {close.map((limit) => (
+        <p
+          key={limit.kind}
+          className="text-muted-foreground flex items-center justify-between gap-2 text-[11px]"
+        >
+          <span>{LIMIT_LABEL[limit.kind]} close behind</span>
+          <span className="font-mono tabular-nums">
+            {compactAmount(limit.consumed, limit.unit, limit.perShift)} /{" "}
+            {compactAmount(limit.perShift, limit.unit, limit.perShift)} ·{" "}
+            {limit.pct}%
+          </span>
+        </p>
+      ))}
+      {load.runningHeavy ? (
+        <p className="text-warning flex items-center gap-1.5 text-xs font-medium">
+          <AlertTriangle className="size-3.5" aria-hidden />
+          Running heavy: completed stops are 15%+ over their forecast
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -863,7 +1247,7 @@ function BacklogRow({
                 disabled={target.locked}
                 title={
                   target.locked
-                    ? "Its instance is confirmed — reopen it to add stops"
+                    ? "Its instance is confirmed: reopen it to add stops"
                     : `Add to ${target.route.id}`
                 }
                 onClick={() => onAssign(target.route.id)}
@@ -943,7 +1327,7 @@ export function AssignRouteMenu({
                   <span className="text-muted-foreground block text-xs">
                     {plan.locked
                       ? "Confirmed"
-                      : `${plan.template?.code ?? plan.route.id} · ${plan.activeStops}/${plan.route.maxStops} stops`}
+                      : `${plan.template?.code ?? plan.route.id} · ${plan.activeStops} ${plan.activeStops === 1 ? "stop" : "stops"}`}
                     {!fits ? (
                       <span className="text-warning"> · Vehicle mismatch</span>
                     ) : null}
